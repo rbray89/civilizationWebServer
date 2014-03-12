@@ -1,7 +1,12 @@
   var websocket;
   var User = "Ryan";
   var Technologies;
+  var SelectedTech;
   var EraIds = ["ancient","medieval","gunpowder_industrial", "modern"];
+  
+  var cancelClick = function(){
+	resetTech();
+  };
   
   var updateTimer = function(obj) {
     var timer_status = document.getElementById('timer-status');
@@ -28,9 +33,27 @@
 	var i = 0;
 	do
 	{ 
-		tech.className = "technology-unavailable";
-		tech = document.getElementById('tech_'+i);
+		var techObj = Technologies[i];
+		var available = true;
+		for( var n = 0; n < techObj.dependencies.length; n++)
+		{
+			var t = techObj.dependencies[n];
+			if(Technologies[t].owner == "")
+			{
+				available = false;
+				break;
+			}
+		}
+		if(available)
+		{
+			tech.className = "technology-available";
+		}
+		else
+		{
+			tech.className = "technology-unavailable";
+		}
 		i++;
+		tech = document.getElementById('tech_'+i);
 	}while(tech != null);
   };
   
@@ -39,21 +62,32 @@
 	var techElement = document.getElementById('tech_'+techObj.id);
 	techObj.dependencies.forEach(function(entry) {
 		var techDependencyElement = document.getElementById('tech_'+entry);
-		techDependencyElement.className = "technology-dependency-2";
+		techDependencyElement.className += " technology-dependency-2";
 		selectSecondDeps(Technologies[entry]);
 	});
   };
   
   var selectTech = function(techObj)
   {
-	resetTech();
-	var techElement = document.getElementById('tech_'+techObj.id);
-	techObj.dependencies.forEach(function(entry) {
-		var techDependencyElement = document.getElementById('tech_'+entry);
-		techDependencyElement.className = "technology-dependency-1";
-		selectSecondDeps(Technologies[entry]);
-	});
-	techElement.className = "technology-selected";
+	if(techObj != null)
+	{
+		SelectedTech = techObj;
+		var techElement = document.getElementById('tech_'+techObj.id);
+		if(techElement.className != "technology-selected")
+		{
+			resetTech();
+			techObj.dependencies.forEach(function(entry) {
+				var techDependencyElement = document.getElementById('tech_'+entry);
+				techDependencyElement.className += " technology-dependency-1";
+				selectSecondDeps(Technologies[entry]);
+			});
+			techElement.className = "technology-selected";
+		}
+		else
+		{
+			resetTech();
+		}
+	}
   };
   
   var updateTech = function(techObj) {
@@ -65,11 +99,43 @@
 		tech.setAttribute('class', 'technology-unavailable');
 		tech.onclick=function(){selectTech(techObj)};
 		techText = document.createElement('div');
-		techText.setAttribute('class', 'tech-text');
+		techText.setAttribute('class', 'tech-text-name');
 		techText.innerHTML = techObj.name;
 		tech.appendChild(techText);
+		//cost
+		techText = document.createElement('img');
+		techText.setAttribute('class', 'tech-text-cost-ico');
+		techText.src="coins16.png";
+		tech.appendChild(techText);
+		techText = document.createElement('div');
+		techText.setAttribute('class', 'tech-text-cost');
+		techText.innerHTML = techObj.cost;
+		tech.appendChild(techText);
+		//benefits
+		techText = document.createElement('img');
+		techText.setAttribute('class', 'tech-text-benefits');
+		techText.src="wonder16.png";
+		tech.appendChild(techText);
+		techText = document.createElement('img');
+		techText.setAttribute('class', 'tech-text-benefits');
+		techText.src="star16.png";
+		tech.appendChild(techText);
+		techText = document.createElement('img');
+		techText.setAttribute('class', 'tech-text-benefits');
+		techText.src="gear16.png";
+		tech.appendChild(techText);
+		techText = document.createElement('img');
+		techText.setAttribute('class', 'tech-text-benefits');
+		techText.src="sword16.png";
+		tech.appendChild(techText);
+		techText = document.createElement('img');
+		techText.setAttribute('class', 'tech-text-benefits');
+		techText.src="happy16.png";
+		tech.appendChild(techText);
+		
 		document.getElementById(EraIds[techObj.era]).appendChild(tech);
 	}
+	resetTech();
   };  
   
   var updateTechnologies = function(obj) {
@@ -77,6 +143,7 @@
 	obj.forEach(function(entry) {
 		updateTech(entry);
 	});
+	selectTech(SelectedTech);
   };
   
   var send_cmd = function(cmd) {
