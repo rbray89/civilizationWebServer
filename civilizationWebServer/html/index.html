@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Civilization Manager</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script language="javascript" type="text/javascript" src="main.js"></script>
+
+<div class="header">Civilization Manager</div>
+<div class="width-container">
+	<div id="turn-status-current">Current: </div>
+	<div id="turn-buy-time" onclick="send_cmd('buy_time'); button_up(this)" onmousedown="button_down(this)" >Add 2:00</div>
+	<div id="turn-status-next">Next: </div>
+	<div id="turn-end" onclick="send_cmd('end_turn'); button_up(this)" onmousedown="button_down(this)">End Turn</div>
+	<div id="timer-status">&nbsp;</div>
+</div>
+<div class="container">
+	<div class="era" id="ancient">
+		<div class="era-text">Ancient Era</div>
+	</div>
+</div>
+</html>
