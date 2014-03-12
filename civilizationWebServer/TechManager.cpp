@@ -9,21 +9,21 @@ TechManager::TechManager()
 {
 	TextJSON = nullptr;
 
-	Technology* Masonry = new Technology("Masonry", ANCIENT_ERA, 15);
-	Technology* Alphabet_Writing = new Technology("Alphabet/Writing", ANCIENT_ERA, 15);
-	Technology* Pottery_Specialization = new Technology("Pottery/Specialization", ANCIENT_ERA, 20);
-	Technology* TheWheel = new Technology("The Wheel", ANCIENT_ERA, 25);
-	Technology* BronzeWorking = new Technology("Bronze Working", ANCIENT_ERA, 25);
-	Technology* CeremonialBurial = new Technology("Ceremonial Burial", ANCIENT_ERA, 25);
-	Technology* CodeOfLaws = new Technology("Code of Laws", ANCIENT_ERA, 35);
-	Technology* HorsebackRiding = new Technology("Horseback Riding", ANCIENT_ERA, 40);
-	Technology* Mathematics =new Technology("Mathematics", ANCIENT_ERA, 40);
-	Technology* IronWorking = new Technology("Iron Working", ANCIENT_ERA, 40);
-	Technology* Philosophy_Literature = new Technology("Philosophy/Literature", ANCIENT_ERA, 40);
-	Technology* Mysticism = new Technology("Mysticism", ANCIENT_ERA, 40);
-	Technology* Trade_Mapmaking = new Technology("Trade/Mapmaking", ANCIENT_ERA, 50);
-	Technology* Construction = new Technology("Construction", ANCIENT_ERA, 50);
-	Technology* Currency = new Technology("Currency", ANCIENT_ERA, 50);
+	Technology* Masonry = new Technology("Masonry", ANCIENT_ERA, 15, WONDER_BENEFIT);
+	Technology* Alphabet_Writing = new Technology("Alphabet/Writing", ANCIENT_ERA, 15, SEMINAL_BENEFIT);
+	Technology* Pottery_Specialization = new Technology("Pottery/Specialization", ANCIENT_ERA, 20, PRODUCTIVE_BENEFIT);
+	Technology* TheWheel = new Technology("The Wheel", ANCIENT_ERA, 25, CAVALRY_BENEFIT);
+	Technology* BronzeWorking = new Technology("Bronze Working", ANCIENT_ERA, 25, INFANTRY_BENEFIT | WONDER_BENEFIT);
+	Technology* CeremonialBurial = new Technology("Ceremonial Burial", ANCIENT_ERA, 25, HAPPY_BENEFIT | WONDER_BENEFIT);
+	Technology* CodeOfLaws = new Technology("Code of Laws", ANCIENT_ERA, 35, HAPPY_BENEFIT);
+	Technology* HorsebackRiding = new Technology("Horseback Riding", ANCIENT_ERA, 40, CAVALRY_BENEFIT);
+	Technology* Mathematics =new Technology("Mathematics", ANCIENT_ERA, 40, ARTILLERY_BENEFIT);
+	Technology* IronWorking = new Technology("Iron Working", ANCIENT_ERA, 40, INFANTRY_BENEFIT);
+	Technology* Philosophy_Literature = new Technology("Philosophy/Literature", ANCIENT_ERA, 40, PRODUCTIVE_BENEFIT|WONDER_BENEFIT);
+	Technology* Mysticism = new Technology("Mysticism", ANCIENT_ERA, 40, HAPPY_BENEFIT|WONDER_BENEFIT);
+	Technology* Trade_Mapmaking = new Technology("Trade/Mapmaking", ANCIENT_ERA, 50, TRADE_BENEFIT|FLEET_BENEFIT|WONDER_BENEFIT);
+	Technology* Construction = new Technology("Construction", ANCIENT_ERA, 50, CITY_BENEFIT|PRODUCTIVE_BENEFIT|HAPPY_BENEFIT|WONDER_BENEFIT);
+	Technology* Currency = new Technology("Currency", ANCIENT_ERA, 50, PRODUCTIVE_BENEFIT);
 
 	HorsebackRiding->SetDependencies(1, TheWheel);
 	Mathematics->SetDependencies(2, Masonry, Alphabet_Writing);

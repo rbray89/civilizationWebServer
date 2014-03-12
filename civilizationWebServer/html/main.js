@@ -2,7 +2,10 @@
   var User = "Ryan";
   var Technologies;
   var SelectedTech;
+  
   var EraIds = ["ancient","medieval","gunpowder_industrial", "modern"];
+  var TechBenefits = ["wonder", "seminal", "productive", "happy", "city", "trade", 
+					"infantry", "cavalry", "artillery", "fleet", "aircraft"];
   
   var cancelClick = function(){
 	resetTech();
@@ -112,27 +115,16 @@
 		techText.innerHTML = techObj.cost;
 		tech.appendChild(techText);
 		//benefits
-		techText = document.createElement('img');
-		techText.setAttribute('class', 'tech-text-benefits');
-		techText.src="wonder16.png";
-		tech.appendChild(techText);
-		techText = document.createElement('img');
-		techText.setAttribute('class', 'tech-text-benefits');
-		techText.src="star16.png";
-		tech.appendChild(techText);
-		techText = document.createElement('img');
-		techText.setAttribute('class', 'tech-text-benefits');
-		techText.src="gear16.png";
-		tech.appendChild(techText);
-		techText = document.createElement('img');
-		techText.setAttribute('class', 'tech-text-benefits');
-		techText.src="sword16.png";
-		tech.appendChild(techText);
-		techText = document.createElement('img');
-		techText.setAttribute('class', 'tech-text-benefits');
-		techText.src="happy16.png";
-		tech.appendChild(techText);
-		
+		for(var i = 0; i < TechBenefits.length; i++)
+		{
+			if(((1<<i)&techObj.benefits) != 0)
+			{
+				techText = document.createElement('img');
+				techText.setAttribute('class', 'tech-text-benefits');
+				techText.src=TechBenefits[i]+"16.png";
+				tech.appendChild(techText);
+			}
+		}		
 		document.getElementById(EraIds[techObj.era]).appendChild(tech);
 	}
 	resetTech();
