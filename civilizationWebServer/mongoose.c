@@ -1362,6 +1362,7 @@ static struct connection *accept_new_connection(struct mg_server *server) {
 }
 
 static void close_conn(struct connection *conn) {
+  call_request_handler(conn);
   LINKED_LIST_REMOVE(&conn->link);
   closesocket(conn->client_sock);
   close_local_endpoint(conn);
@@ -1952,6 +1953,7 @@ static void write_terminating_chunk(struct connection *conn) {
 
 static int call_request_handler(struct connection *conn) {
   int result;
+  conn->mg_conn.flags = conn->flags;
   conn->mg_conn.content = conn->local_iobuf.buf;
   switch ((result = conn->server->request_handler(&conn->mg_conn))) {
     case MG_REQUEST_CALL_AGAIN: conn->flags |= CONN_LONG_RUNNING; break;

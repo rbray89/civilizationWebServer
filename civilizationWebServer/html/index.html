@@ -4,26 +4,52 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 <script language="javascript" type="text/javascript" src="main.js"></script>
 <body>
-	<div class="header">Civilization Manager</div>
-	<div class="width-container">
-		<div id="turn-status-current">Current: </div>
-		<div id="turn-buy-time" onclick="send_cmd('buy_time'); button_up(this)" onmousedown="button_down(this)" >Add 2:00</div>
-		<div id="turn-status-next">Next: </div>
-		<div id="turn-end" onclick="send_cmd('end_turn'); button_up(this)" onmousedown="button_down(this)">End Turn</div>
-		<div id="timer-status">&nbsp;</div>
+	<div id="login">
+		<div class="login-prompt">Select Player</div>
+		<div id="login-button" onclick="button_up(this)" onmousedown="button_down(this)"><span class="span25"></span>Select</div>
 	</div>
-	<div class="container">
-		<div class="era" id="ancient">
-			<div class="era-text">Ancient Era</div>
+	<div id="civilization-manager" style="visibility:hidden;">
+		<div class="width-container">
+			<div id="turn-text-left">
+				<span class="span45" id="turn-status-current">Current: </span>
+			</div>
+			<div id="header">
+				<span class="span45" id="player"></span>
+			</div>
+			<div id="game-phase" >
+				<span class="span45" id="game-current-phase"></span>
+			</div>
 		</div>
-		<div class="era" id="medieval">
-			<div class="era-text">Medieval Era</div>
+		<div class="width-container">
+			<div id="turn-text-left">
+				<span class="span45" id="turn-status-current">Current: </span>
+			</div>
+			<div id="turn-button-left" onclick="send_cmd('buy_time'); button_up(this)" onmousedown="button_down(this)" >
+				<span class="span45" id="turn-buy-time">Add 2:00</span>
+			</div>
+			<div id="turn-text-right" >
+				<span class="span45" id="turn-status-next">Next: </span>
+			</div>
+			<div id="turn-button-right" onclick="send_cmd('end_turn'); button_up(this)" onmousedown="button_down(this)">
+				<span class="span45" id="turn-end">End Turn</span>
+			</div>
+			<div id="turn-text-center">
+				<span class="span45" id="timer-status">&nbsp;</span>
+			</div>
 		</div>
-		<div class="era" id="gunpowder_industrial">
-			<div class="era-text">Gunpowder/Industrial Era</div>
-		</div>
-		<div class="era" id="modern">
-			<div class="era-text">Modern Era</div>
+		<div class="container">
+			<div class="era" id="ancient">
+				<div class="era-text">Ancient Era</div>
+			</div>
+			<div class="era" id="medieval">
+				<div class="era-text">Medieval Era</div>
+			</div>
+			<div class="era" id="gunpowder_industrial">
+				<div class="era-text">Gunpowder/Industrial Era</div>
+			</div>
+			<div class="era" id="modern">
+				<div class="era-text">Modern Era</div>
+			</div>
 		</div>
 	</div>
 </body>

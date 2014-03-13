@@ -4,9 +4,100 @@ body
 	background-color: FloralWhite;
 }
 
+#login{
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 150px;
+    margin-left: -150px;
+    margin-top: -75px;
+	border:4px solid gray;
+}
+
+.login-prompt
+{
+	font: 14px Arial;
+	font-weight: bold;
+	float: top;
+	margin: 2px;
+	text-align: center;
+	vertical-align:middle; 
+	border-bottom:2px solid gray;
+}
+
+.span50
+{ 
+    line-height:30px; 
+}
+
+.login-player, .login-player-selected, .login-player-taken
+{
+	font: 14px Arial;
+	font-weight: bold;
+	float: left;
+    width: 100px;
+    height: 30px;
+	margin: 4px;
+	text-align: center;
+	vertical-align:middle; 
+	border:2px solid gray;
+	cursor: pointer;
+}
+
+.login-player
+{
+	background: #F5DEB3;
+}
+
+.login-player-selected
+{
+	background: #FFA07A;
+	cursor: default;
+}
+
+.login-player-taken
+{
+	background: #DCDCDC;
+	cursor: default;
+}
+
+.span25
+{ 
+    line-height:25px; 
+}
+
+#login-button{
+	position: absolute;
+	font: 14px Arial;
+	font-weight: bold;
+	text-align: center;
+	vertical-align:middle; 
+	bottom: 0;
+	right: 0;
+    width: 50px;
+    height: 25px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+	background: #DEB887;
+	border: 4px groove gray;
+	cursor: pointer;
+}
+
+#game-phase, #header
+{
+	font: 18px Arial;
+	font-weight: bold;
+	height: 45px;
+	border: 4px solid FloralWhite;
+	width: 180px;
+	float: left;
+	text-align: center;
+}
+
 .header
 {
-	font: 24px Arial; margin: 0.5em 1em;
+	float: left;
 }
 
 #headerContent{
@@ -16,48 +107,59 @@ body
 
 .container{
     width: 100%;
-    height: 980px;
+    height: auto;
 	margin: 10px 0 0 0;
 	border:2px solid gray;
 }
 
 .width-container{
     width: 100%;
-    height: auto;
+    padding-top: 3px;
+	padding-bottom: 3px;
+	height: auto;
 	border:2px solid gray;
+	margin: 10px 0 0 0;
 }
 
-#turn-status-current, #turn-buy-time, #turn-end, #turn-status-next, #timer-status
+.span45
+{ 
+    line-height:45px; 
+}
+
+#turn-text-left, 
+#turn-text-right, 
+#turn-text-center, 
+#turn-button-right, 
+#turn-button-left
 {
-	padding: 15px;
 	font: 18px Arial;
 	font-weight: bold;
+	height: 45px;
+	border: 4px solid FloralWhite;
 }
 
-#turn-status-current, #turn-buy-time
+#turn-text-left, #turn-button-left
 {
-	width: 160px;
+	width: 180px;
 	float: left;
 	text-align: center;
 }
 
-#timer-status
+#turn-text-center
 {
 	text-align: center;
 	overflow:hidden
 }
 
-#turn-status-next, #turn-end
+#turn-text-right, #turn-button-right
 {
-	width: 160px;
+	width: 180px;
 	float: right;
 	text-align: center;
 }
 
-#turn-buy-time, #turn-end
+#turn-button-right, #turn-button-left
 {
-	padding: 8px;
-	margin: 3px;
 	width: 100px;
 	background: #DEB887;
 	border: 4px groove gray;

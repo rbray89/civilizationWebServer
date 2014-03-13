@@ -4,15 +4,14 @@
 #include "rapidjson\writer.h"
 #include "rapidjson\stringbuffer.h"
 
-//#define TECH_COUNT 53
-#define TECH_COUNT 15
+#define TECH_COUNT 53
 	
 using namespace rapidjson;
 
 enum TECH_ERA
 {
 	ANCIENT_ERA,
-	MEDIVIAL_ERA,
+	MEDEVIAL_ERA,
 	GUNPOWDER_ERA,
 	MODERN_ERA
 };

@@ -1,7 +1,7 @@
 #include "Technology.h"
 #include <stdarg.h>
 #include "string.h"
-#include "GameTimer.h"
+#include "GameManager.h"
 
 using namespace rapidjson;
 
@@ -66,7 +66,7 @@ void Technology::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<char*>("name", Name, document->GetAllocator());
 	jsonObject.AddMember<TECH_ERA>("era", Era, document->GetAllocator());
 	jsonObject.AddMember<int>("cost", Cost, document->GetAllocator());
-	jsonObject.AddMember<char*>("owner", GameTimer::GetPlayer(Owner), document->GetAllocator());
+	jsonObject.AddMember<char*>("owner", Player::GetPlayerName(Owner), document->GetAllocator());
 	jsonObject.AddMember<TECH_BENEFITS>("benefits", Benefits, document->GetAllocator());
 	Value dependencies(kArrayType);
 	for (int i = 0; i < DepCount; i++)

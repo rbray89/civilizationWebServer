@@ -80,8 +80,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="mongoose.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="rapidjson\document.h" />
     <ClInclude Include="rapidjson\filestream.h" />
     <ClInclude Include="rapidjson\internal\pow10.h" />
@@ -99,8 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="civilizationWebServer.cpp" />
-    <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="mongoose.c" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="TechManager.cpp" />
     <ClCompile Include="Technology.cpp" />

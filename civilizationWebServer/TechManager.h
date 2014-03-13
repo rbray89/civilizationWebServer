@@ -5,6 +5,7 @@ class TechManager
 {
 	Technology** TechTree;
 	char* TextJSON;
+
 public:
 	char* GetTechStatusJSON();
 	TechManager();

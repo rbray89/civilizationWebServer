@@ -1,11 +1,14 @@
   var websocket;
-  var User = "Ryan";
+  var Player;
+  var Players;
   var Technologies;
   var SelectedTech;
   
   var EraIds = ["ancient","medieval","gunpowder_industrial", "modern"];
   var TechBenefits = ["wonder", "seminal", "productive", "happy", "city", "trade", 
 					"infantry", "cavalry", "artillery", "fleet", "aircraft"];
+  
+  var GamePhases = ["Purchase Phase","Movement/Battle Phase","Trading Phase","Prouction Phase"];
   
   var cancelClick = function(){
 	resetTech();
@@ -16,7 +19,7 @@
 	var minutes = Math.floor(obj.time_remaining/60);
 	var seconds = (obj.time_remaining%60);
 	seconds = (seconds < 10 ? "0" : "")+seconds;
-	timer_status.innerHTML = 'Time Remaining:' + minutes + ':' + seconds;
+	timer_status.textContent  = 'Time Remaining:' + minutes + ':' + seconds;
 	if( obj.time_remaining > 120){
 		timer_status.style.color="#3CB371";
 	} else if(obj.time_remaining > 60){
@@ -25,9 +28,25 @@
 		timer_status.style.color="#ff0000";
 	}
 	var player_current = document.getElementById('turn-status-current');
-	player_current.innerHTML = "Current: " + obj.player_current;
+	player_current.textContent  = "Current: " + Players[obj.player_current].name;
 	var player_current = document.getElementById('turn-status-next');
-	player_current.innerHTML = "Next: " + obj.player_next;
+	player_current.textContent  = "Next: " + Players[obj.player_next].name;
+	var gamePhase = document.getElementById('game-current-phase');
+	gamePhase.textContent = GamePhases[obj.current_phase];
+	
+	var addTimeButton = document.getElementById('turn-button-left');
+	var endTurnButton = document.getElementById('turn-button-right');
+	if(Player == obj.player_current)
+	{
+		endTurnButton.style.visibility = 'visible';
+		addTimeButton.style.visibility = 'visible';
+	}
+	else
+	{
+		endTurnButton.style.visibility = 'hidden';
+		addTimeButton.style.visibility = 'hidden';
+	}
+	
   };
 
   var resetTech = function()
@@ -138,11 +157,76 @@
 	selectTech(SelectedTech);
   };
   
-  var send_cmd = function(cmd) {
+  var loginPlayer = function(player, serverVerified) {
+	if(serverVerified)
+	{
+		Player = player;
+		var header = document.getElementById('player');
+		header.innerText = 'Player: '+Players[Player].name;
+		var loginPrompt = document.getElementById('login');
+		loginPrompt.style.visibility = 'hidden';
+		var civDisplay = document.getElementById('civilization-manager');
+		civDisplay.style.visibility = 'visible'
+	}
+	else
+	{
+		send_cmd('login', player)
+	}
+  };
+  
+  var selectPlayerLogin = function(playerLogin) {
+	for(var i = 0; i < Players.length; i++)
+	{
+		var otherLogins = document.getElementById('player_login_'+i);
+		if(Players[i].logged_in)
+		{
+			otherLogins.className = "login-player-taken";
+		}
+		else
+		{
+			otherLogins.className = "login-player";
+		}
+	}
+	playerLogin.className = "login-player-selected";
+	var loginButton = document.getElementById('login-button');
+	loginButton.onclick=function(){loginPlayer(parseInt(playerLogin.getAttribute('name'))); button_up(this);};
+  };
+  
+  var updatePlayers = function(players) {
+	Players = players;
+	if(Player == null)
+	{
+		var loginPrompt = document.getElementById('login');
+		Players.forEach(function(entry) {
+			var playerLogin = document.getElementById("player_login_"+entry.id);
+			if(playerLogin == null)
+			{
+				playerLogin = document.createElement('div');
+				loginPrompt.appendChild(playerLogin);
+			}
+			playerLogin.innerHTML = "<span class='span50'></span>"+entry.name;
+			playerLogin.id = "player_login_"+entry.id;
+			playerLogin.setAttribute("name",entry.id);
+			if(entry.logged_in)
+			{
+				playerLogin.className = "login-player-taken";
+				playerLogin.onclick=null;
+			}
+			else
+			{
+				playerLogin.className = "login-player";
+				playerLogin.onclick=function(){selectPlayerLogin(playerLogin)};
+			}
+		});
+	}
+  };
+  
+  var send_cmd = function(cmd, args) {
 	var msg = {};
 	msg.command = {};
-	msg.command.user = User;
+	msg.command.player = Player;
 	msg.command.cmd = cmd;
+	msg.command.args = args;
 	websocket.send(JSON.stringify(msg));
   };
   
@@ -160,7 +244,8 @@
 
     websocket = new WebSocket(url);
     websocket.onopen = function(ev) {
-		send_cmd("send_tech_status");
+		send_cmd("get_player_status");
+		send_cmd("get_tech_status");
     };
     websocket.onclose = function(ev) {
 
@@ -177,6 +262,17 @@
 		if(json.technologies != null)
 		{
 			updateTechnologies(json.technologies);
+		}
+		if(json.players != null)
+		{
+			updatePlayers(json.players);
+		}
+		if(json.login != null)
+		{
+			if(json.login.verified == true)
+			{
+				loginPlayer(json.login.player, true);
+			}
 		}
       }
     };
