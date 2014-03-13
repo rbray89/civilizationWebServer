@@ -20,7 +20,7 @@ GameManager::GameManager(struct mg_server* server)
 	TextJSON = nullptr;
 	Paused = true;
 	Initialized = false;
-
+	StartingPlayer = 0;
 }
 
 GameManager::~GameManager()
@@ -40,27 +40,45 @@ static int PostMsgToClient(struct mg_connection *conn)
 	return MG_REQUEST_PROCESSED;
 }
 
+int GameManager::GetNextPlayer()
+{
+	if (StartingPlayer == Player::GetNextPlayer() &&
+		CurrentPhase == PRODUCTION_PHASE)
+	{
+		return Player::GetNextPlayer(1);
+	}
+	else
+	{
+		return Player::GetNextPlayer();
+	}
+}
+
 void GameManager::EndTurn()
 {
 	CountingDown = true;
 	TimeRemaining = PLAYER_TURN_TIME;
-	switch (CurrentPhase)
-	{
-	case PURCHASE_PHASE:
-		CurrentPhase = MOVEMENT_PHASE;
-		break;
-	case MOVEMENT_PHASE:
-		CurrentPhase = TRADE_PHASE;
-		break;
-	case TRADE_PHASE:
-		CurrentPhase = PRODUCTION_PHASE;
-		break;
-	case PRODUCTION_PHASE:
-		CurrentPhase = PURCHASE_PHASE;
-		//increment again to move to next starting player.
-		Player::IncrementCurrentPlayer();
-	}
 	Player::IncrementCurrentPlayer();
+	if (StartingPlayer == Player::GetCurrentPlayer())
+	{
+		switch (CurrentPhase)
+		{
+		case PURCHASE_PHASE:
+			CurrentPhase = MOVEMENT_PHASE;
+			break;
+		case MOVEMENT_PHASE:
+			CurrentPhase = TRADE_PHASE;
+			break;
+		case TRADE_PHASE:
+			CurrentPhase = PRODUCTION_PHASE;
+			break;
+		case PRODUCTION_PHASE:
+			CurrentPhase = PURCHASE_PHASE;
+			//increment again to move to next starting player.
+			Player::IncrementCurrentPlayer();
+			StartingPlayer = Player::GetCurrentPlayer();
+		}
+	}
+	
 	HandleSecondEvent(false);
 }
 
@@ -94,7 +112,7 @@ void GameManager::HandleSecondEvent(bool deincrement)
 	gametimer.AddMember<int>("current_phase", CurrentPhase, document.GetAllocator());
 	gametimer.AddMember<int>("time_remaining", TimeRemaining, document.GetAllocator());
 	gametimer.AddMember<int>("player_current", Player::GetCurrentPlayer(), document.GetAllocator());
-	gametimer.AddMember<int>("player_next", Player::GetNextPlayer(), document.GetAllocator());
+	gametimer.AddMember<int>("player_next", GetNextPlayer(), document.GetAllocator());
 	document.AddMember("game_timer", gametimer, document.GetAllocator());
 		
 	document.Accept(writer);

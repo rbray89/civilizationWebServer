@@ -21,7 +21,7 @@ private:
 
 	struct mg_server* Server;
 	GAME_PHASES CurrentPhase = MOVEMENT_PHASE;
-
+	int StartingPlayer;
 
 	HANDLE hTimer;
 	HANDLE hTimerQueue;
@@ -39,6 +39,7 @@ public:
 	GameManager(struct mg_server* server);
 	void StartStop();
 	int Start();
+	int GetNextPlayer();
 	void EndTurn();
 	void ExtendTurn();
 	char* GetPlayerStatusJSON();

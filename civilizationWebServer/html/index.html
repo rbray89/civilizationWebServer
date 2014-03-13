@@ -9,34 +9,31 @@
 		<div id="login-button" onclick="button_up(this)" onmousedown="button_down(this)"><span class="span25"></span>Select</div>
 	</div>
 	<div id="civilization-manager" style="visibility:hidden;">
-		<div class="width-container">
+		<table class="width-container" ><tr><td class="table-seperator">
 			<div id="turn-text-left">
 				<span class="span45" id="turn-status-current">Current: </span>
 			</div>
+			<div id="turn-button-left" onclick="send_cmd('buy_time'); button_up(this)" onmousedown="button_down(this)" style="visibility:hidden;">
+				<span class="span45" id="turn-buy-time">Add 2:00</span>
+			</div>
+			<div id="turn-text-right" >
+				<span class="span45" id="turn-status-next">Next: </span>
+			</div>
+			<div id="turn-button-right" onclick="send_cmd('end_turn'); button_up(this)" onmousedown="button_down(this)" style="visibility:hidden;">
+				<span class="span45" id="turn-end">End Turn</span>
+			</div>
+			<div id="turn-text-center">
+				<span class="span45" id="timer-status">&nbsp;</span>
+			</div>
+		</td></tr>
+		<tr><td>
 			<div id="header">
 				<span class="span45" id="player"></span>
 			</div>
 			<div id="game-phase" >
 				<span class="span45" id="game-current-phase"></span>
 			</div>
-		</div>
-		<div class="width-container">
-			<div id="turn-text-left">
-				<span class="span45" id="turn-status-current">Current: </span>
-			</div>
-			<div id="turn-button-left" onclick="send_cmd('buy_time'); button_up(this)" onmousedown="button_down(this)" >
-				<span class="span45" id="turn-buy-time">Add 2:00</span>
-			</div>
-			<div id="turn-text-right" >
-				<span class="span45" id="turn-status-next">Next: </span>
-			</div>
-			<div id="turn-button-right" onclick="send_cmd('end_turn'); button_up(this)" onmousedown="button_down(this)">
-				<span class="span45" id="turn-end">End Turn</span>
-			</div>
-			<div id="turn-text-center">
-				<span class="span45" id="timer-status">&nbsp;</span>
-			</div>
-		</div>
+		</td></tr></table>
 		<div class="container">
 			<div class="era" id="ancient">
 				<div class="era-text">Ancient Era</div>

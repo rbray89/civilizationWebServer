@@ -28,7 +28,7 @@ public:
 	static char* GetPlayerName(int i);
 	static void IncrementCurrentPlayer();
 	static int GetCurrentPlayer();
-	static int GetNextPlayer();
+	static int GetNextPlayer(int skip = 0);
 	static bool LogIn(int player, struct mg_connection* token);
 	static bool LogOut(struct mg_connection* token);
 	static char* GetLoginStatusJSON(int player, bool success);

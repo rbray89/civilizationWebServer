@@ -93,9 +93,9 @@ int Player::GetCurrentPlayer()
 	return CurrentPlayer;
 }
 
-int Player::GetNextPlayer()
+int Player::GetNextPlayer(int skip)
 {
-	return (CurrentPlayer + 1) >= PlayerCount ? 0 : CurrentPlayer + 1;
+	return (CurrentPlayer + 1 + skip) % PlayerCount;
 }
 
 char* Player::GetLoginStatusJSON(int player, bool success)
