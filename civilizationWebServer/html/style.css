@@ -1,7 +1,16 @@
 
-body
+body, html
 {
 	background-color: FloralWhite;
+}
+
+#civilization-manager
+{
+	position:absolute;
+    top:0;
+    left:10px;
+    right:10px;
+    bottom:156px;
 }
 
 #login{
@@ -19,7 +28,6 @@ body
 {
 	font: 14px Arial;
 	font-weight: bold;
-	float: top;
 	margin: 2px;
 	text-align: center;
 	vertical-align:middle; 
@@ -43,6 +51,23 @@ body
 	vertical-align:middle; 
 	border:2px solid gray;
 	cursor: pointer;
+}
+
+.login-color-container
+{
+	position: absolute;
+	top: 20px;
+	right: 10px;
+	width: 60px;
+}
+
+.login-color
+{
+	width:16px;
+	height:16px;
+	float: right;
+	margin: 3px;
+	border:3px solid gray;
 }
 
 .login-player
@@ -119,16 +144,20 @@ body
 
 .container{
     width: 100%;
-    height: auto;
-	margin: 10px 0 0 0;
+    height: 100%;
+	overflow-y: scroll;
+	margin: 10px 0 0  0;
 	border:2px solid gray;
 }
 
-.width-container{
+.width-container, .width-container-table{
     width: 100%;
+	height: auto;
+}
+
+.width-container{
     padding-top: 3px;
 	padding-bottom: 3px;
-	height: auto;
 	border:2px solid gray;
 	margin: 10px 0 0 0;
 }

@@ -8,6 +8,7 @@
   var EraIds = ["ancient","medieval","gunpowder_industrial", "modern"];
   var TechBenefits = ["wonder", "seminal", "productive", "happy", "city", "trade", 
 					"infantry", "cavalry", "artillery", "fleet", "aircraft"];
+  var PlayerColors = ['#DC143C','#00008B','#228B22','#FFD700','#A9A9A9','#8B008B'];
   
   var GamePhases = ["Purchase Phase","Movement/Battle Phase","Trading Phase","Prouction Phase"];
   
@@ -284,6 +285,23 @@
 	loginButton.onclick=function(){loginPlayer(parseInt(playerLogin.getAttribute('name'))); button_up(this);};
   };
   
+  var selectPlayerColor = function(playerColor)
+  {
+	for(var n = 0; n < PlayerColors.length; n++)
+	{
+		var color = document.getElementById('login-color-'+n);
+		color.style.borderColor='gray';
+	}
+	playerColor.style.borderColor='#6495ED';
+  }
+  
+  var assignLoginColor = function(i)
+  {
+	var playerColor = document.getElementById('login-color-'+i);
+	playerColor.onclick=function(){selectPlayerColor(playerColor)};
+	playerColor.style.background = PlayerColors[i];
+  }
+  
   var updatePlayers = function(players) {
 	Players = players;
 	if(Player == null)
@@ -310,6 +328,10 @@
 				playerLogin.onclick=function(){selectPlayerLogin(playerLogin)};
 			}
 		});
+		for(var i = 0; i < PlayerColors.length; i++)
+		{
+			assignLoginColor(i);
+		}
 	}
   };
   
