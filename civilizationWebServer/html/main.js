@@ -1,5 +1,6 @@
   var websocket;
   var Player;
+  var PlayerColor = -1;
   var Players;
   var Technologies;
   var SelectedTech;
@@ -8,9 +9,11 @@
   var EraIds = ["ancient","medieval","gunpowder_industrial", "modern"];
   var TechBenefits = ["wonder", "seminal", "productive", "happy", "city", "trade", 
 					"infantry", "cavalry", "artillery", "fleet", "aircraft"];
-  var PlayerColors = ['#DC143C','#00008B','#228B22','#FFD700','#A9A9A9','#8B008B'];
+  var PlayerColors = ['#DC143C','#00008B','#228B22','#DAA520','#A9A9A9','#8B008B'];
   
   var GamePhases = ["Purchase Phase","Movement/Battle Phase","Trading Phase","Prouction Phase"];
+  
+  
   
   var cancelClick = function(){
 	resetTech();
@@ -35,18 +38,36 @@
 	if(TurnStatus.player_current != -1)
 	{
 		player_current.textContent  = "Current: " + Players[TurnStatus.player_current].name;
+		if(Players[TurnStatus.player_current].color != -1)
+		{
+			player_current.style.color = PlayerColors[Players[TurnStatus.player_current].color];
+		}
+		else
+		{
+			player_current.style.color = null;
+		}
 	}
 	else
 	{
 		player_current.textContent  = "-";
+		player_current.style.color = null;
 	}
 	if(TurnStatus.player_next != -1)
 	{
 		player_next.textContent  = "Next: " + Players[TurnStatus.player_next].name;
+		if(Players[TurnStatus.player_next].color != -1)
+		{
+			player_next.style.color = PlayerColors[Players[TurnStatus.player_next].color];
+		}
+		else
+		{
+			player_next.style.color = null;
+		}
 	}
 	else
 	{
 		player_next.textContent  = "-";
+		player_next.style.color = null;
 	}
 	var gamePhase = document.getElementById('game-current-phase');
 	gamePhase.textContent = GamePhases[TurnStatus.current_phase];
@@ -250,12 +271,13 @@
 	selectTech(SelectedTech);
   };
   
-  var loginPlayer = function(player, serverVerified) {
+  var loginPlayer = function(player, color, serverVerified) {
 	if(serverVerified)
 	{
 		Player = player;
 		var header = document.getElementById('player');
 		header.innerText = 'Player: '+Players[Player].name;
+		header.style.color = PlayerColors[Players[Player].color];
 		var loginPrompt = document.getElementById('login');
 		loginPrompt.style.visibility = 'hidden';
 		var civDisplay = document.getElementById('civilization-manager');
@@ -263,7 +285,10 @@
 	}
 	else
 	{
-		send_cmd('login', player)
+		var obj = {};
+		obj.player = player;
+		obj.color = color;
+		send_cmd('login', obj)
 	}
   };
   
@@ -282,24 +307,32 @@
 	}
 	playerLogin.className = "login-player-selected";
 	var loginButton = document.getElementById('login-button');
-	loginButton.onclick=function(){loginPlayer(parseInt(playerLogin.getAttribute('name'))); button_up(this);};
+	loginButton.onclick=function(){loginPlayer(parseInt(playerLogin.getAttribute('name')), PlayerColor); button_up(this);};
   };
   
-  var selectPlayerColor = function(playerColor)
+  var selectPlayerColor = function(id)
   {
+	var playerColor = document.getElementById('login-color-'+id);
 	for(var n = 0; n < PlayerColors.length; n++)
 	{
 		var color = document.getElementById('login-color-'+n);
 		color.style.borderColor='gray';
 	}
 	playerColor.style.borderColor='#6495ED';
+	PlayerColor = id;
   }
   
   var assignLoginColor = function(i)
   {
 	var playerColor = document.getElementById('login-color-'+i);
-	playerColor.onclick=function(){selectPlayerColor(playerColor)};
+	playerColor.onclick=function(){selectPlayerColor(i)};
 	playerColor.style.background = PlayerColors[i];
+	Players.forEach(function(entry) {
+		if(entry.logged_in && entry.color == i)
+		{
+			playerColor.style.visibility = 'hidden';
+		}
+	});
   }
   
   var updatePlayers = function(players) {
@@ -385,7 +418,7 @@
 		{
 			if(json.login.verified == true)
 			{
-				loginPlayer(json.login.player, true);
+				loginPlayer(json.login.player, null, true);
 			}
 		}
       }

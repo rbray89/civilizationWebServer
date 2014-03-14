@@ -17,6 +17,7 @@ private:
 	char* Name;
 	bool LoggedIn;
 	int Id;
+	int Color;
 	struct mg_connection* Token;
 
 	char* GetName();
@@ -29,7 +30,7 @@ public:
 	static void IncrementCurrentPlayer();
 	static int GetCurrentPlayer();
 	static int GetNextPlayer(int skip = 0);
-	static bool LogIn(int player, struct mg_connection* token);
+	static bool LogIn(int player, int color, struct mg_connection* token);
 	static bool LogOut(struct mg_connection* token);
 	static char* GetLoginStatusJSON(int player, bool success);
 	static void SendToAllPlayers(char* string);

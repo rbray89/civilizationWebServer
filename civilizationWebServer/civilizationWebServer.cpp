@@ -35,8 +35,9 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 		}
 		if (strcmp(document["command"]["cmd"].GetString(), "login") == 0)
 		{
-			int player = document["command"]["args"].GetInt();
-			bool success = Player::LogIn(player, conn);
+			int player = document["command"]["args"]["player"].GetInt();
+			int color = document["command"]["args"]["color"].GetInt();
+			bool success = Player::LogIn(player, color, conn);
 			_GameManager->SendPlayerStatusUpdate();
 			char* string = Player::GetLoginStatusJSON(player, success);
 			mg_websocket_write(conn, 1, string, strlen(string));

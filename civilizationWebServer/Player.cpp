@@ -20,6 +20,7 @@ Player::Player(char* name)
 	strcpy(Name, name);
 	LoggedIn = false;
 	Id = PlayerCount++;
+	Color = -1;
 }
 
 Player::~Player()
@@ -42,6 +43,7 @@ void Player::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<char*>("name", Name, document->GetAllocator());
 	jsonObject.AddMember<bool>("logged_in", LoggedIn, document->GetAllocator());
 	jsonObject.AddMember<int>("id", Id, document->GetAllocator());
+	jsonObject.AddMember<int>("color", Color, document->GetAllocator());
 	array->PushBack(jsonObject, document->GetAllocator());
 }
 
@@ -53,12 +55,25 @@ void Player::GetJSONArray(Document* document, Value* array)
 	}
 }
 
-bool Player::LogIn(int player, struct mg_connection* token)
+bool Player::LogIn(int player, int color, struct mg_connection* token)
 {
+	if (color == -1)
+	{
+		return false;
+	}
+	for (int i = 0; i < PlayerCount; i++)
+	{
+		if (i != player && Players[i]->Color == color)
+		{
+			return false;
+		}
+	}
+
 	if (!Players[player]->LoggedIn)
 	{
 		Players[player]->LoggedIn = true;
 		Players[player]->Token = token;
+		Players[player]->Color = color;
 		return true;
 	}
 	return false;
