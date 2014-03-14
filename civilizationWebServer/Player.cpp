@@ -87,6 +87,7 @@ bool Player::LogOut(struct mg_connection* token)
 		{
 			Players[i]->LoggedIn = false;
 			Players[i]->Token = nullptr;
+			Players[i]->Color = 1;
 			return true;
 		}
 	}
@@ -123,6 +124,7 @@ char* Player::GetLoginStatusJSON(int player, bool success)
 	Value loginObj(kObjectType);
 
 	loginObj.AddMember<int>("player", player, document.GetAllocator());
+	loginObj.AddMember<int>("color", Players[player]->Color, document.GetAllocator());
 	loginObj.AddMember<bool>("verified", success, document.GetAllocator());
 
 	document.AddMember("login", loginObj, document.GetAllocator());
