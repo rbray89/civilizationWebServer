@@ -251,7 +251,7 @@ body, html
 
 .technology-purchased
 {
-	background: #DEB887;
+	background: floralwhite;
 }
 
 .technology-selected
@@ -295,6 +295,7 @@ body, html
 	margin: 4px 0 0 2px;
 	width: 86px;
 	float: left;
+	font-weight: bold;
 }
 
 .span18
