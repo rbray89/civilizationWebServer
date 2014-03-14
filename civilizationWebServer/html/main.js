@@ -277,7 +277,7 @@
 		Player = player;
 		var header = document.getElementById('player');
 		header.innerText = 'Player: '+Players[Player].name;
-		header.style.color = color;
+		header.style.color = PlayerColors[color];
 		var loginPrompt = document.getElementById('login');
 		loginPrompt.style.visibility = 'hidden';
 		var civDisplay = document.getElementById('civilization-manager');
