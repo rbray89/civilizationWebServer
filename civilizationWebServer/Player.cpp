@@ -87,7 +87,7 @@ bool Player::LogOut(struct mg_connection* token)
 		{
 			Players[i]->LoggedIn = false;
 			Players[i]->Token = nullptr;
-			Players[i]->Color = 1;
+			Players[i]->Color = -1;
 			return true;
 		}
 	}
