@@ -56,24 +56,35 @@ int GameManager::GetNextPlayer()
 void GameManager::EndTurn()
 {
 	CountingDown = true;
-	TimeRemaining = PLAYER_TURN_TIME;
-	Player::IncrementCurrentPlayer();
+	
+	switch (CurrentPhase)
+	{
+	case PURCHASE_PHASE:
+	case MOVEMENT_PHASE:
+		Player::IncrementCurrentPlayer();
+		TimeRemaining = PLAYER_TURN_TIME;
+		break;
+	}
+	
 	if (StartingPlayer == Player::GetCurrentPlayer())
 	{
 		switch (CurrentPhase)
 		{
 		case PURCHASE_PHASE:
 			CurrentPhase = MOVEMENT_PHASE;
+			TimeRemaining = PLAYER_TURN_TIME;
 			break;
 		case MOVEMENT_PHASE:
 			CurrentPhase = TRADE_PHASE;
+			TimeRemaining = GROUP_TURN_TIME;
 			break;
 		case TRADE_PHASE:
 			CurrentPhase = PRODUCTION_PHASE;
+			TimeRemaining = GROUP_TURN_TIME;
 			break;
 		case PRODUCTION_PHASE:
 			CurrentPhase = PURCHASE_PHASE;
-			//increment again to move to next starting player.
+			TimeRemaining = PLAYER_TURN_TIME;
 			Player::IncrementCurrentPlayer();
 			StartingPlayer = Player::GetCurrentPlayer();
 		}
@@ -111,8 +122,16 @@ void GameManager::HandleSecondEvent(bool deincrement)
 	Value gametimer(kObjectType);
 	gametimer.AddMember<int>("current_phase", CurrentPhase, document.GetAllocator());
 	gametimer.AddMember<int>("time_remaining", TimeRemaining, document.GetAllocator());
-	gametimer.AddMember<int>("player_current", Player::GetCurrentPlayer(), document.GetAllocator());
-	gametimer.AddMember<int>("player_next", GetNextPlayer(), document.GetAllocator());
+	if (CurrentPhase == TRADE_PHASE || CurrentPhase == PRODUCTION_PHASE)
+	{
+		gametimer.AddMember<int>("player_current", -1, document.GetAllocator());
+		gametimer.AddMember<int>("player_next", -1, document.GetAllocator());
+	}
+	else
+	{
+		gametimer.AddMember<int>("player_current", Player::GetCurrentPlayer(), document.GetAllocator());
+		gametimer.AddMember<int>("player_next", GetNextPlayer(), document.GetAllocator());
+	}
 	document.AddMember("game_timer", gametimer, document.GetAllocator());
 		
 	document.Accept(writer);

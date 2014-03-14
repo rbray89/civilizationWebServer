@@ -28,9 +28,23 @@
 		timer_status.style.color="#ff0000";
 	}
 	var player_current = document.getElementById('turn-status-current');
-	player_current.textContent  = "Current: " + Players[obj.player_current].name;
-	var player_current = document.getElementById('turn-status-next');
-	player_current.textContent  = "Next: " + Players[obj.player_next].name;
+	var player_next = document.getElementById('turn-status-next');
+	if(obj.player_current != -1)
+	{
+		player_current.textContent  = "Current: " + Players[obj.player_current].name;
+	}
+	else
+	{
+		player_current.textContent  = "-";
+	}
+	if(obj.player_next != -1)
+	{
+		player_next.textContent  = "Next: " + Players[obj.player_next].name;
+	}
+	else
+	{
+		player_next.textContent  = "-";
+	}
 	var gamePhase = document.getElementById('game-current-phase');
 	gamePhase.textContent = GamePhases[obj.current_phase];
 	
@@ -38,13 +52,19 @@
 	var endTurnButton = document.getElementById('turn-button-right');
 	if(Player == obj.player_current)
 	{
-		endTurnButton.style.visibility = 'visible';
 		addTimeButton.style.visibility = 'visible';
 	}
 	else
 	{
-		endTurnButton.style.visibility = 'hidden';
 		addTimeButton.style.visibility = 'hidden';
+	}
+	if(Player == obj.player_current || obj.player_current == -1)
+	{
+		endTurnButton.style.visibility = 'visible';
+	}
+	else
+	{
+		endTurnButton.style.visibility = 'hidden';
 	}
 	
   };
@@ -73,6 +93,17 @@
 		else
 		{
 			tech.className = "technology-unavailable";
+		}
+		var techCost = document.getElementById('tech_cost_'+i);
+		techCost.innerHTML = techObj.cost;
+		var techOwner = document.getElementById('tech_owner_'+i);
+		if(techObj.owner == -1)
+		{
+			techOwner.innerHTML = "-";
+		}
+		else
+		{
+			techOwner.innerHTML = Players[techObj.owner];
 		}
 		i++;
 		tech = document.getElementById('tech_'+i);
@@ -131,7 +162,7 @@
 		tech.appendChild(techText);
 		techText = document.createElement('div');
 		techText.setAttribute('class', 'tech-text-cost');
-		techText.innerHTML = techObj.cost;
+		techText.setAttribute('id', 'tech_cost_'+techObj.id);
 		tech.appendChild(techText);
 		//benefits
 		for(var i = 0; i < TechBenefits.length; i++)
@@ -143,7 +174,13 @@
 				techText.src=TechBenefits[i]+"16.png";
 				tech.appendChild(techText);
 			}
-		}		
+		}
+		//owner
+		techText = document.createElement('div');
+		techText.setAttribute('class', 'tech-owner');
+		techText.setAttribute('id', 'tech_owner_'+techObj.id);
+		tech.appendChild(techText);
+			
 		document.getElementById(EraIds[techObj.era]).appendChild(tech);
 	}
 	resetTech();

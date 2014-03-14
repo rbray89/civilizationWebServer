@@ -272,3 +272,10 @@ body
 	float: top;
 }
 
+.tech-owner
+{
+	margin: 4px 0 0 2px;
+	width: 86px;
+	float: left;
+}
+
