@@ -59,6 +59,7 @@ public:
 	Technology(char* name, TECH_ERA era, int cost, TECH_BENEFITS benefits);
 	(const char*) GetName();
 	int GetCost();
+	void Purchase(int player);
 	void GetJSON(Document* document, Value* array);
 	void SetDependencies(int n, ...);
 	~Technology();

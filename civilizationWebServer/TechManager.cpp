@@ -150,6 +150,11 @@ char* TechManager::GetTechStatusJSON()
 	return TextJSON;
 }
 
+void TechManager::Purchase(int tech, int player)
+{
+	TechTree[tech]->Purchase(player);
+}
+
 TechManager::~TechManager()
 {
 }

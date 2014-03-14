@@ -18,7 +18,6 @@ using namespace std;
 #define UPDATE_BUFF_SIZE 500
 
 GameManager* _GameManager;
-TechManager* _TechManager;
 
 static void msg_handler(char* msg, struct mg_connection *conn)
 {
@@ -44,7 +43,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 		}
 		if (strcmp(document["command"]["cmd"].GetString(), "get_tech_status") == 0)
 		{
-			char* string = _TechManager->GetTechStatusJSON();
+			char* string = _GameManager->GetTechStatusJSON();
 			mg_websocket_write(conn, 1, string, strlen(string));
 		}
 		if (strcmp(document["command"]["cmd"].GetString(),"buy_time") == 0)
@@ -55,7 +54,13 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 		{
 			_GameManager->EndTurn();
 		}
-		
+		if (strcmp(document["command"]["cmd"].GetString(), "purchase_tech") == 0)
+		{
+			int player = document["command"]["player"].GetInt();
+			int tech = document["command"]["args"].GetInt();
+			_GameManager->PurchaseTech(player, tech);
+			_GameManager->SendTechStatusUpdate();
+		}
 		
 	}
 }
@@ -118,8 +123,9 @@ int main(int argc, char* argv[]){
 	Player::PlayersInit(&(argv[1]), argc - 1);
 
 	struct mg_server *server = mg_create_server(NULL);
+	
 	_GameManager = new GameManager(server);
-	_TechManager = new TechManager();
+	
 
 	mg_set_option(server, "listening_port", "8080");
 	mg_set_option(server, "document_root", "html");

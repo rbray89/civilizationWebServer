@@ -15,6 +15,7 @@ GameManager::GameManager()
 GameManager::GameManager(struct mg_server* server)
 {
 	this->Server = server;
+	_TechManager = new TechManager();
 	TimeRemaining = PLAYER_TURN_TIME;
 	CountingDown = true;
 	TextJSON = nullptr;
@@ -151,6 +152,15 @@ void GameManager::SendPlayerStatusUpdate()
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
+void GameManager::SendTechStatusUpdate()
+{
+	static char buf[UPDATE_BUFF_SIZE];
+
+	const char* string = GetTechStatusJSON();
+	strcpy(buf, string);
+	mg_iterate_over_connections(Server, PostMsgToClient, buf);
+}
+
 VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 {
 	GameManager* gameTimer = (GameManager*)lpParam;
@@ -188,6 +198,14 @@ int GameManager::Start()
 	return 0;
 }
 
+void GameManager::PurchaseTech(int player, int tech)
+{
+	if (player == Player::GetCurrentPlayer() && CurrentPhase == PURCHASE_PHASE)
+	{
+		_TechManager->Purchase(tech, player);
+	}
+}
+
 char* GameManager::GetPlayerStatusJSON()
 {
 	Document document;
@@ -213,4 +231,9 @@ char* GameManager::GetPlayerStatusJSON()
 	memcpy(TextJSON, str, strLen);
 
 	return TextJSON;
+}
+
+char* GameManager::GetTechStatusJSON()
+{
+	return _TechManager->GetTechStatusJSON();
 }

@@ -3,6 +3,7 @@
   var Players;
   var Technologies;
   var SelectedTech;
+  var TurnStatus;
   
   var EraIds = ["ancient","medieval","gunpowder_industrial", "modern"];
   var TechBenefits = ["wonder", "seminal", "productive", "happy", "city", "trade", 
@@ -14,43 +15,45 @@
 	resetTech();
   };
   
-  var updateTimer = function(obj) {
+  var updateTurnStatus = function(obj) {
+	TurnStatus = obj
     var timer_status = document.getElementById('timer-status');
-	var minutes = Math.floor(obj.time_remaining/60);
-	var seconds = (obj.time_remaining%60);
+	var minutes = Math.floor(TurnStatus.time_remaining/60);
+	var seconds = (TurnStatus.time_remaining%60);
 	seconds = (seconds < 10 ? "0" : "")+seconds;
 	timer_status.textContent  = 'Time Remaining:' + minutes + ':' + seconds;
-	if( obj.time_remaining > 120){
+	if( TurnStatus.time_remaining > 120){
 		timer_status.style.color="#3CB371";
-	} else if(obj.time_remaining > 60){
+	} else if(TurnStatus.time_remaining > 60){
 		timer_status.style.color="#DAA520";
 	} else {
 		timer_status.style.color="#ff0000";
 	}
 	var player_current = document.getElementById('turn-status-current');
 	var player_next = document.getElementById('turn-status-next');
-	if(obj.player_current != -1)
+	if(TurnStatus.player_current != -1)
 	{
-		player_current.textContent  = "Current: " + Players[obj.player_current].name;
+		player_current.textContent  = "Current: " + Players[TurnStatus.player_current].name;
 	}
 	else
 	{
 		player_current.textContent  = "-";
 	}
-	if(obj.player_next != -1)
+	if(TurnStatus.player_next != -1)
 	{
-		player_next.textContent  = "Next: " + Players[obj.player_next].name;
+		player_next.textContent  = "Next: " + Players[TurnStatus.player_next].name;
 	}
 	else
 	{
 		player_next.textContent  = "-";
 	}
 	var gamePhase = document.getElementById('game-current-phase');
-	gamePhase.textContent = GamePhases[obj.current_phase];
+	gamePhase.textContent = GamePhases[TurnStatus.current_phase];
 	
+	var playerBanner = document.getElementById('player-banner');
 	var addTimeButton = document.getElementById('turn-button-left');
 	var endTurnButton = document.getElementById('turn-button-right');
-	if(Player == obj.player_current)
+	if(Player == TurnStatus.player_current)
 	{
 		addTimeButton.style.visibility = 'visible';
 	}
@@ -58,20 +61,24 @@
 	{
 		addTimeButton.style.visibility = 'hidden';
 	}
-	if(Player == obj.player_current || obj.player_current == -1)
+	if(Player == TurnStatus.player_current || TurnStatus.player_current == -1)
 	{
+		playerBanner.style.background = '#F5DEB3';
 		endTurnButton.style.visibility = 'visible';
 	}
 	else
 	{
+		playerBanner.style.background = 'FloralWhite';
 		endTurnButton.style.visibility = 'hidden';
 	}
-	
+	resetTech(false);
   };
-
-  var resetTech = function()
+  
+  var resetTech = function(selectReset)
   {
 	var tech = document.getElementById('tech_0');
+	var techOwner = document.getElementById('tech_owner_0');
+	var techPurchase = document.getElementById('tech_purchase_0');
 	var i = 0;
 	do
 	{ 
@@ -80,19 +87,27 @@
 		for( var n = 0; n < techObj.dependencies.length; n++)
 		{
 			var t = techObj.dependencies[n];
-			if(Technologies[t].owner == "")
+			if(Technologies[t].owner == -1)
 			{
 				available = false;
 				break;
 			}
 		}
-		if(available)
+		techObj.available = available;
+		if(selectReset)
 		{
-			tech.className = "technology-available";
+			tech.style.border = null;
 		}
-		else
+		if(selectReset || tech.className != "technology-selected")
 		{
-			tech.className = "technology-unavailable";
+			if(available)
+			{
+				tech.className = "technology-available";
+			}
+			else
+			{
+				tech.className = "technology-unavailable";
+			}
 		}
 		var techCost = document.getElementById('tech_cost_'+i);
 		techCost.innerHTML = techObj.cost;
@@ -105,8 +120,34 @@
 		{
 			techOwner.innerHTML = Players[techObj.owner];
 		}
+		
+		if( TurnStatus!=null && TurnStatus.current_phase == 0 && 
+		TurnStatus.player_current == Player && techObj.owner == -1 && techObj.available)
+		{
+			techOwner.style.display = 'none';
+			techPurchase.style.display = null;
+		}
+		else if(techObj.owner == -1)
+		{
+			techOwner.innerHTML = "-";
+			techOwner.style.display = null;
+			techPurchase.style.display = 'none';
+		}
+		else
+		{
+			if(tech.className != "technology-selected")
+			{
+				tech.className = "technology-purchased";
+			}
+			techOwner.innerHTML = Players[techObj.owner].name;
+			techOwner.style.display = null;
+			techPurchase.style.display = 'none';
+		}
+		
 		i++;
 		tech = document.getElementById('tech_'+i);
+		techOwner = document.getElementById('tech_owner_'+i);
+		techPurchase = document.getElementById('tech_purchase_'+i);
 	}while(tech != null);
   };
   
@@ -115,10 +156,18 @@
 	var techElement = document.getElementById('tech_'+techObj.id);
 	techObj.dependencies.forEach(function(entry) {
 		var techDependencyElement = document.getElementById('tech_'+entry);
-		techDependencyElement.className += " technology-dependency-2";
+		techDependencyElement.style.border= '3px dotted #6A5ACD';
 		selectSecondDeps(Technologies[entry]);
 	});
   };
+  
+  var purchaseTech = function(techObj)
+  {
+	if (confirm("You are purchasing "+techObj.name+"."))
+	  {
+		send_cmd('purchase_tech', techObj.id);
+	  }
+  }
   
   var selectTech = function(techObj)
   {
@@ -128,17 +177,17 @@
 		var techElement = document.getElementById('tech_'+techObj.id);
 		if(techElement.className != "technology-selected")
 		{
-			resetTech();
+			resetTech(true);
 			techObj.dependencies.forEach(function(entry) {
 				var techDependencyElement = document.getElementById('tech_'+entry);
-				techDependencyElement.className += " technology-dependency-1";
+				techDependencyElement.style.border= '3px dashed #FF0000';
 				selectSecondDeps(Technologies[entry]);
 			});
 			techElement.className = "technology-selected";
 		}
 		else
 		{
-			resetTech();
+			resetTech(true);
 		}
 	}
   };
@@ -180,10 +229,16 @@
 		techText.setAttribute('class', 'tech-owner');
 		techText.setAttribute('id', 'tech_owner_'+techObj.id);
 		tech.appendChild(techText);
-			
+		techText = document.createElement('div');
+		techText.setAttribute('class', 'tech-purchase');
+		techText.setAttribute('id', 'tech_purchase_'+techObj.id);
+		techText.onclick=function(event){purchaseTech(techObj);event.stopPropagation();};
+		techText.innerHTML = "<span class='span18'></span>Purchase";
+		techText.style.display = 'none';
+		tech.appendChild(techText);	
 		document.getElementById(EraIds[techObj.era]).appendChild(tech);
 	}
-	resetTech();
+	resetTech(false);
   };  
   
   var updateTechnologies = function(obj) {
@@ -294,7 +349,7 @@
 		var json = JSON.parse(ev.data);
 		if(json.game_timer != null)
 		{
-			updateTimer(json.game_timer);
+			updateTurnStatus(json.game_timer);
 		}
 		if(json.technologies != null)
 		{

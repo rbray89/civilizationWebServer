@@ -8,6 +8,7 @@ class TechManager
 
 public:
 	char* GetTechStatusJSON();
+	void Purchase(int tech, int player);
 	TechManager();
 	~TechManager();
 };

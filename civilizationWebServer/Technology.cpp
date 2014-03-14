@@ -58,6 +58,11 @@ int Technology::GetCost()
 	return Cost;
 }
 
+void Technology::Purchase(int player)
+{
+	Owner = player;
+}
+
 void Technology::GetJSON(Document* document, Value* array)
 {
 
