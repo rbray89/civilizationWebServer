@@ -140,7 +140,8 @@
 		}
 		else
 		{
-			techOwner.innerHTML = Players[techObj.owner];
+			techOwner.innerHTML = Players[techObj.owner].name;
+			techOwner.style.color = PlayerColors[Players[techObj.owner].color];
 		}
 		
 		if( TurnStatus!=null && TurnStatus.current_phase == 0 && 
@@ -151,7 +152,6 @@
 		}
 		else if(techObj.owner == -1)
 		{
-			techOwner.innerHTML = "-";
 			techOwner.style.display = null;
 			techPurchase.style.display = 'none';
 		}
@@ -161,7 +161,6 @@
 			{
 				tech.className = "technology-purchased";
 			}
-			techOwner.innerHTML = Players[techObj.owner].name;
 			techOwner.style.display = null;
 			techPurchase.style.display = 'none';
 		}
