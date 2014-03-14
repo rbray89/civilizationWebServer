@@ -277,7 +277,7 @@
 		Player = player;
 		var header = document.getElementById('player');
 		header.innerText = 'Player: '+Players[Player].name;
-		header.style.color = PlayerColors[Players[Player].color];
+		header.style.color = color;
 		var loginPrompt = document.getElementById('login');
 		loginPrompt.style.visibility = 'hidden';
 		var civDisplay = document.getElementById('civilization-manager');
@@ -418,7 +418,7 @@
 		{
 			if(json.login.verified == true)
 			{
-				loginPlayer(json.login.player, null, true);
+				loginPlayer(json.login.player, json.login.color, true);
 			}
 		}
       }
