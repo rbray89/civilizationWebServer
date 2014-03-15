@@ -57,7 +57,7 @@ void Technology::InitTech()
 	IronWorking->EnablesText = "Swordsman";
 	Philosophy_Literature->EnablesText = "Library";
 	Mysticism->EnablesText = "Temple";
-	Trade_Mapmaking->EnablesText = "Galley, Trade1";
+	Trade_Mapmaking->EnablesText = "Galley, Trade1-sea";
 	Currency->EnablesText = "Marketplace";
 	Construction->EnablesText = "Aqueduct, Coloseum, Size2 Cities";
 
@@ -87,6 +87,16 @@ void Technology::InitTech()
 	Technology* Chivalry = new Technology("Chivalry", MEDEVIAL_ERA, 60, INFANTRY_BENEFIT);
 	Technology* Navigation = new Technology("Navigation", MEDEVIAL_ERA, 60, TRADE_BENEFIT | FLEET_BENEFIT);
 	Technology* Chemistry = new Technology("Chemistry", MEDEVIAL_ERA, 40, CITY_BENEFIT);
+
+	Banking->EnablesText = "Bank";
+	Education->EnablesText = "University";
+	Engineering->EnablesText = "Trebuche";
+	Theology->EnablesText = "Cathedral";
+	Feudalism->EnablesText = "Man-At-Arms, Castle";
+	Astronomy->EnablesText = "Caravel, Trade2-sea";
+	Banking->EnablesText = "Knight";
+	Navigation->EnablesText = "Galleons, Trade3";
+	Chemistry->EnablesText = "Size3 Cities";
 
 	Banking->BenefitText = "Free Bank Improvment";
 	Engineering->BenefitText = "One free Trebuche unit";
@@ -123,6 +133,16 @@ void Technology::InitTech()
 	Technology* SteamPower = new Technology("Steam Power", GUNPOWDER_ERA, 120, PRODUCTIVE_BENEFIT | FLEET_BENEFIT | INFANTRY_BENEFIT | TRADE_BENEFIT | WONDER_BENEFIT | SEMINAL_BENEFIT, TranscontinentalRailroad);
 	Technology* Industrialization = new Technology("Industrialization", GUNPOWDER_ERA, 100, ARTILLERY_BENEFIT | PRODUCTIVE_BENEFIT);
 
+	Nationalism->EnablesText = "Capitol";
+	Economics->EnablesText = "Stock Market";
+	GunpowderWeapons->EnablesText = "Muketman";
+	Cavalry->EnablesText = "Dragoon";
+	LegislativeGovernment->EnablesText = "Legislature";
+	Metallurgy->EnablesText = "Cannon, Frigate";
+	Medicine->EnablesText = "Hospital, Size4 Cities";
+	SteamPower->EnablesText = "Ironclad, Rifleman, Railroad, Trade4-land";
+	Industrialization->EnablesText = "Artillery, Factory";
+
 	GunpowderWeapons->BenefitText = "One free Musketman unit";
 	Cavalry->BenefitText = "One free Dragoon unit";
 	LegislativeGovernment->BenefitText = "Free Legilature improvement";
@@ -154,7 +174,7 @@ void Technology::InitTech()
 	Technology* Electricity = new Technology("Electricity", MODERN_ERA, 100, INFANTRY_BENEFIT);
 	Technology* Combustion = new Technology("Combustion", MODERN_ERA, 100, PRODUCTIVE_BENEFIT | FLEET_BENEFIT);
 	Technology* Flight = new Technology("Flight", MODERN_ERA, 100, AIRCRAFT_BENEFIT | TRADE_BENEFIT);
-	Technology* Fision = new Technology("Fision", MODERN_ERA, 150, PRODUCTIVE_BENEFIT | WONDER_BENEFIT, ManhattanProject);
+	Technology* Fission = new Technology("Fision", MODERN_ERA, 150, PRODUCTIVE_BENEFIT | WONDER_BENEFIT, ManhattanProject);
 	Technology* Electronics = new Technology("Electronics", MODERN_ERA, 70, WONDER_BENEFIT, HooverDam);
 	Technology* MassProduction = new Technology("Mass Production", MODERN_ERA, 100, PRODUCTIVE_BENEFIT | CAVALRY_BENEFIT | WONDER_BENEFIT, UniversalSuffrage);
 	Technology* Plastics = new Technology("Plastics", MODERN_ERA, 80, HAPPY_BENEFIT);
@@ -168,6 +188,23 @@ void Technology::InitTech()
 	Technology* SpaceFlight = new Technology("Space Flight", MODERN_ERA, 150, ARTILLERY_BENEFIT | WONDER_BENEFIT, ApolloProgram);
 	Technology* SuperConductor = new Technology("Super Conductor", MODERN_ERA, 120, AIRCRAFT_BENEFIT);
 	Technology* Fusion = new Technology("Fusion", MODERN_ERA, 150, PRODUCTIVE_BENEFIT | WONDER_BENEFIT, AlphaCentauriColonyShip);
+
+	ScientificMethod->EnablesText = "Research Lab";
+	Electricity->EnablesText = "Machine Gunner";
+	Flight->EnablesText = "Biplane, Trade-All";
+	Fission->EnablesText = "Nuclear Power Plant";
+	MassProduction->EnablesText = "Tank, Manufacturing Plant";
+	Plastics->EnablesText = "Shopping Mall";
+	Robotics->EnablesText = "Mechanized Infantry";
+	Radio_Television->EnablesText = "Television Station";
+	Computers->EnablesText = "The Internet";
+	AdvancedFlight->EnablesText = "Aircraft Carrier, Monoplane, Airport";
+	Genetics->EnablesText = "Healthcare Complex";
+	Rocketry->EnablesText = "Rocket Artillery, Jets";
+	Miniaturization->EnablesText = "Modern Armor Infantry";
+	SpaceFlight->EnablesText = "Cruise Missiles";
+	SuperConductor->EnablesText = "Stealth Aircraft";
+	Fusion->EnablesText = "Fusion Reactor";
 
 	Electricity->BenefitText = "One free Machinegunner unit";
 	Combustion->BenefitText = "One free Batteship unit";
@@ -184,7 +221,7 @@ void Technology::InitTech()
 	Electricity->SetDependencies(1, SteamPower);
 	Combustion->SetDependencies(1, Industrialization);
 	Flight->SetDependencies(1, Combustion);
-	Fision->SetDependencies(1, ScientificMethod);
+	Fission->SetDependencies(1, ScientificMethod);
 	Electronics->SetDependencies(2, Electricity, ScientificMethod);
 	MassProduction->SetDependencies(2, Combustion, Electricity);
 	Plastics->SetDependencies(1, MassProduction);
@@ -197,7 +234,7 @@ void Technology::InitTech()
 	Miniaturization->SetDependencies(1, Computers);
 	SpaceFlight->SetDependencies(2, Plastics, Computers);
 	SuperConductor->SetDependencies(2, Miniaturization, SpaceFlight);
-	Fusion->SetDependencies(2, Fision, SuperConductor);
+	Fusion->SetDependencies(2, Fission, SuperConductor);
 
 }
 
