@@ -1,20 +1,14 @@
 #pragma once
 
+#include "Common.h"
 #include "rapidjson\document.h"
 #include "rapidjson\writer.h"
 #include "rapidjson\stringbuffer.h"
+#include "Wonder.h"
 
 #define TECH_COUNT 53
 	
 using namespace rapidjson;
-
-enum TECH_ERA
-{
-	ANCIENT_ERA,
-	MEDEVIAL_ERA,
-	GUNPOWDER_ERA,
-	MODERN_ERA
-};
 
 enum TECH_BENEFITS
 {
@@ -47,21 +41,31 @@ private:
 	Technology** DependsOn;
 	int Id;
 	TECH_BENEFITS Benefits;
+	char* BenefitText;
+	char* EnablesText;
 	Value* jsonObject;
+	Wonder** Wonders;
+	int WonderCount;
 
 	static Technology* TechTree[TECH_COUNT];
 	static int IdCount;
+	static char* TextJSON;
+	
 
 public:
 	static Technology** GetTechTree();
 
 	Technology();
-	Technology(char* name, TECH_ERA era, int cost, TECH_BENEFITS benefits);
+	Technology(char* name, TECH_ERA era, int cost, TECH_BENEFITS benefits, Wonder* wonder1 = nullptr, Wonder* wonder2 = nullptr);
 	(const char*) GetName();
 	int GetCost();
 	void Purchase(int player);
 	void GetJSON(Document* document, Value* array);
 	void SetDependencies(int n, ...);
+
+	static void InitTech();
+	static char* GetTechStatusJSON();
+	static void Purchase(int tech, int player);
 	~Technology();
 };
 

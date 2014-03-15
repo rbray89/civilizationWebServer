@@ -63,13 +63,16 @@
     <ClInclude Include="Technology.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TechManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wonder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,13 +89,13 @@
     <ClCompile Include="Technology.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TechManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Wonder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

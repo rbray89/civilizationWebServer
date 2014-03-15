@@ -4,6 +4,7 @@
   var Players;
   var Technologies;
   var SelectedTech;
+  var Wonders;
   var TurnStatus;
   
   var EraIds = ["ancient","medieval","gunpowder_industrial", "modern"];
@@ -101,6 +102,7 @@
 	var tech = document.getElementById('tech_0');
 	var techOwner = document.getElementById('tech_owner_0');
 	var techPurchase = document.getElementById('tech_purchase_0');
+	var techElementExpanded  = document.getElementById('tech_expanded_0');
 	var i = 0;
 	do
 	{ 
@@ -130,6 +132,7 @@
 			{
 				tech.className = "technology-unavailable";
 			}
+			techElementExpanded.className = "technology-unexpanded";
 		}
 		var techCost = document.getElementById('tech_cost_'+i);
 		techCost.innerHTML = techObj.cost;
@@ -160,6 +163,7 @@
 			if(tech.className != "technology-selected")
 			{
 				tech.className = "technology-purchased";
+				techElementExpanded.className = "technology-unexpanded";
 			}
 			techOwner.style.display = null;
 			techPurchase.style.display = 'none';
@@ -169,6 +173,7 @@
 		tech = document.getElementById('tech_'+i);
 		techOwner = document.getElementById('tech_owner_'+i);
 		techPurchase = document.getElementById('tech_purchase_'+i);
+		techElementExpanded  = document.getElementById('tech_expanded_'+i);
 	}while(tech != null);
   };
   
@@ -205,6 +210,8 @@
 				selectSecondDeps(Technologies[entry]);
 			});
 			techElement.className = "technology-selected";
+			var techElementExpanded = document.getElementById('tech_expanded_'+techObj.id);
+			techElementExpanded.className = "technology-expanded";
 		}
 		else
 		{
@@ -258,6 +265,38 @@
 		techText.style.display = 'none';
 		tech.appendChild(techText);	
 		document.getElementById(EraIds[techObj.era]).appendChild(tech);
+		
+		var techExpanded = document.createElement('div');
+		techExpanded.setAttribute('id', 'tech_expanded_'+techObj.id);
+		techExpanded.setAttribute('class', 'technology-unexpanded');
+		techExpanded.onclick=function(event){selectTech(techObj);event.stopPropagation();};
+		
+		techText = document.createElement('div');
+		var benefitText = techObj.benefit_text;
+		if(benefitText == null)
+		{
+			if(techObj.wonders.length == 1)
+			{
+				benefitText = Wonders[techObj.wonders[0]].name+' Wonder';
+			}
+			else
+			{
+				benefitText = Wonders[techObj.wonders[0]].name+
+				' Wonder AND '+Wonders[techObj.wonders[1]].name+' Wonder';
+			}
+		}
+		techText.innerHTML = benefitText;
+		techExpanded.appendChild(techText);	
+		
+		var enablesText = techObj.enables_text;
+		if(enablesText != null)
+		{
+			techText = document.createElement('div');
+			techText.innerHTML = 'Enables: '+enablesText;
+			techExpanded.appendChild(techText);	
+		}
+		
+		tech.appendChild(techExpanded);
 	}
 	resetTech(false);
   };  
@@ -268,6 +307,10 @@
 		updateTech(entry);
 	});
 	selectTech(SelectedTech);
+  };
+  
+  var updateWonders = function(obj) {
+	Wonders = obj;
   };
   
   var loginPlayer = function(player, color, serverVerified) {
@@ -404,6 +447,10 @@
 		if(json.game_timer != null)
 		{
 			updateTurnStatus(json.game_timer);
+		}
+		if(json.wonders != null)
+		{
+			updateWonders(json.wonders);
 		}
 		if(json.technologies != null)
 		{

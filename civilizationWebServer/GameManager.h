@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include "Player.h"
-#include "TechManager.h"
+#include "Technology.h"
 
 #define UPDATE_BUFF_SIZE 16000
 #define PLAYER_TURN_TIME 5*60
@@ -22,7 +22,7 @@ class GameManager
 private:
 
 	struct mg_server* Server;
-	TechManager* _TechManager;
+	
 	GAME_PHASES CurrentPhase = MOVEMENT_PHASE;
 	int StartingPlayer;
 
@@ -39,6 +39,7 @@ public:
 	void HandleSecondEvent(bool deincrement = true);
 	void SendPlayerStatusUpdate();
 	void SendTechStatusUpdate();
+	void SendWonderStatusUpdate();
 	GameManager();
 	GameManager(struct mg_server* server);
 	void StartStop();
@@ -49,6 +50,7 @@ public:
 	void PurchaseTech(int player, int tech);
 	char* GetPlayerStatusJSON();
 	char* GetTechStatusJSON();
+	char* GetWonderStatusJSON();
 	~GameManager();
 };
 

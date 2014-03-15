@@ -80,6 +80,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="mongoose.h" />
     <ClInclude Include="Player.h" />
@@ -95,8 +96,8 @@
     <ClInclude Include="rapidjson\writer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TechManager.h" />
     <ClInclude Include="Technology.h" />
+    <ClInclude Include="Wonder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="civilizationWebServer.cpp" />
@@ -104,8 +105,8 @@
     <ClCompile Include="mongoose.c" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="TechManager.cpp" />
     <ClCompile Include="Technology.cpp" />
+    <ClCompile Include="Wonder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="html\favicon.ico" />

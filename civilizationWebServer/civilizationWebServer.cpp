@@ -7,7 +7,6 @@
 #include <fstream>
 #include "mongoose.h"
 #include "GameManager.h"
-#include "TechManager.h"
 #include "rapidjson\document.h"
 #include "rapidjson\writer.h"
 #include "rapidjson\stringbuffer.h"
@@ -44,7 +43,9 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 		}
 		if (strcmp(document["command"]["cmd"].GetString(), "get_tech_status") == 0)
 		{
-			char* string = _GameManager->GetTechStatusJSON();
+			char* string = _GameManager->GetWonderStatusJSON();
+			mg_websocket_write(conn, 1, string, strlen(string));
+			string = _GameManager->GetTechStatusJSON();
 			mg_websocket_write(conn, 1, string, strlen(string));
 		}
 		if (strcmp(document["command"]["cmd"].GetString(),"buy_time") == 0)
@@ -60,6 +61,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 			int player = document["command"]["player"].GetInt();
 			int tech = document["command"]["args"].GetInt();
 			_GameManager->PurchaseTech(player, tech);
+			_GameManager->SendWonderStatusUpdate();
 			_GameManager->SendTechStatusUpdate();
 		}
 		

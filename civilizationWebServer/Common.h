@@ -1,0 +1,9 @@
+#pragma once
+
+enum TECH_ERA
+{
+	ANCIENT_ERA,
+	MEDEVIAL_ERA,
+	GUNPOWDER_ERA,
+	MODERN_ERA
+};
