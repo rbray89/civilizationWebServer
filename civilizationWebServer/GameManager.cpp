@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "mongoose.h"
 #include "string.h"
+#include <fstream>
 #include <windows.h>
 #include "rapidjson\document.h"
 #include "rapidjson\writer.h"
@@ -15,7 +16,9 @@ GameManager::GameManager()
 GameManager::GameManager(struct mg_server* server)
 {
 	this->Server = server;
+	Upgrade::InitUpgrades();
 	Technology::InitTech();
+	
 	TimeRemaining = PLAYER_TURN_TIME;
 	CountingDown = true;
 	TextJSON = nullptr;
@@ -170,6 +173,15 @@ void GameManager::SendWonderStatusUpdate()
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
+void GameManager::SendCityStatusUpdate()
+{
+	static char buf[UPDATE_BUFF_SIZE];
+
+	const char* string = City::GetCityStatusJSON();
+	strcpy(buf, string);
+	mg_iterate_over_connections(Server, PostMsgToClient, buf);
+}
+
 VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 {
 	GameManager* gameTimer = (GameManager*)lpParam;
@@ -215,6 +227,21 @@ void GameManager::PurchaseTech(int player, int tech)
 	}
 }
 
+void GameManager::PurchaseTechOverride(int player, int tech)
+{
+	Technology::Purchase(tech, player);
+}
+
+void GameManager::AssignCity(int player, int city)
+{
+	City::Assign(player, city);
+}
+
+void GameManager::CreateCity(int player, RESOURCE resource, bool fertile)
+{
+	new City(resource, player, fertile);
+}
+
 char* GameManager::GetPlayerStatusJSON()
 {
 	Document document;
@@ -250,4 +277,59 @@ char* GameManager::GetTechStatusJSON()
 char* GameManager::GetWonderStatusJSON()
 {
 	return Wonder::GetWonderStatusJSON();
+}
+
+void GameManager::LoadState(char* filename)
+{
+	std::ifstream in(filename, std::ios::in | std::ios::binary);
+	std::string contents;
+	if (in)
+	{
+		in.seekg(0, std::ios::end);
+		contents.resize(in.tellg());
+		in.seekg(0, std::ios::beg);
+		in.read(&contents[0], contents.size());
+		in.close();
+	}
+	else
+	{
+		return;
+	}
+	Document document;
+	if (document.Parse<0>(contents.c_str()).HasParseError() || !document.IsObject())
+	{
+		return;
+	}
+	Player::SetCurrentPlayer(document["gameState"]["currentPlayer"].GetInt());
+	StartingPlayer = document["gameState"]["turnStartingPlayer"].GetInt();
+	CurrentPhase = (GAME_PHASES)document["gameState"]["currentPhase"].GetInt();
+	Technology::LoadState(&document);
+}
+
+void GameManager::SaveState(char* filename)
+{
+	Document document;
+
+	document.Parse<0>("{}");
+	StringBuffer ss;
+	Writer<StringBuffer> writer(ss);
+
+	Value gameState(kObjectType);
+	gameState.AddMember<int>("currentPlayer", Player::GetCurrentPlayer(), document.GetAllocator());
+	gameState.AddMember<int>("turnStartingPlayer", StartingPlayer, document.GetAllocator());
+	gameState.AddMember<GAME_PHASES>("currentPhase", CurrentPhase, document.GetAllocator());
+	document.AddMember("gameState", gameState, document.GetAllocator());
+	Technology::SaveState(&document);
+	document.Accept(writer);
+	const char* str = ss.GetString();
+
+	std::ofstream out(filename, std::ios::out | std::ios::binary);
+	std::string contents;
+	if (out)
+	{
+		out.write(str, strlen(str)+1);
+		out.close();
+	}
+	
+	
 }

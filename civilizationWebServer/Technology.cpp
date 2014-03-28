@@ -38,7 +38,6 @@ void Technology::InitTech()
 	Technology* Currency = new Technology("Currency", ANCIENT_ERA, 50, PRODUCTIVE_BENEFIT);
 	Technology* Construction = new Technology("Construction", ANCIENT_ERA, 50, CITY_BENEFIT | PRODUCTIVE_BENEFIT | HAPPY_BENEFIT | WONDER_BENEFIT, GreatWall);
 
-	Alphabet_Writing->BenefitText = "4 Victory Points";
 	Pottery_Specialization->BenefitText = "Free Granary improvement";
 	TheWheel->BenefitText = "One free Chariot unit";
 	HorsebackRiding->BenefitText = "One free Horesman unit";
@@ -84,7 +83,7 @@ void Technology::InitTech()
 	Technology* Feudalism = new Technology("Feudalism", MEDEVIAL_ERA, 70, HAPPY_BENEFIT | INFANTRY_BENEFIT | WONDER_BENEFIT, ArtOfWar);
 	Technology* Astronomy = new Technology("Astronomy", MEDEVIAL_ERA, 60, TRADE_BENEFIT | FLEET_BENEFIT | WONDER_BENEFIT, CopernicusObservatory);
 	Technology* PrintingPress = new Technology("Printing Press", MEDEVIAL_ERA, 40, SEMINAL_BENEFIT);
-	Technology* Chivalry = new Technology("Chivalry", MEDEVIAL_ERA, 60, INFANTRY_BENEFIT);
+	Technology* Chivalry = new Technology("Chivalry", MEDEVIAL_ERA, 60, CAVALRY_BENEFIT);
 	Technology* Navigation = new Technology("Navigation", MEDEVIAL_ERA, 60, TRADE_BENEFIT | FLEET_BENEFIT);
 	Technology* Chemistry = new Technology("Chemistry", MEDEVIAL_ERA, 40, CITY_BENEFIT);
 
@@ -94,13 +93,12 @@ void Technology::InitTech()
 	Theology->EnablesText = "Cathedral";
 	Feudalism->EnablesText = "Man-At-Arms, Castle";
 	Astronomy->EnablesText = "Caravel, Trade2-sea";
-	Banking->EnablesText = "Knight";
+	Chivalry->EnablesText = "Knight";
 	Navigation->EnablesText = "Galleons, Trade3";
 	Chemistry->EnablesText = "Size3 Cities";
 
 	Banking->BenefitText = "Free Bank Improvment";
 	Engineering->BenefitText = "One free Trebuche unit";
-	PrintingPress->BenefitText = "4 Victory Points";
 	Chivalry->BenefitText = "One free Knight unit";
 	Navigation->BenefitText = "One free Galleon unit";
 	Chemistry->BenefitText = "One free city upgrade";
@@ -147,7 +145,6 @@ void Technology::InitTech()
 	Cavalry->BenefitText = "One free Dragoon unit";
 	LegislativeGovernment->BenefitText = "Free Legilature improvement";
 	Medicine->BenefitText = "Free Hospital improvement";
-	SteamPower->BenefitText = "Transcontinental Railroad Wonder AND 4 Victory Points";
 	Industrialization->BenefitText = "Free Factory improvement";
 
 	Nationalism->SetDependencies(2, Banking, PrintingPress);
@@ -191,6 +188,7 @@ void Technology::InitTech()
 
 	ScientificMethod->EnablesText = "Research Lab";
 	Electricity->EnablesText = "Machine Gunner";
+	Combustion->EnablesText = "Highway System";
 	Flight->EnablesText = "Biplane, Trade-All";
 	Fission->EnablesText = "Nuclear Power Plant";
 	MassProduction->EnablesText = "Tank, Manufacturing Plant";
@@ -211,7 +209,6 @@ void Technology::InitTech()
 	Flight->BenefitText = "One free Biplane unit";
 	Plastics->BenefitText = "Free Shopping Mall improvement";
 	Robotics->BenefitText = "One free Mechanized Infantry unit";
-	Computers->BenefitText = "4 Victory Points";
 	AdvancedFlight->BenefitText = "One free Monoplane unit";
 	Rocketry->BenefitText = "One free Rocket Artillery unit";
 	Miniaturization->BenefitText = "One free Modern Armor unit";
@@ -311,7 +308,7 @@ Technology::Technology(char* name, TECH_ERA era, int cost, TECH_BENEFITS benefit
 	}
 	else
 	{
-		WonderCount == 0;
+		WonderCount = 0;
 		Wonders = nullptr;
 	}
 }
@@ -353,47 +350,74 @@ void Technology::Purchase(int player)
 	}
 }
 
-void Technology::GetJSON(Document* document, Value* array)
+void Technology::GetJSON(Document* document, Value* array, bool minimal)
 {
 
 	Value jsonObject(kObjectType);
 	jsonObject.AddMember<int>("id", Id, document->GetAllocator());
-	jsonObject.AddMember<char*>("name", Name, document->GetAllocator());
-	jsonObject.AddMember<TECH_ERA>("era", Era, document->GetAllocator());
-	jsonObject.AddMember<int>("cost", Cost, document->GetAllocator());
 	jsonObject.AddMember<int>("owner", Owner, document->GetAllocator());
-	jsonObject.AddMember<TECH_BENEFITS>("benefits", Benefits, document->GetAllocator());
-	if (BenefitText != nullptr)
+	if (!minimal)
 	{
-		jsonObject.AddMember<char*>("benefit_text", BenefitText, document->GetAllocator());
+
+		jsonObject.AddMember<char*>("name", Name, document->GetAllocator());
+		jsonObject.AddMember<TECH_ERA>("era", Era, document->GetAllocator());
+		jsonObject.AddMember<int>("cost", Cost, document->GetAllocator());
+
+		jsonObject.AddMember<TECH_BENEFITS>("benefits", Benefits, document->GetAllocator());
+		if (BenefitText != nullptr)
+		{
+			jsonObject.AddMember<char*>("benefit_text", BenefitText, document->GetAllocator());
+		}
+		else
+		{
+			Value nullVal(kNullType);
+			jsonObject.AddMember("benefit_text", nullVal, document->GetAllocator());
+		}
+		if (EnablesText != nullptr)
+		{
+			jsonObject.AddMember<char*>("enables_text", EnablesText, document->GetAllocator());
+		}
+		else
+		{
+			Value nullVal(kNullType);
+			jsonObject.AddMember("enables_text", nullVal, document->GetAllocator());
+		}
+		Value wonders(kArrayType);
+		for (int i = 0; i < WonderCount; i++)
+		{
+			wonders.PushBack<int>(Wonders[i]->GetId(), document->GetAllocator());
+		}
+		jsonObject.AddMember("wonders", wonders, document->GetAllocator());
+		Value dependencies(kArrayType);
+		for (int i = 0; i < DepCount; i++)
+		{
+			dependencies.PushBack<int>(DependsOn[i]->Id, document->GetAllocator());
+		}
+		jsonObject.AddMember("dependencies", dependencies, document->GetAllocator());
 	}
-	else
-	{
-		Value nullVal(kNullType);
-		jsonObject.AddMember("benefit_text", nullVal, document->GetAllocator());
-	}
-	if (EnablesText != nullptr)
-	{
-		jsonObject.AddMember<char*>("enables_text", EnablesText, document->GetAllocator());
-	}
-	else
-	{
-		Value nullVal(kNullType);
-		jsonObject.AddMember("enables_text", nullVal, document->GetAllocator());
-	}
-	Value wonders(kArrayType);
-	for (int i = 0; i < WonderCount; i++)
-	{
-		wonders.PushBack<int>(Wonders[i]->GetId(), document->GetAllocator());
-	}
-	jsonObject.AddMember("wonders", wonders, document->GetAllocator());
-	Value dependencies(kArrayType);
-	for (int i = 0; i < DepCount; i++)
-	{
-		dependencies.PushBack<int>(DependsOn[i]->Id, document->GetAllocator());
-	}
-	jsonObject.AddMember("dependencies",dependencies, document->GetAllocator());
 	array->PushBack(jsonObject, document->GetAllocator());
+}
+
+void Technology::LoadState(Document* document)
+{
+	const Value& techArray = (*document)["technologies"];
+	for (SizeType i = 0; i < techArray.Size(); i++)
+	{
+		int id = techArray[SizeType(i)]["id"].GetInt();
+		int owner = techArray[SizeType(i)]["owner"].GetInt();
+		TechTree[id]->Purchase(owner);
+	}
+}
+
+void Technology::SaveState(Document* document)
+{
+	Value technologies(kArrayType);
+
+	for (int i = 0; i < TECH_COUNT; i++)
+	{
+		TechTree[i]->GetJSON(document, &technologies, true);
+	}
+	document->AddMember("technologies", technologies, document->GetAllocator());
 }
 
 Technology::~Technology()

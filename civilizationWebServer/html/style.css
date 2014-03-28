@@ -129,12 +129,14 @@ body, html
 #game-phase
 {
 	float: right;
-	width: 300px;
+	width: 288px;
 }
 
 #header
 {
+	width: 288px;
 	float: left;
+	text-align: center;
 }
 
 #headerContent{
@@ -170,11 +172,19 @@ body, html
     line-height:45px; 
 }
 
+#header-text-center
+{
+	height: 100%;
+    margin: 0 auto;
+}
+
 #turn-text-left, 
 #turn-text-right, 
 #turn-text-center, 
 #turn-button-right, 
-#turn-button-left
+#turn-button-left,
+#show-tech,
+#show-cities
 {
 	font: 18px Arial;
 	font-weight: bold;
@@ -189,7 +199,7 @@ body, html
 	text-align: center;
 }
 
-#turn-text-center
+#turn-text-center, #header-text-center
 {
 	text-align: center;
 	overflow:hidden
@@ -202,7 +212,16 @@ body, html
 	text-align: center;
 }
 
-#turn-button-right, #turn-button-left
+#show-tech, #show-cities
+{
+	width: 180px;
+	text-align: center;
+
+	display:inline-block;
+}
+
+#turn-button-right, #turn-button-left,
+#show-tech, #show-cities
 {
 	width: 100px;
 	background: #DEB887;
@@ -214,8 +233,6 @@ body, html
 {
 	position: relative;
 	padding:5px;
-	padding-bottom:65px;
-	padding-right:40px;
 	border:2px solid gray;
 	margin:10px;
 	overflow:hidden;
@@ -224,7 +241,8 @@ body, html
 
 .era-expanded
 {
-	z-index: 2;
+	padding-bottom:95px;
+	padding-right:40px;
 }
 
 .era-text
@@ -295,7 +313,7 @@ body, html
 	top:70px;
 	left:-3px;
 	position: absolute;
-	height:60px;
+	height:auto;
 	width:210px;
 	z-index:4;
 	background: floralwhite;
@@ -355,3 +373,9 @@ body, html
 	border: 3px groove gray;
 }
 
+.tech-benefit
+{
+	font: 14px Arial;
+	text-align: center;
+	border-bottom: 1px solid gray;
+}

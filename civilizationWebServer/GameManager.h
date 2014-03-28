@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include "Player.h"
+#include "City.h"
 #include "Technology.h"
 
 #define UPDATE_BUFF_SIZE 16000
@@ -40,6 +41,7 @@ public:
 	void SendPlayerStatusUpdate();
 	void SendTechStatusUpdate();
 	void SendWonderStatusUpdate();
+	void SendCityStatusUpdate();
 	GameManager();
 	GameManager(struct mg_server* server);
 	void StartStop();
@@ -48,9 +50,14 @@ public:
 	void EndTurn();
 	void ExtendTurn();
 	void PurchaseTech(int player, int tech);
+	void PurchaseTechOverride(int player, int tech);
+	void AssignCity(int player, int city);
+	void CreateCity(int player, RESOURCE resource, bool fertile);
 	char* GetPlayerStatusJSON();
 	char* GetTechStatusJSON();
 	char* GetWonderStatusJSON();
+	void LoadState(char* filename);
+	void SaveState(char* filename);
 	~GameManager();
 };
 

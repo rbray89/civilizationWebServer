@@ -21,6 +21,7 @@ Player::Player(char* name)
 	LoggedIn = false;
 	Id = PlayerCount++;
 	Color = -1;
+	upgrades = NONE;
 }
 
 Player::~Player()
@@ -109,6 +110,11 @@ int Player::GetCurrentPlayer()
 	return CurrentPlayer;
 }
 
+void Player::SetCurrentPlayer(int i)
+{
+	CurrentPlayer = i;
+}
+
 int Player::GetNextPlayer(int skip)
 {
 	return (CurrentPlayer + 1 + skip) % PlayerCount;
@@ -151,4 +157,17 @@ void Player::SendToAllPlayers(char* string)
 	{
 		mg_websocket_write(Players[i]->Token, 1, string, strlen(string)); 
 	}
+}
+
+void Player::DepricateUpgrade(UPGRADE upgrade)
+{
+	for (int i = 0; i < PlayerCount; i++)
+	{
+		Players[i]->upgrades &= ~static_cast<int>(upgrade);
+	}
+}
+
+void Player::PurchaseUpgrade(int player, UPGRADE upgrade)
+{
+	Players[player]->upgrades |= upgrade;
 }

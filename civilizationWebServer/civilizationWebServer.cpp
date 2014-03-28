@@ -14,12 +14,13 @@
 using namespace rapidjson;
 using namespace std;
 
-#define UPDATE_BUFF_SIZE 500
 
+char* filename;
 GameManager* _GameManager;
 
 static void msg_handler(char* msg, struct mg_connection *conn)
 {
+	printf(conn->uri);
 	Document document;
 	if (document.Parse<0>(msg).HasParseError() || !document.IsObject())
 	{
@@ -32,15 +33,6 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 			char* string = _GameManager->GetPlayerStatusJSON();
 			mg_websocket_write(conn, 1, string, strlen(string));
 		}
-		if (strcmp(document["command"]["cmd"].GetString(), "login") == 0)
-		{
-			int player = document["command"]["args"]["player"].GetInt();
-			int color = document["command"]["args"]["color"].GetInt();
-			bool success = Player::LogIn(player, color, conn);
-			_GameManager->SendPlayerStatusUpdate();
-			char* string = Player::GetLoginStatusJSON(player, success);
-			mg_websocket_write(conn, 1, string, strlen(string));
-		}
 		if (strcmp(document["command"]["cmd"].GetString(), "get_tech_status") == 0)
 		{
 			char* string = _GameManager->GetWonderStatusJSON();
@@ -48,23 +40,65 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 			string = _GameManager->GetTechStatusJSON();
 			mg_websocket_write(conn, 1, string, strlen(string));
 		}
-		if (strcmp(document["command"]["cmd"].GetString(),"buy_time") == 0)
+
+		if (strcmp(conn->uri, "/ws-manager") == 0)
 		{
-			_GameManager->ExtendTurn();
+			if (strcmp(document["command"]["cmd"].GetString(), "assign_tech") == 0)
+			{
+				int player = document["command"]["player"].GetInt();
+				int tech = document["command"]["args"].GetInt();
+				_GameManager->PurchaseTechOverride(player, tech);
+				_GameManager->SendWonderStatusUpdate();
+				_GameManager->SendTechStatusUpdate();
+			}
+			if (strcmp(document["command"]["cmd"].GetString(), "assign_city") == 0)
+			{
+				int player = document["command"]["player"].GetInt();
+				int city = document["command"]["args"].GetInt();
+				_GameManager->AssignCity(player, city);
+				_GameManager->SendCityStatusUpdate();
+			}
+			if (strcmp(document["command"]["cmd"].GetString(), "assign_city") == 0)
+			{
+				int player = document["command"]["player"].GetInt();
+				RESOURCE resource = static_cast<RESOURCE>(document["command"]["args"]["resource"].GetInt());
+				bool fertile = static_cast<bool>(document["command"]["args"]["fertile"].GetBool());
+				_GameManager->CreateCity(player, resource, fertile);
+				_GameManager->SendCityStatusUpdate();
+			}
+			if (strcmp(document["command"]["cmd"].GetString(), "end_turn") == 0)
+			{
+				_GameManager->EndTurn();
+			}
 		}
-		if (strcmp(document["command"]["cmd"].GetString(), "end_turn") == 0)
+		else
 		{
-			_GameManager->EndTurn();
+			if (strcmp(document["command"]["cmd"].GetString(), "login") == 0)
+			{
+				int player = document["command"]["args"]["player"].GetInt();
+				int color = document["command"]["args"]["color"].GetInt();
+				bool success = Player::LogIn(player, color, conn);
+				_GameManager->SendPlayerStatusUpdate();
+				char* string = Player::GetLoginStatusJSON(player, success);
+				mg_websocket_write(conn, 1, string, strlen(string));
+			}
+			if (strcmp(document["command"]["cmd"].GetString(), "buy_time") == 0)
+			{
+				_GameManager->ExtendTurn();
+			}
+			if (strcmp(document["command"]["cmd"].GetString(), "end_turn") == 0)
+			{
+				_GameManager->EndTurn();
+			}
+			if (strcmp(document["command"]["cmd"].GetString(), "purchase_tech") == 0)
+			{
+				int player = document["command"]["player"].GetInt();
+				int tech = document["command"]["args"].GetInt();
+				_GameManager->PurchaseTech(player, tech);
+				_GameManager->SendWonderStatusUpdate();
+				_GameManager->SendTechStatusUpdate();
+			}
 		}
-		if (strcmp(document["command"]["cmd"].GetString(), "purchase_tech") == 0)
-		{
-			int player = document["command"]["player"].GetInt();
-			int tech = document["command"]["args"].GetInt();
-			_GameManager->PurchaseTech(player, tech);
-			_GameManager->SendWonderStatusUpdate();
-			_GameManager->SendTechStatusUpdate();
-		}
-		
 	}
 }
 
@@ -104,6 +138,8 @@ static void *serve(void *server) {
 	return NULL;
 }
 
+int p = -1;
+int t = 0;
 bool cmd_handler()
 {
 	char c = getc(stdin);
@@ -111,9 +147,31 @@ bool cmd_handler()
 	{
 		return true;
 	}
+	else if (c == 's')
+	{
+		_GameManager->SaveState(filename);
+	}
+	else if (c == 'l')
+	{
+		_GameManager->LoadState(filename);
+	}
+	else if (c <= '9' && c >= '0')
+	{
+		if (p == -1)
+		{
+			p = c - '0';
+		}
+		else
+		{
+			t = c - '0';
+			_GameManager->PurchaseTechOverride(p, t);
+			p = -1;
+		}
+	}
 	_GameManager->StartStop();
 	return false;
 }
+
 
 int main(int argc, char* argv[]){
 
@@ -123,12 +181,13 @@ int main(int argc, char* argv[]){
 		printf("%s ", argv[i]);
 	}
 
-	Player::PlayersInit(&(argv[1]), argc - 1);
+	filename = argv[1];
+	Player::PlayersInit(&(argv[2]), argc - 2);
 
 	struct mg_server *server = mg_create_server(NULL);
 	
 	_GameManager = new GameManager(server);
-	
+	_GameManager->LoadState(filename);
 
 	mg_set_option(server, "listening_port", "8080");
 	mg_set_option(server, "document_root", "html");

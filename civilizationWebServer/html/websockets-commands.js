@@ -1,7 +1,5 @@
-  var websocket;
-  var Player;
-  var PlayerColor = -1;
-  var Players;
+
+
   var Technologies;
   var SelectedTech;
   var Wonders;
@@ -10,16 +8,10 @@
   var EraIds = ["ancient","medieval","gunpowder_industrial", "modern"];
   var TechBenefits = ["wonder", "seminal", "productive", "happy", "city", "trade", 
 					"infantry", "cavalry", "artillery", "fleet", "aircraft"];
-  var PlayerColors = ['#DC143C','#00008B','#228B22','#DAA520','#A9A9A9','#8B008B'];
-  
+
   var GamePhases = ["Purchase Phase","Movement/Battle Phase","Trading Phase","Prouction Phase"];
   
-  
-  
-  var cancelClick = function(){
-	resetTech();
-  };
-  
+
   var updateTurnStatus = function(obj) {
 	TurnStatus = obj
     var timer_status = document.getElementById('timer-status');
@@ -273,16 +265,35 @@
 		
 		techText = document.createElement('div');
 		var benefitText = techObj.benefit_text;
+		techText.className = 'tech-benefit'
 		if(benefitText == null)
 		{
 			if(techObj.wonders.length == 1)
 			{
 				benefitText = Wonders[techObj.wonders[0]].name+' Wonder';
 			}
-			else
+			else if(techObj.wonders.length == 2)
 			{
 				benefitText = Wonders[techObj.wonders[0]].name+
 				' Wonder AND '+Wonders[techObj.wonders[1]].name+' Wonder';
+			}
+			
+			if(techObj.benefits & 2)
+			{
+				if(techObj.wonders.length > 0)
+				{
+					benefitText += ' AND ';
+				}
+				benefitText += '4 Victory Points'; 
+			}
+			
+			if(techObj.wonders.length == 1)
+			{
+				benefitText += '<br>' + Wonders[techObj.wonders[0]].description;
+			}
+			if(techObj.wonders.length == 2)
+			{
+				benefitText += '<br>' + Wonders[techObj.wonders[1]].description;
 			}
 		}
 		techText.innerHTML = benefitText;
@@ -313,163 +324,3 @@
 	Wonders = obj;
   };
   
-  var loginPlayer = function(player, color, serverVerified) {
-	if(serverVerified)
-	{
-		Player = player;
-		var header = document.getElementById('player');
-		header.innerText = 'Player: '+Players[Player].name;
-		header.style.color = PlayerColors[color];
-		var loginPrompt = document.getElementById('login');
-		loginPrompt.style.visibility = 'hidden';
-		var civDisplay = document.getElementById('civilization-manager');
-		civDisplay.style.visibility = 'visible'
-	}
-	else
-	{
-		var obj = {};
-		obj.player = player;
-		obj.color = color;
-		send_cmd('login', obj)
-	}
-  };
-  
-  var selectPlayerLogin = function(playerLogin) {
-	for(var i = 0; i < Players.length; i++)
-	{
-		var otherLogins = document.getElementById('player_login_'+i);
-		if(Players[i].logged_in)
-		{
-			otherLogins.className = "login-player-taken";
-		}
-		else
-		{
-			otherLogins.className = "login-player";
-		}
-	}
-	playerLogin.className = "login-player-selected";
-	var loginButton = document.getElementById('login-button');
-	loginButton.onclick=function(){loginPlayer(parseInt(playerLogin.getAttribute('name')), PlayerColor); button_up(this);};
-  };
-  
-  var selectPlayerColor = function(id)
-  {
-	var playerColor = document.getElementById('login-color-'+id);
-	for(var n = 0; n < PlayerColors.length; n++)
-	{
-		var color = document.getElementById('login-color-'+n);
-		color.style.borderColor='gray';
-	}
-	playerColor.style.borderColor='#6495ED';
-	PlayerColor = id;
-  }
-  
-  var assignLoginColor = function(i)
-  {
-	var playerColor = document.getElementById('login-color-'+i);
-	playerColor.onclick=function(){selectPlayerColor(i)};
-	playerColor.style.background = PlayerColors[i];
-	Players.forEach(function(entry) {
-		if(entry.logged_in && entry.color == i)
-		{
-			playerColor.style.visibility = 'hidden';
-		}
-	});
-  }
-  
-  var updatePlayers = function(players) {
-	Players = players;
-	if(Player == null)
-	{
-		var loginPrompt = document.getElementById('login');
-		Players.forEach(function(entry) {
-			var playerLogin = document.getElementById("player_login_"+entry.id);
-			if(playerLogin == null)
-			{
-				playerLogin = document.createElement('div');
-				loginPrompt.appendChild(playerLogin);
-			}
-			playerLogin.innerHTML = "<span class='span50'></span>"+entry.name;
-			playerLogin.id = "player_login_"+entry.id;
-			playerLogin.setAttribute("name",entry.id);
-			if(entry.logged_in)
-			{
-				playerLogin.className = "login-player-taken";
-				playerLogin.onclick=null;
-			}
-			else
-			{
-				playerLogin.className = "login-player";
-				playerLogin.onclick=function(){selectPlayerLogin(playerLogin)};
-			}
-		});
-		for(var i = 0; i < PlayerColors.length; i++)
-		{
-			assignLoginColor(i);
-		}
-	}
-  };
-  
-  var send_cmd = function(cmd, args) {
-	var msg = {};
-	msg.command = {};
-	msg.command.player = Player;
-	msg.command.cmd = cmd;
-	msg.command.args = args;
-	websocket.send(JSON.stringify(msg));
-  };
-  
-  var button_up = function(element)
-  {
-	element.style.border="4px groove gray";
-  };
-  var button_down = function(element)
-  {
-	element.style.border="4px ridge gray";
-  };
-  
-  window.onload = function() {
-    var url = 'ws://' + location.host + '/ws';
-
-    websocket = new WebSocket(url);
-    websocket.onopen = function(ev) {
-		send_cmd("get_player_status");
-		send_cmd("get_tech_status");
-    };
-    websocket.onclose = function(ev) {
-
-    };
-    websocket.onmessage = function(ev) {
-      if (!ev.data) {
-        //ping message
-      } else {
-		var json = JSON.parse(ev.data);
-		if(json.game_timer != null)
-		{
-			updateTurnStatus(json.game_timer);
-		}
-		if(json.wonders != null)
-		{
-			updateWonders(json.wonders);
-		}
-		if(json.technologies != null)
-		{
-			updateTechnologies(json.technologies);
-		}
-		if(json.players != null)
-		{
-			updatePlayers(json.players);
-		}
-		if(json.login != null)
-		{
-			if(json.login.verified == true)
-			{
-				loginPlayer(json.login.player, json.login.color, true);
-			}
-		}
-      }
-    };
-    websocket.onerror = function(ev) {
-      
-    };
-  };

@@ -4,6 +4,7 @@
 #include "rapidjson\document.h"
 #include "rapidjson\writer.h"
 #include "rapidjson\stringbuffer.h"
+#include "Upgrade.h"
 #include "Wonder.h"
 
 #define TECH_COUNT 53
@@ -60,12 +61,14 @@ public:
 	(const char*) GetName();
 	int GetCost();
 	void Purchase(int player);
-	void GetJSON(Document* document, Value* array);
+	void GetJSON(Document* document, Value* array, bool minimal = false);
 	void SetDependencies(int n, ...);
 
 	static void InitTech();
 	static char* GetTechStatusJSON();
 	static void Purchase(int tech, int player);
+	static void LoadState(Document* document);
+	static void SaveState(Document* document);
 	~Technology();
 };
 

@@ -2,37 +2,25 @@
 <meta charset="utf-8" />
 <title>Civilization Manager</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
-<script language="javascript" type="text/javascript" src="websockets.js"></script>
+<script language="javascript" type="text/javascript" src="manager.js"></script>
 <script language="javascript" type="text/javascript" src="players.js"></script>
 <script language="javascript" type="text/javascript" src="technology.js"></script>
 <script language="javascript" type="text/javascript" src="gameTimer.js"></script>
 <script language="javascript" type="text/javascript" src="wonders.js"></script>
 <script language="javascript" type="text/javascript" src="cities.js"></script>
 <body>
-	<div id="login">
-		<div class="login-prompt">Select Player</div>
-		<div id="login-button" onclick="button_up(this)" onmousedown="button_down(this)"><span class="span25"></span>Select</div>
-		<div class="login-color-container">
-			<div class="login-color" id='login-color-0'></div>
-			<div class="login-color" id='login-color-1'></div>
-			<div class="login-color" id='login-color-2'></div>
-			<div class="login-color" id='login-color-3'></div>
-			<div class="login-color" id='login-color-4'></div>
-			<div class="login-color" id='login-color-5'></div>
-		</div>
-	</div>
-	<div id="civilization-manager" style="visibility:hidden;">
+	<div id="civilization-manager" >
 		<div class="width-container" ><table class="width-container-table" ><tr><td class="table-seperator">
 			<div id="turn-text-left">
 				<span class="span45" id="turn-status-current">Current: </span>
 			</div>
-			<div id="turn-button-left" onclick="send_cmd('buy_time'); button_up(this)" onmousedown="button_down(this)" style="visibility:hidden;">
-				<span class="span45" id="turn-buy-time">Add 2:00</span>
+			<div id="turn-button-left" onclick="send_cmd('previous_turn'); button_up(this)" onmousedown="button_down(this)">
+				<span class="span45" id="turn-buy-time">Previous</span>
 			</div>
 			<div id="turn-text-right" >
 				<span class="span45" id="turn-status-next">Next: </span>
 			</div>
-			<div id="turn-button-right" onclick="send_cmd('end_turn'); button_up(this)" onmousedown="button_down(this)" style="visibility:hidden;">
+			<div id="turn-button-right" onclick="send_cmd('end_turn'); button_up(this)" onmousedown="button_down(this)">
 				<span class="span45" id="turn-end">End Turn</span>
 			</div>
 			<div id="turn-text-center">
@@ -47,21 +35,26 @@
 				<span class="span45" id="game-current-phase"></span>
 			</div>
 			<div id="header-text-center">
-				<span class="span45" id="resources-selection">&nbsp;</span>
+				<div id="show-tech">
+					<span class="span45">Tech</span>
+				</div>
+				<div id="show-cities">
+					<span class="span45">Cities</span>
+				</div>
 			</div>
 		</td></tr></table>
 		</div>
 		<div class="container">
-			<div class="era-expanded" id="ancient">
+			<div class="era" id="ancient">
 				<div class="era-text">Ancient Era</div>
 			</div>
-			<div class="era-expanded" id="medieval">
+			<div class="era" id="medieval">
 				<div class="era-text">Medieval Era</div>
 			</div>
-			<div class="era-expanded" id="gunpowder_industrial">
+			<div class="era" id="gunpowder_industrial">
 				<div class="era-text">Gunpowder/Industrial Era</div>
 			</div>
-			<div class="era-expanded" id="modern">
+			<div class="era" id="modern">
 				<div class="era-text">Modern Era</div>
 			</div>
 		</div>

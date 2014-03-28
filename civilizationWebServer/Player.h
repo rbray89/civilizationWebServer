@@ -3,6 +3,7 @@
 #include "rapidjson\writer.h"
 #include "rapidjson\stringbuffer.h"
 #include "mongoose.h"
+#include "Upgrade.h"
 
 using namespace rapidjson;
 
@@ -19,6 +20,7 @@ private:
 	int Id;
 	int Color;
 	struct mg_connection* Token;
+	UPGRADE upgrades;
 
 	char* GetName();
 	void GetJSON(Document* document, Value* array);
@@ -29,11 +31,14 @@ public:
 	static char* GetPlayerName(int i);
 	static void IncrementCurrentPlayer();
 	static int GetCurrentPlayer();
+	static void SetCurrentPlayer(int i);
 	static int GetNextPlayer(int skip = 0);
 	static bool LogIn(int player, int color, struct mg_connection* token);
 	static bool LogOut(struct mg_connection* token);
 	static char* GetLoginStatusJSON(int player, bool success);
 	static void SendToAllPlayers(char* string);
+	static void DepricateUpgrade(UPGRADE upgrade);
+	static void PurchaseUpgrade(int player, UPGRADE upgrade);
 	~Player();
 };
 
