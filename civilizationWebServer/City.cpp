@@ -15,6 +15,9 @@ City::City(RESOURCE resource, int owner, bool fertile)
 	Fertile = fertile;
 	Happy = NONE;
 	Productive = NONE;
+	Traded = -1;
+	Size = 0;
+	Resource = resource;
 }
 
 void City::Assign(int player, int city)
@@ -22,6 +25,7 @@ void City::Assign(int player, int city)
 	CityList[city]->Happy = NONE;
 	CityList[city]->Productive = NONE;
 	CityList[city]->Owner = player;
+	CityList[city]->Traded = -1;
 }
 
 bool City::isHappy()
@@ -96,14 +100,15 @@ void City::GetJSON(Document* document, Value* array)
 
 void City::GetJSONArray(Document* document, Value* array)
 {
+
 	for (int i = 0; i < CityCount; i++)
 	{
 		if (CityList[i] != nullptr)
 		{
 			CityList[i]->GetJSON(document, array);
 		}
-		
 	}
+	document->AddMember("cities", *array, document->GetAllocator());
 }
 
 char* City::GetCityStatusJSON()
@@ -113,9 +118,9 @@ char* City::GetCityStatusJSON()
 	document.Parse<0>("{}");
 	StringBuffer ss;
 	Writer<StringBuffer> writer(ss);
-	Value technologies(kArrayType);
+	Value cities(kArrayType);
 
-	GetJSONArray(&document, &technologies);
+	GetJSONArray(&document, &cities);
 	
 	document.Accept(writer);
 	const char* str = ss.GetString();

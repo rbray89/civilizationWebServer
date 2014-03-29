@@ -33,6 +33,7 @@ class City
 	RESOURCE Resource;
 
 	int Owner;
+	int Traded;
 	int Id;
 
 	UPGRADE Happy;

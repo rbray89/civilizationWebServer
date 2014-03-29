@@ -56,6 +56,7 @@ public:
 	char* GetPlayerStatusJSON();
 	char* GetTechStatusJSON();
 	char* GetWonderStatusJSON();
+	char* GetCityStatusJSON();
 	void LoadState(char* filename);
 	void SaveState(char* filename);
 	~GameManager();

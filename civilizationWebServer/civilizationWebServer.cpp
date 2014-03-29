@@ -40,7 +40,11 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 			string = _GameManager->GetTechStatusJSON();
 			mg_websocket_write(conn, 1, string, strlen(string));
 		}
-
+		if (strcmp(document["command"]["cmd"].GetString(), "get_city_status") == 0)
+		{
+			char* string = _GameManager->GetCityStatusJSON();
+			mg_websocket_write(conn, 1, string, strlen(string));
+		}
 		if (strcmp(conn->uri, "/ws-manager") == 0)
 		{
 			if (strcmp(document["command"]["cmd"].GetString(), "assign_tech") == 0)
@@ -58,7 +62,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 				_GameManager->AssignCity(player, city);
 				_GameManager->SendCityStatusUpdate();
 			}
-			if (strcmp(document["command"]["cmd"].GetString(), "assign_city") == 0)
+			if (strcmp(document["command"]["cmd"].GetString(), "create_city") == 0)
 			{
 				int player = document["command"]["player"].GetInt();
 				RESOURCE resource = static_cast<RESOURCE>(document["command"]["args"]["resource"].GetInt());

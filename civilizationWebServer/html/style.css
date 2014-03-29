@@ -216,7 +216,6 @@ body, html
 {
 	width: 180px;
 	text-align: center;
-
 	display:inline-block;
 }
 
@@ -327,7 +326,10 @@ body, html
 	float: top;
 }
 
-.tech-text-cost-ico, .tech-text-cost
+.tech-text-cost-ico, .tech-text-cost, .city-production-ico,
+.city-production-text, .city-option-select, .city-option-select-size,
+.city-resource-ico, .city-resource-text, 
+.city-size-ico, .city-size-text, .city-trade-text
 {
 	font: 14px Arial;
 	text-align: left;
@@ -335,7 +337,14 @@ body, html
 	float: left;
 }
 
-.tech-text-benefits
+.city-resource-center
+{
+	font: 20px Arial;
+	text-align: center;
+	overflow:hidden
+}
+
+.tech-text-benefits, .city-happy, .city-productive
 {
 	font: 14px Arial;
 	text-align: right;
@@ -346,7 +355,53 @@ body, html
 .tech-text-cost
 {
 	width: 64px;
-	float: top;
+}
+
+.city-production-text, .city-resource-text,
+.city-size-text, .city-trade-text
+{
+	font: 20px Arial;
+	width: 32px;
+}
+
+.city-trade-text
+{
+	width: 64px;
+}
+
+.city-size-text
+{
+	width: 16px;
+}
+
+.city-resource-text
+{
+	margin: 3px 0 0 5px;
+	font: 20px Arial;
+}
+
+.city-option-select
+{
+	font: 18px Arial;
+	width: 116px;
+}
+
+.city-option-select-size
+{
+	font: 18px Arial;
+	width: 60px;
+	text-align: center;
+}
+
+#city-add-button
+{
+	width: 42px;
+	margin: 3px 0 0 5px;
+	height: 18px;
+	background: #DEB887;
+	border: 4px groove gray;
+	cursor: pointer;
+	float: left;
 }
 
 .tech-owner
@@ -360,6 +415,18 @@ body, html
 .span18
 { 
     line-height:18px; 
+}
+
+.span24
+{ 
+	text-align: center;
+    line-height:24px; 
+}
+
+#city-add-button
+{
+	margin: 4px 6px 0 2px;
+	float: right;
 }
 
 .tech-purchase
@@ -378,4 +445,16 @@ body, html
 	font: 14px Arial;
 	text-align: center;
 	border-bottom: 1px solid gray;
+}
+
+#cities-add, .city
+{
+	position: relative;
+	padding:5px;
+	border:3px solid gray;
+	margin:10px;
+	height:60px;
+	width:248px;
+	float:left;
+	z-index:2;
 }

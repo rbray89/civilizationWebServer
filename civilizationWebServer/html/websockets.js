@@ -62,7 +62,12 @@
 			if(json.login.verified == true)
 			{
 				loginPlayer(json.login.player, json.login.color, true);
+				send_cmd("get_city_status");
 			}
+		}
+		if(json.cities != null)
+		{
+			updateCities(json.cities);
 		}
       }
     };

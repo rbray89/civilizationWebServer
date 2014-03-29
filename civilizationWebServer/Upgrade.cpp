@@ -55,13 +55,17 @@ void Upgrade::InitUpgrades()
 
 void Upgrade::DepricateUpgrade(UPGRADE upgrade)
 {
-	UpgradeList[upgrade]->Depricated = true;
+	int index = -1;
+	while ((1 << ++index) != upgrade){};
+	UpgradeList[index]->Depricated = true;
 	Player::DepricateUpgrade(upgrade);
 }
 
 void Upgrade::PurchaseUpgrade(int player, UPGRADE upgrade)
 {
-	if (!UpgradeList[upgrade]->Depricated)
+	int index = -1;
+	while ((1 << ++index) != upgrade){};
+	if (!UpgradeList[index]->Depricated)
 	{
 		Player::PurchaseUpgrade(player, upgrade);
 	}
@@ -69,7 +73,13 @@ void Upgrade::PurchaseUpgrade(int player, UPGRADE upgrade)
 
 bool Upgrade::isActive(UPGRADE upgrade)
 {
-	return !(UpgradeList[upgrade]->Depricated);
+	if (upgrade == NONE)
+	{
+		return false;
+	}
+	int index = -1;
+	while ((1 << ++index) != upgrade){};
+	return !(UpgradeList[index]->Depricated);
 }
 
 void Upgrade::GetJSON(Document* document, Value* array)

@@ -8,6 +8,21 @@
 <script language="javascript" type="text/javascript" src="gameTimer.js"></script>
 <script language="javascript" type="text/javascript" src="wonders.js"></script>
 <script language="javascript" type="text/javascript" src="cities.js"></script>
+<script language="javascript" type="text/javascript">
+	var show = function(id)
+	{
+		var element = document.getElementById(id);
+		element.style.display = null;
+		
+	};
+	
+	var hide = function(id)
+	{
+		var element = document.getElementById(id);
+		element.style.display = "none";
+		
+	};
+</script>
 <body>
 	<div id="civilization-manager" >
 		<div class="width-container" ><table class="width-container-table" ><tr><td class="table-seperator">
@@ -35,16 +50,16 @@
 				<span class="span45" id="game-current-phase"></span>
 			</div>
 			<div id="header-text-center">
-				<div id="show-tech">
-					<span class="span45">Tech</span>
+				<div id="show-tech" onclick="show('tech'); hide('cities'); button_up(this)" onmousedown="button_down(this)">
+					<span class="span45" >Tech</span>
 				</div>
-				<div id="show-cities">
-					<span class="span45">Cities</span>
+				<div id="show-cities" onclick="show('cities'); hide('tech'); button_up(this)" onmousedown="button_down(this)">
+					<span class="span45" >Cities</span>
 				</div>
 			</div>
 		</td></tr></table>
 		</div>
-		<div class="container">
+		<div class="container" id="tech" >
 			<div class="era" id="ancient">
 				<div class="era-text">Ancient Era</div>
 			</div>
@@ -57,6 +72,31 @@
 			<div class="era" id="modern">
 				<div class="era-text">Modern Era</div>
 			</div>
+		</div>
+		<div class="container" id="cities" style="display:none">
+			<div class="city" id="city-add">
+				<div class="city-option-select">
+					<input type="checkbox" id="city-fertile-add">Fertile</input>
+				</div>
+				<select class="city-option-select" id="city-resource-add">
+					<option value="0">None</option>
+					<option value="1">Horses</option>
+					<option value="2">Spices</option>
+				</select>
+				<select class="city-option-select" id="city-player-add">
+					<option value="0">-</option>
+					<option value="1">Ryan</option>
+					<option value="2">Jonothan</option>
+				</select>
+				<!--<select class="city-option-select-size">
+					<option value="0">1</option>
+					<option value="1">2</option>
+					<option value="2">3</option>
+					<option value="3">4</option>
+				</select>-->
+				<div id="city-add-button" onclick="addCity()"><span class="span24">Add</span></div>
+			</div>
+			<div id="cities-add">test</div>
 		</div>
 	</div>
 </body>

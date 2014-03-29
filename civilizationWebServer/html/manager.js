@@ -32,6 +32,7 @@
     websocket.onopen = function(ev) {
 		send_cmd("get_player_status");
 		send_cmd("get_tech_status");
+		send_cmd("get_city_status");
     };
     websocket.onclose = function(ev) {
 
@@ -63,6 +64,10 @@
 			{
 				loginPlayer(json.login.player, json.login.color, true);
 			}
+		}
+		if(json.cities != null)
+		{
+			updateCities(json.cities);
 		}
       }
     };

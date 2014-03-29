@@ -279,6 +279,11 @@ char* GameManager::GetWonderStatusJSON()
 	return Wonder::GetWonderStatusJSON();
 }
 
+char* GameManager::GetCityStatusJSON()
+{
+	return City::GetCityStatusJSON();
+}
+
 void GameManager::LoadState(char* filename)
 {
 	std::ifstream in(filename, std::ios::in | std::ios::binary);
