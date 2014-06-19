@@ -199,7 +199,7 @@ void Technology::InitTech()
 	AdvancedFlight->EnablesText = "Aircraft Carrier, Monoplane, Airport";
 	Genetics->EnablesText = "Healthcare Complex";
 	Rocketry->EnablesText = "Rocket Artillery, Jets";
-	Miniaturization->EnablesText = "Modern Armor Infantry";
+	Miniaturization->EnablesText = "Modern Armor Calvary";
 	SpaceFlight->EnablesText = "Cruise Missiles";
 	SuperConductor->EnablesText = "Stealth Aircraft";
 	Fusion->EnablesText = "Fusion Reactor";
@@ -228,8 +228,8 @@ void Technology::InitTech()
 	AdvancedFlight->SetDependencies(2, Flight, Radio_Television);
 	Genetics->SetDependencies(2, Medicine, Computers);
 	Rocketry->SetDependencies(1, AdvancedFlight);
-	Miniaturization->SetDependencies(1, Computers);
-	SpaceFlight->SetDependencies(2, Plastics, Computers);
+	SpaceFlight->SetDependencies(4, Plastics, Computers, Robotics, Rocketry);
+	Miniaturization->SetDependencies(2, Computers, SpaceFlight);
 	SuperConductor->SetDependencies(2, Miniaturization, SpaceFlight);
 	Fusion->SetDependencies(2, Fission, SuperConductor);
 

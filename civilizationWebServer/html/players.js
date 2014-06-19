@@ -1,7 +1,7 @@
 
   var Player;
   var PlayerColor = -1;
-  var Players;
+  var Players = null;
   
   var PlayerColors = ['#DC143C','#00008B','#228B22','#DAA520','#A9A9A9','#8B008B'];
   
@@ -70,6 +70,13 @@
   }
   
   var updatePlayers = function(players) {
+	if(MANAGER && Players == null)
+	{
+		var cityPlayerAdd = document.getElementById("city-player-add");
+		players.forEach(function(entry) {
+			cityPlayerAdd.options.add(new Option(entry.name, 1+entry.id));
+		});
+	}
 	Players = players;
 	if(!MANAGER && Player == null)
 	{
