@@ -47,6 +47,7 @@ class City
 public:
 	City(RESOURCE resource, int owner, bool fertile);
 	static void Assign(int player, int city);
+	static void Trade(int player, int city);
 	static void SetSize(int city, int size);
 	static void SetFertile(int city, int size);
 	static void GetJSONArray(Document* document, Value* array);

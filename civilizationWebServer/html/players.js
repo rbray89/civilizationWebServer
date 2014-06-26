@@ -74,7 +74,7 @@
 	{
 		var cityPlayerAdd = document.getElementById("city-player-add");
 		players.forEach(function(entry) {
-			cityPlayerAdd.options.add(new Option(entry.name, 1+entry.id));
+			cityPlayerAdd.options.add(new Option(entry.name, entry.id));
 		});
 	}
 	Players = players;

@@ -28,6 +28,11 @@ void City::Assign(int player, int city)
 	CityList[city]->Traded = -1;
 }
 
+void City::Trade(int player, int city)
+{
+	CityList[city]->Traded = player;
+}
+
 bool City::isHappy()
 {
 	if (Resource == GEMS || Resource == WINE || Upgrade::isActive(Happy))
@@ -87,6 +92,7 @@ void City::GetJSON(Document* document, Value* array)
 	Value jsonObject(kObjectType);
 	jsonObject.AddMember<int>("id", Id, document->GetAllocator());
 	jsonObject.AddMember<int>("owner", Owner, document->GetAllocator());
+	jsonObject.AddMember<int>("traded", Traded, document->GetAllocator());
 	jsonObject.AddMember<UPGRADE>("happy", Happy, document->GetAllocator());
 	jsonObject.AddMember<bool>("isHappy", isHappy(), document->GetAllocator());
 	jsonObject.AddMember<UPGRADE>("productive", Productive, document->GetAllocator());
@@ -94,7 +100,6 @@ void City::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<int>("size", Size, document->GetAllocator());
 	jsonObject.AddMember<RESOURCE>("resource", Resource, document->GetAllocator());
 	jsonObject.AddMember<int>("production", production(), document->GetAllocator());
-
 	array->PushBack(jsonObject, document->GetAllocator());
 }
 

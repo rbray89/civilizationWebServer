@@ -357,7 +357,7 @@ body, html
 	width: 64px;
 }
 
-.city-production-text, .city-resource-text,
+.city-production-text,
 .city-size-text, .city-trade-text
 {
 	font: 20px Arial;
@@ -378,12 +378,13 @@ body, html
 {
 	margin: 3px 0 0 5px;
 	font: 20px Arial;
+	width: 125px;
 }
 
 .city-option-select
 {
 	font: 18px Arial;
-	width: 116px;
+	width: 125px;
 }
 
 .city-option-select-size
@@ -454,7 +455,7 @@ body, html
 	border:3px solid gray;
 	margin:10px;
 	height:60px;
-	width:248px;
+	width:285px;
 	float:left;
 	z-index:2;
 }

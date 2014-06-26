@@ -45,6 +45,13 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 			char* string = _GameManager->GetCityStatusJSON();
 			mg_websocket_write(conn, 1, string, strlen(string));
 		}
+		if (strcmp(document["command"]["cmd"].GetString(), "assign_city_trade") == 0)
+		{
+			int player = document["command"]["args"]["traded"].GetInt();
+			int city = document["command"]["args"]["id"].GetInt();
+			_GameManager->AssignCityTrade(player, city);
+			_GameManager->SendCityStatusUpdate();
+		}
 		if (strcmp(conn->uri, "/ws-manager") == 0)
 		{
 			if (strcmp(document["command"]["cmd"].GetString(), "assign_tech") == 0)
@@ -193,7 +200,7 @@ int main(int argc, char* argv[]){
 	_GameManager = new GameManager(server);
 	_GameManager->LoadState(filename);
 
-	mg_set_option(server, "listening_port", "8080");
+	mg_set_option(server, "listening_port", "80");
 	mg_set_option(server, "document_root", "html");
 	mg_set_request_handler(server, request_handler);
 

@@ -52,6 +52,7 @@ public:
 	void PurchaseTech(int player, int tech);
 	void PurchaseTechOverride(int player, int tech);
 	void AssignCity(int player, int city);
+	void AssignCityTrade(int player, int city);
 	void CreateCity(int player, RESOURCE resource, bool fertile);
 	char* GetPlayerStatusJSON();
 	char* GetTechStatusJSON();

@@ -213,6 +213,7 @@
 		techText.className = 'tech-benefit'
 		if(benefitText == null)
 		{
+			benefitText = "";
 			if(techObj.wonders.length == 1)
 			{
 				benefitText = Wonders[techObj.wonders[0]].name+' Wonder';

@@ -237,6 +237,11 @@ void GameManager::AssignCity(int player, int city)
 	City::Assign(player, city);
 }
 
+void GameManager::AssignCityTrade(int player, int city)
+{
+	City::Trade(player, city);
+}
+
 void GameManager::CreateCity(int player, RESOURCE resource, bool fertile)
 {
 	new City(resource, player, fertile);
