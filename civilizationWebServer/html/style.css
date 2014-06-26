@@ -184,7 +184,7 @@ body, html
 #turn-button-right, 
 #turn-button-left,
 #show-tech,
-#show-cities
+.show-container
 {
 	font: 18px Arial;
 	font-weight: bold;
@@ -212,7 +212,7 @@ body, html
 	text-align: center;
 }
 
-#show-tech, #show-cities
+.show-container
 {
 	width: 180px;
 	text-align: center;
@@ -220,7 +220,7 @@ body, html
 }
 
 #turn-button-right, #turn-button-left,
-#show-tech, #show-cities
+.show-container
 {
 	width: 100px;
 	background: #DEB887;

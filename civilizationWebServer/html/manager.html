@@ -9,19 +9,16 @@
 <script language="javascript" type="text/javascript" src="wonders.js"></script>
 <script language="javascript" type="text/javascript" src="cities.js"></script>
 <script language="javascript" type="text/javascript">
-	var show = function(id)
+	var showContainer = function(id)
 	{
-		var element = document.getElementById(id);
+		var nodeList = document.querySelectorAll(".container");
+		  for (var i = 0, length = nodeList.length; i < length; i++) {
+			 nodeList[i].style.display = "none";
+		  }
+		  var element = document.getElementById(id);
 		element.style.display = null;
-		
 	};
 	
-	var hide = function(id)
-	{
-		var element = document.getElementById(id);
-		element.style.display = "none";
-		
-	};
 </script>
 <body>
 	<div id="civilization-manager" >
@@ -50,16 +47,22 @@
 				<span class="span45" id="game-current-phase"></span>
 			</div>
 			<div id="header-text-center">
-				<div id="show-tech" onclick="show('tech'); hide('cities'); button_up(this)" onmousedown="button_down(this)">
+				<div class="show-container" onclick="showContainer('players'); button_up(this)" onmousedown="button_down(this)">
+					<span class="span45" >Players</span>
+				</div>
+				<div class="show-container" onclick="showContainer('tech'); button_up(this)" onmousedown="button_down(this)">
 					<span class="span45" >Tech</span>
 				</div>
-				<div id="show-cities" onclick="show('cities'); hide('tech'); button_up(this)" onmousedown="button_down(this)">
+				<div class="show-container" onclick="showContainer('cities'); button_up(this)" onmousedown="button_down(this)">
 					<span class="span45" >Cities</span>
 				</div>
 			</div>
 		</td></tr></table>
 		</div>
-		<div class="container" id="tech" >
+		<div class="container" id="players">
+			
+		</div>
+		<div class="container" id="tech" style="display:none">
 			<div class="era" id="ancient">
 				<div class="era-text">Ancient Era</div>
 			</div>
