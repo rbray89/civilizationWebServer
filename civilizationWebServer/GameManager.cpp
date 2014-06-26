@@ -97,6 +97,46 @@ void GameManager::EndTurn()
 	HandleSecondEvent(false);
 }
 
+void GameManager::PreviousTurn()
+{
+	CountingDown = true;
+
+	if (StartingPlayer == Player::GetCurrentPlayer())
+	{
+		switch (CurrentPhase)
+		{
+		case PURCHASE_PHASE:
+			CurrentPhase = PRODUCTION_PHASE;
+			TimeRemaining = GROUP_TURN_TIME;
+			Player::DeIncrementCurrentPlayer();
+			StartingPlayer = Player::GetCurrentPlayer();
+			break;
+		case MOVEMENT_PHASE:
+			CurrentPhase = PURCHASE_PHASE;
+			TimeRemaining = PLAYER_TURN_TIME;
+			break;
+		case TRADE_PHASE:
+			CurrentPhase = MOVEMENT_PHASE;
+			TimeRemaining = PLAYER_TURN_TIME;
+			break;
+		case PRODUCTION_PHASE:
+			CurrentPhase = TRADE_PHASE;
+			TimeRemaining = GROUP_TURN_TIME;
+		}
+	}
+
+	switch (CurrentPhase)
+	{
+	case PURCHASE_PHASE:
+	case MOVEMENT_PHASE:
+		Player::DeIncrementCurrentPlayer();
+		TimeRemaining = PLAYER_TURN_TIME;
+		break;
+	}
+
+	HandleSecondEvent(false);
+}
+
 void GameManager::ExtendTurn()
 {
 	CountingDown = true;

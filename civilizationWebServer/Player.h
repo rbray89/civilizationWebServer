@@ -30,6 +30,7 @@ public:
 	static void GetJSONArray(Document* document, Value* array);
 	static char* GetPlayerName(int i);
 	static void IncrementCurrentPlayer();
+	static void DeIncrementCurrentPlayer();
 	static int GetCurrentPlayer();
 	static void SetCurrentPlayer(int i);
 	static int GetNextPlayer(int skip = 0);

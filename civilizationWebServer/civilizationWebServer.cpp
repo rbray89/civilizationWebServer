@@ -81,6 +81,10 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 			{
 				_GameManager->EndTurn();
 			}
+			if (strcmp(document["command"]["cmd"].GetString(), "previous_turn") == 0)
+			{
+				_GameManager->PreviousTurn();
+			}
 		}
 		else
 		{

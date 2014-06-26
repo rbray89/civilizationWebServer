@@ -48,6 +48,7 @@ public:
 	int Start();
 	int GetNextPlayer();
 	void EndTurn();
+	void PreviousTurn();
 	void ExtendTurn();
 	void PurchaseTech(int player, int tech);
 	void PurchaseTechOverride(int player, int tech);

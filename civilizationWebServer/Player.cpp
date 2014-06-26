@@ -105,6 +105,15 @@ void Player::IncrementCurrentPlayer()
 	}
 }
 
+void Player::DeIncrementCurrentPlayer()
+{
+	CurrentPlayer--;
+	if (CurrentPlayer < 0)
+	{
+		CurrentPlayer = PlayerCount-1;
+	}
+}
+
 int Player::GetCurrentPlayer()
 {
 	return CurrentPlayer;
