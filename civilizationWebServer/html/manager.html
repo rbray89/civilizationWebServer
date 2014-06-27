@@ -8,31 +8,20 @@
 <script language="javascript" type="text/javascript" src="gameTimer.js"></script>
 <script language="javascript" type="text/javascript" src="wonders.js"></script>
 <script language="javascript" type="text/javascript" src="cities.js"></script>
-<script language="javascript" type="text/javascript">
-	var showContainer = function(id)
-	{
-		var nodeList = document.querySelectorAll(".container");
-		  for (var i = 0, length = nodeList.length; i < length; i++) {
-			 nodeList[i].style.display = "none";
-		  }
-		  var element = document.getElementById(id);
-		element.style.display = null;
-	};
-	
-</script>
+<script language="javascript" type="text/javascript" src="page.js"></script>
 <body>
 	<div id="civilization-manager" >
 		<div class="width-container" ><table class="width-container-table" ><tr><td class="table-seperator">
 			<div id="turn-text-left">
 				<span class="span45" id="turn-status-current">Current: </span>
 			</div>
-			<div id="turn-button-left" onclick="send_cmd('previous_turn'); button_up(this)" onmousedown="button_down(this)">
+			<div id="turn-button-left" class="button-up" onclick="send_cmd('previous_turn');">
 				<span class="span45" id="turn-buy-time">Previous</span>
 			</div>
 			<div id="turn-text-right" >
 				<span class="span45" id="turn-status-next">Next: </span>
 			</div>
-			<div id="turn-button-right" onclick="send_cmd('end_turn'); button_up(this)" onmousedown="button_down(this)">
+			<div id="turn-button-right" class="button-up" onclick="send_cmd('end_turn');">
 				<span class="span45" id="turn-end">End Turn</span>
 			</div>
 			<div id="turn-text-center">
@@ -47,20 +36,20 @@
 				<span class="span45" id="game-current-phase"></span>
 			</div>
 			<div id="header-text-center">
-				<div class="show-container" onclick="showContainer('players'); button_up(this)" onmousedown="button_down(this)">
+				<div class="show-container button-up" onclick="showContainer('players');" >
 					<span class="span45" >Players</span>
 				</div>
-				<div class="show-container" onclick="showContainer('tech'); button_up(this)" onmousedown="button_down(this)">
+				<div class="show-container button-up" onclick="showContainer('tech');">
 					<span class="span45" >Tech</span>
 				</div>
-				<div class="show-container" onclick="showContainer('cities'); button_up(this)" onmousedown="button_down(this)">
+				<div class="show-container button-up" onclick="showContainer('cities');">
 					<span class="span45" >Cities</span>
 				</div>
 			</div>
 		</td></tr></table>
 		</div>
-		<div class="container" id="players">
-			
+		<div class="container-center" id="players">
+			<div class="players-set-class button-up" ><span class="span25"></span>Select</div>
 		</div>
 		<div class="container" id="tech" style="display:none">
 			<div class="era" id="ancient">
@@ -92,9 +81,9 @@
 					<option value="7">Wine</option>
 					<option value="8">Gems</option>
 				</select>
-				<select class="city-option-select" id="city-player-add">
+				<select class="city-option-select button-up" id="city-player-add">
 				</select>
-				<div id="city-add-button" onclick="addCity()"><span class="span24">Add</span></div>
+				<div id="city-add-button" class="button-up" onclick="addCity()"><span class="span24">Add</span></div>
 			</div>
 			
 		</div>

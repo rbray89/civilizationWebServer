@@ -54,6 +54,17 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 		}
 		if (strcmp(conn->uri, "/ws-manager") == 0)
 		{
+			if (strcmp(document["command"]["cmd"].GetString(), "init_players") == 0)
+			{
+				const Value& players = document["command"]["args"];
+				const char* playerNames[6];
+				for (int i = 0; i < players.Size(); i++)
+				{
+					playerNames[i] = players[i].GetString();
+				}
+				Player::PlayersInit(playerNames, players.Size());
+			}
+			
 			if (strcmp(document["command"]["cmd"].GetString(), "assign_tech") == 0)
 			{
 				int player = document["command"]["player"].GetInt();
@@ -197,7 +208,7 @@ int main(int argc, char* argv[]){
 	}
 
 	filename = argv[1];
-	Player::PlayersInit(&(argv[2]), argc - 2);
+	//Player::PlayersInit(&(argv[2]), argc - 2);
 
 	struct mg_server *server = mg_create_server(NULL);
 	

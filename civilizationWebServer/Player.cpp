@@ -6,7 +6,7 @@ int Player::PlayerCount = 0;
 int Player::CurrentPlayer = 0;
 char* Player::TextJSON = nullptr;
 
-void Player::PlayersInit(char** players, int playerCount)
+void Player::PlayersInit(const char* players[6], int playerCount)
 {
 	for (int i = 0; i < playerCount; i++)
 	{
@@ -14,7 +14,7 @@ void Player::PlayersInit(char** players, int playerCount)
 	}
 }
 
-Player::Player(char* name)
+Player::Player(const char* name)
 {
 	Name = new char[strlen(name) + 1];
 	strcpy(Name, name);

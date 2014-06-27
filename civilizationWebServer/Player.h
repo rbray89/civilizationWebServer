@@ -24,9 +24,9 @@ private:
 
 	char* GetName();
 	void GetJSON(Document* document, Value* array);
-	Player(char* name);
+	Player(const char* name);
 public:
-	static void PlayersInit(char** players, int playerCount);
+	static void PlayersInit(const char** players, int playerCount);
 	static void GetJSONArray(Document* document, Value* array);
 	static char* GetPlayerName(int i);
 	static void IncrementCurrentPlayer();

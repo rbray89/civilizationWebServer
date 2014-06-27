@@ -94,19 +94,12 @@ body, html
 
 #login-button{
 	position: absolute;
-	font: 14px Arial;
-	font-weight: bold;
-	text-align: center;
-	vertical-align:middle; 
 	bottom: 0;
 	right: 0;
     width: 50px;
     height: 25px;
     margin-right: 10px;
     margin-bottom: 10px;
-	background: #DEB887;
-	border: 4px groove gray;
-	cursor: pointer;
 }
 
 #header, #game-phase
@@ -144,7 +137,7 @@ body, html
 	width: 960px;
 }
 
-.container
+.container, .container-center
 {
 	position: relative;
     width: 100%;
@@ -153,6 +146,11 @@ body, html
 	margin: 10px 0 0  0;
 	border:2px solid gray;
 	z-index: 0;
+}
+
+.container-center
+{
+	text-align: center;
 }
 
 .width-container, .width-container-table{
@@ -196,7 +194,6 @@ body, html
 {
 	width: 180px;
 	float: left;
-	text-align: center;
 }
 
 #turn-text-center, #header-text-center
@@ -209,7 +206,6 @@ body, html
 {
 	width: 180px;
 	float: right;
-	text-align: center;
 }
 
 .show-container
@@ -399,9 +395,6 @@ body, html
 	width: 42px;
 	margin: 3px 0 0 5px;
 	height: 18px;
-	background: #DEB887;
-	border: 4px groove gray;
-	cursor: pointer;
 	float: left;
 }
 
@@ -458,4 +451,28 @@ body, html
 	width:285px;
 	float:left;
 	z-index:2;
+}
+
+.players-set-class
+{
+	font: 14px Arial;
+	width: 125px;
+	text-align: center;
+	display: inline-block;
+}
+
+.button-up, .button-down
+{
+	font: 14px Arial;
+	font-weight: bold;
+	text-align: center;
+	vertical-align:middle; 
+	background: #DEB887;
+	border: 4px groove gray;
+	cursor: pointer;
+}
+
+.button-down
+{
+	border: 4px ridge gray;
 }
