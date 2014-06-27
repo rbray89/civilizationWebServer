@@ -41,7 +41,7 @@
 	}
 	playerLogin.className = "login-player-selected";
 	var loginButton = document.getElementById('login-button');
-	loginButton.onclick=function(){loginPlayer(parseInt(playerLogin.getAttribute('name')), PlayerColor); button_up(this);};
+	loginButton.onclick=function(){button_up(this); loginPlayer(parseInt(playerLogin.getAttribute('name')), PlayerColor);};
   };
   
   var selectPlayerColor = function(id)
@@ -68,6 +68,33 @@
 		}
 	});
   }
+  
+  var updatePlayerAddCount = function(element) {
+	var count = element.options[element.selectedIndex].value;
+	var playerContainer = document.getElementById("player-add-container");
+	while(playerContainer.firstChild) {
+		playerContainer.removeChild(playerContainer.firstChild);
+	}
+	for(var i = 1; i <= count; i++)
+	{
+		var player = document.createElement('input');
+		player.className = "players-set-class";
+		player.id = "player-add-" + i;
+		playerContainer.appendChild(player);
+	}
+	
+  };
+  
+  var setPlayers = function() {
+	var playerInput = document.getElementById("player-add-1");
+	var players = new Array();
+	for(var i = 2; playerInput != null; i++)
+	{
+		players[players.length] = playerInput.value;
+		playerInput = document.getElementById("player-add-" + i);
+	}
+	send_cmd('init_players', -1, players);
+  };
   
   var updatePlayers = function(players) {
 	if(MANAGER && Players == null)

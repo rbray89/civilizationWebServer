@@ -25,12 +25,12 @@
 	var onclickOrig = element.onclick;
 	 element.onclick = function(){
 			button_up(this);
-			eval(onclickOrig);
+			var test = onclickOrig != null && onclickOrig();
 		};
 	var onmousedownOrig = element.onmousedown;
 	 element.onmousedown = function(){
 			button_down(this);
-			eval(onmousedownOrig);
+			var test = onmousedownOrig != null && onmousedownOrig();
 		};
   };
   

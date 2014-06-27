@@ -207,13 +207,13 @@ int main(int argc, char* argv[]){
 		printf("%s ", argv[i]);
 	}
 
-	filename = argv[1];
+	//filename = argv[1];
 	//Player::PlayersInit(&(argv[2]), argc - 2);
 
 	struct mg_server *server = mg_create_server(NULL);
 	
 	_GameManager = new GameManager(server);
-	_GameManager->LoadState(filename);
+	//_GameManager->LoadState(filename);
 
 	mg_set_option(server, "listening_port", "80");
 	mg_set_option(server, "document_root", "html");

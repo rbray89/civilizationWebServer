@@ -36,7 +36,7 @@
 				<span class="span45" id="game-current-phase"></span>
 			</div>
 			<div id="header-text-center">
-				<div class="show-container button-up" onclick="showContainer('players');" >
+				<div id="players-show" class="show-container button-up" onclick="showContainer('players');" >
 					<span class="span45" >Players</span>
 				</div>
 				<div class="show-container button-up" onclick="showContainer('tech');">
@@ -48,8 +48,23 @@
 			</div>
 		</td></tr></table>
 		</div>
-		<div class="container-center" id="players">
-			<div class="players-set-class button-up" ><span class="span25"></span>Select</div>
+		<div class="container container-center" id="players">
+			<div class="container-center-sub">
+				<div class="players-set-count">Player Count:
+					<select onchange="updatePlayerAddCount(this);">
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+					</select>
+				</div>
+				<div class="players-set-class" id="player-add-container">
+					<input class="players-set-class" id="player-add-1"></input>
+					<input class="players-set-class" id="player-add-2"></input>
+				</div>
+				<div class="players-set-class button-up" onclick="setPlayers();"><span class="span25"></span>Set</div>
+			</div>
 		</div>
 		<div class="container" id="tech" style="display:none">
 			<div class="era" id="ancient">
