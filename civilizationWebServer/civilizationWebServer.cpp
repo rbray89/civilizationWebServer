@@ -54,6 +54,11 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 		}
 		if (strcmp(conn->uri, "/ws-manager") == 0)
 		{
+			if (strcmp(document["command"]["cmd"].GetString(), "start_stop") == 0)
+			{
+				_GameManager->StartStop();
+			}
+
 			if (strcmp(document["command"]["cmd"].GetString(), "init_players") == 0)
 			{
 				const Value& players = document["command"]["args"];
@@ -63,6 +68,12 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 					playerNames[i] = players[i].GetString();
 				}
 				Player::PlayersInit(playerNames, players.Size());
+
+				_GameManager->SendPlayerStatusUpdate();
+				_GameManager->SendWonderStatusUpdate();
+				_GameManager->SendTechStatusUpdate();
+				_GameManager->SendCityStatusUpdate();
+				
 			}
 			
 			if (strcmp(document["command"]["cmd"].GetString(), "assign_tech") == 0)
@@ -194,7 +205,6 @@ bool cmd_handler()
 			p = -1;
 		}
 	}
-	_GameManager->StartStop();
 	return false;
 }
 

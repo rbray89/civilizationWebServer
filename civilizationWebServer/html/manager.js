@@ -32,9 +32,12 @@
 		if(json.players != null)
 		{
 			updatePlayers(json.players);
-			var playerSelector = document.getElementById("players-show");
-			playerSelector.style.display= "none";
-			showContainer("tech");
+			if(Players.length > 0)
+			{
+				var playerSelector = document.getElementById("players-show");
+				playerSelector.style.display= "none";
+				showContainer("tech");
+			}
 		}
 		if(Players.length > 0)
 		{
