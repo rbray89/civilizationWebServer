@@ -63,7 +63,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 			{
 				const Value& players = document["command"]["args"];
 				const char* playerNames[6];
-				for (int i = 0; i < players.Size(); i++)
+				for (unsigned int i = 0; i < players.Size(); i++)
 				{
 					playerNames[i] = players[i].GetString();
 				}

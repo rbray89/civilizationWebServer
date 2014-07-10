@@ -24,7 +24,7 @@ private:
 
 	struct mg_server* Server;
 	
-	GAME_PHASES CurrentPhase = MOVEMENT_PHASE;
+	GAME_PHASES CurrentPhase;
 	int StartingPlayer;
 
 	HANDLE hTimer;

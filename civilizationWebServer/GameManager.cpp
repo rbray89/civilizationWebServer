@@ -9,11 +9,11 @@
 
 using namespace rapidjson;
 
-GameManager::GameManager()
+GameManager::GameManager() : CurrentPhase(MOVEMENT_PHASE)
 {
 }
 
-GameManager::GameManager(struct mg_server* server)
+GameManager::GameManager(struct mg_server* server) : CurrentPhase(MOVEMENT_PHASE)
 {
 	this->Server = server;
 	Upgrade::InitUpgrades();
@@ -191,7 +191,7 @@ void GameManager::SendPlayerStatusUpdate()
 	static char buf[UPDATE_BUFF_SIZE];
 
 	const char* string = GetPlayerStatusJSON();
-	strcpy(buf, string);
+	strcpy_s(buf, sizeof(buf), string);
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
@@ -200,7 +200,7 @@ void GameManager::SendTechStatusUpdate()
 	static char buf[UPDATE_BUFF_SIZE];
 
 	const char* string = GetTechStatusJSON();
-	strcpy(buf, string);
+	strcpy_s(buf, sizeof(buf), string);
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
@@ -209,7 +209,7 @@ void GameManager::SendWonderStatusUpdate()
 	static char buf[UPDATE_BUFF_SIZE];
 
 	const char* string = Wonder::GetWonderStatusJSON();
-	strcpy(buf, string);
+	strcpy_s(buf, sizeof(buf), string);
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
@@ -218,7 +218,7 @@ void GameManager::SendCityStatusUpdate()
 	static char buf[UPDATE_BUFF_SIZE];
 
 	const char* string = City::GetCityStatusJSON();
-	strcpy(buf, string);
+	strcpy_s(buf, sizeof(buf), string);
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
@@ -336,7 +336,7 @@ void GameManager::LoadState(char* filename)
 	if (in)
 	{
 		in.seekg(0, std::ios::end);
-		contents.resize(in.tellg());
+		contents.resize((unsigned int) in.tellg());
 		in.seekg(0, std::ios::beg);
 		in.read(&contents[0], contents.size());
 		in.close();
