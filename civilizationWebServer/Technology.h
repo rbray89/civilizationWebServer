@@ -40,13 +40,15 @@ private:
 	int Owner;
 	int DepCount;
 	Technology** DependsOn;
+	Upgrade** Upgrades;
+	int UpgradeCount;
+	Wonder** Wonders;
+	int WonderCount;
 	int Id;
 	TECH_BENEFITS Benefits;
 	char* BenefitText;
 	char* EnablesText;
 	Value* jsonObject;
-	Wonder** Wonders;
-	int WonderCount;
 
 	static Technology* TechTree[TECH_COUNT];
 	static int IdCount;
@@ -56,13 +58,15 @@ private:
 public:
 	static Technology** GetTechTree();
 
-	Technology();
-	Technology(char* name, TECH_ERA era, int cost, TECH_BENEFITS benefits, Wonder* wonder1 = nullptr, Wonder* wonder2 = nullptr);
+//	Technology();
+	Technology(char* name, TECH_ERA era, int cost, TECH_BENEFITS benefits);
 	(const char*) GetName();
 	int GetCost();
 	void Purchase(int player);
 	void GetJSON(Document* document, Value* array, bool minimal = false);
 	void SetDependencies(int n, ...);
+	void SetUpgrades(int n, ...);
+	void SetWonders(int n, ...);
 
 	static void InitTech();
 	static char* GetTechStatusJSON();

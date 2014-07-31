@@ -25,236 +25,369 @@
 	send_cmd("assign_city_trade", city);
   }
   
-  
-  var updateCity= function(city)
+  var toggleCityHappiness = function(city)
   {
-	var cityElement = document.getElementById('city_'+city.id);
-	if(cityElement == null)
-	{
-		if(MANAGER || Player == city.owner || Player == city.traded)
-		{
-			cityELement = document.createElement('div');
-			cityELement.setAttribute('id', 'city_'+city.id);
-			cityELement.setAttribute('class', 'city');
-			document.getElementById('cities').appendChild(cityELement);
-		}
-		
-		if(!MANAGER && Player == city.owner)
-		{
-			//<img class="city-production-ico" src="coin24.png"></img>
-			var cityProductionIcon = document.createElement('img');
-			cityProductionIcon.src='coins24.png';
-			cityProductionIcon.className='city-production-ico';
-			cityELement.appendChild(cityProductionIcon);
-			//	<div class="city-production-text">20</div>
-			var cityProductionText = document.createElement('div');
-			cityProductionText.className='city-production-text';
-			cityProductionText.innerHTML = city.production;
-			cityELement.appendChild(cityProductionText);
-			//	<img class="city-happy" src="happy24.png"></img>
-			if(city.isHappy)
-			{
-				var cityHappy = document.createElement('img');
-				cityHappy.className='city-happy';
-				cityHappy.src='happy24.png';
-				cityELement.appendChild(cityHappy);
-			}
-			//	<img class="city-productive" src="productive24.png"></img>
-			if(city.isProductive)
-			{
-				var cityProductive = document.createElement('img');
-				cityProductive.className='city-productive';
-				cityProductive.src='productive24.png';
-				cityELement.appendChild(cityProductive);
-			}
-			//<div class="city-resource-center">
-			//		<img class='city-resource-ico' src="wine24.png"></img>
-			//		<div class='city-resource-text span24'>Wine</div>
-			//	</div>
-			
-			var cityResource = document.createElement('div');
-			cityResource.className='city-resource-center';
-			var cityResourceIcon = document.createElement('img');
-			cityResourceIcon.className='city-resource-ico';
-			cityResourceIcon.src=ResourcesID[city.resource]+'24.png';
-			cityResource.appendChild(cityResourceIcon);
-			var cityResourceText = document.createElement('div');
-			cityResourceText.className='city-resource-text span24';
-			if(city.resource > 0)
-			{
-				cityResourceText.innerHTML += Resources[city.resource];
-			}
-			cityResource.appendChild(cityResourceText);
-			cityELement.appendChild(cityResource);
-			
-			//<img class="city-production-ico" src="coin24.png"></img>
-			var citySizeIcon = document.createElement('img');
-			citySizeIcon.src='size24.png';
-			citySizeIcon.className='city-size-ico';
-			cityELement.appendChild(citySizeIcon);
-			//	<div class="city-production-text">20</div>
-			var citySizeText = document.createElement('div');
-			citySizeText.className='city-size-text';
-			citySizeText.innerHTML = city.size + 1;
-			cityELement.appendChild(citySizeText);
-			
-			//	<div class="city-option-select">
-			//		Trade To:
-			//	</div>
-			var cityTradeText = document.createElement('div');
-			cityTradeText.className='city-trade-text';
-			cityTradeText.innerHTML = 'Trade:';
-			cityELement.appendChild(cityTradeText);
-			//	<select class="city-option-select">
-			//		<option value="0">-</option>
-			//		<option value="1">Ryan</option>
-			//		<option value="2">Jonothan</option>
-			//	</select>
-			var cityTradeSelect = document.createElement('select');
-			cityTradeSelect.className='city-option-select';
-			cityTradeSelect.options.add(new Option('-', -1));
-			for(var i = 0; i < Players.length; i++)
-			{
-				if(Player != i)
-				{
-					cityTradeSelect.options.add(new Option(Players[i].name, i));
-				}
-			}
-			cityTradeSelect.options[city.traded+1].selected = true;
-			cityTradeSelect.onchange = function(){assignCityTrade(city, cityTradeSelect);};
-			cityELement.appendChild(cityTradeSelect);
-			
-		}
-		else if(!MANAGER && Player == city.traded)
-		{
-						
-			//<div class="city-resource-center">
-			//		<img class='city-resource-ico' src="wine24.png"></img>
-			//		<div class='city-resource-text span24'>Wine</div>
-			//	</div>
-			
-			var cityResource = document.createElement('div');
-			cityResource.className='city-resource-center';
-			var cityResourceIcon = document.createElement('img');
-			cityResourceIcon.className='city-resource-ico';
-			cityResourceIcon.src=ResourcesID[city.resource]+'24.png';
-			cityResource.appendChild(cityResourceIcon);
-			var cityResourceText = document.createElement('div');
-			cityResourceText.className='city-resource-text span24';
-			if(city.resource > 0)
-			{
-				cityResourceText.innerHTML += Resources[city.resource];
-			}
-			cityResource.appendChild(cityResourceText);
-			cityELement.appendChild(cityResource);
-			
-			//	<div class="city-option-select">
-			//		Owner:
-			//	</div>
-			var cityTradeText = document.createElement('div');
-			cityTradeText.className='city-trade-text';
-			cityTradeText.innerHTML = 'Owner:'+Players[city.owner].name;
-			cityELement.appendChild(cityTradeText);
-		}
-		else if (MANAGER)
-		{
-			document.getElementById('cities').appendChild(cityELement);
-			//<img class="city-production-ico" src="coin24.png"></img>
-			var cityProductionIcon = document.createElement('img');
-			cityProductionIcon.src='coins24.png';
-			cityProductionIcon.className='city-production-ico';
-			cityELement.appendChild(cityProductionIcon);
-			//	<div class="city-production-text">20</div>
-			var cityProductionText = document.createElement('div');
-			cityProductionText.className='city-production-text';
-			cityProductionText.innerHTML = city.production;
-			cityELement.appendChild(cityProductionText);
-			//	<img class="city-happy" src="happy24.png"></img>
-			if(city.isHappy)
-			{
-				var cityHappy = document.createElement('img');
-				cityHappy.className='city-happy';
-				cityHappy.src='happy24.png';
-				cityELement.appendChild(cityHappy);
-			}
-			//	<img class="city-productive" src="productive24.png"></img>
-			if(city.isProductive)
-			{
-				var cityProductive = document.createElement('img');
-				cityProductive.className='city-productive';
-				cityProductive.src='productive24.png';
-				cityELement.appendChild(cityProductive);
-			}
-			//<div class="city-resource-center">
-			//		<img class='city-resource-ico' src="wine24.png"></img>
-			//		<div class='city-resource-text span24'>Wine</div>
-			//	</div>
-			
-			var cityResource = document.createElement('div');
-			cityResource.className='city-resource-center';
-			var cityResourceIcon = document.createElement('img');
-			cityResourceIcon.className='city-resource-ico';
-			cityResourceIcon.src=ResourcesID[city.resource]+'24.png';
-			cityResource.appendChild(cityResourceIcon);
-			var cityResourceText = document.createElement('div');
-			cityResourceText.className='city-resource-text span24';
-			if(city.resource > 0)
-			{
-				cityResourceText.innerHTML += Resources[city.resource];
-			}
-			cityResource.appendChild(cityResourceText);
-			cityELement.appendChild(cityResource);
-			
-			//<img class="city-production-ico" src="coin24.png"></img>
-			var citySizeIcon = document.createElement('img');
-			citySizeIcon.src='size24.png';
-			citySizeIcon.className='city-size-ico';
-			cityELement.appendChild(citySizeIcon);
-			//	<div class="city-production-text">20</div>
-			var citySizeText = document.createElement('div');
-			citySizeText.className='city-size-text';
-			citySizeText.innerHTML = city.size + 1;
-			cityELement.appendChild(citySizeText);
-			
-			//	<div class="city-option-select">
-			//		Owner:
-			//	</div>
-			var cityTradeText = document.createElement('div');
-			cityTradeText.className='city-trade-text';
-			cityTradeText.innerHTML = 'Owner:';
-			cityELement.appendChild(cityTradeText);
-			//	<select class="city-option-select">
-			//		<option value="0">-</option>
-			//		<option value="1">Ryan</option>
-			//		<option value="2">Jonothan</option>
-			//	</select>
-			var ownerSelect = document.createElement('select');
-			ownerSelect.className='city-option-select';
-			ownerSelect.options.add(new Option('-', -1));
-			for(var i = 0; i < Players.length; i++)
-			{
-				ownerSelect.options.add(new Option(Players[i].name, i));
-			}
-			ownerSelect.options[city.owner+1].selected = true;
-			ownerSelect.onchange = function(){assignCity(city, ownerSelect);};
-			cityELement.appendChild(ownerSelect);
-			
-		}
-	}
-	else
-	{
-		if(!MANAGER && Player != city.owner && Player != city.traded)
-		{
-			cityElement.parentNode.removeChild(cityElement);
-		}
-	}
+    if (!MANAGER)
+    {
+      send_cmd("toggle_city_happiness", city)
+    }
+  }
+  
+  var toggleCityProduction = function(city)
+  {
+    if (!MANAGER)
+    {  
+      send_cmd("toggle_city_productivity", city)
+    }
+  }
+  
+  var increaseCitySize = function(city)
+  {
+    if (!MANAGER)
+    {  
+	  if (confirm("You are upgrading the city size"))
+	  {
+	   send_cmd("increase_city_size", city)
+	  }    
+    }
+  }
+ 
+  
+  // Manager sees all fields except trade (instead manager sees owner)
+  // Owner sees all fields
+  // Trader sees only resource and owner text  
+  var showCity= function(city)
+  {  
+  
+    if(!MANAGER && Player != city.owner && Player != city.traded)
+    {
+    	hideCityBox(city)
+        return;
+    }
+    
+    // Show city
+    var cityElement = showCityBox(city);
+    
+    // Always show resource
+    showCityResourceIcon(city, cityElement);
+    showCityResourceText(city, cityElement);    
+    
+    // Only show prod, happy, productivity to Manager or owner
+    if (Player == city.owner || MANAGER)
+    {
+        showCityProdIcon(city, cityElement);    
+        showCityProductionText(city, cityElement);
+        showCityHappiness(city, cityElement);
+        showCityProductivity(city, cityElement);
+        showCitySizeIcon(city, cityElement);
+        showCitySizeText(city, cityElement);   
+        hideCityOwner(city, cityElement);
+    }
+    // Otherwise, if trader show owner
+    else if (Player == city.traded)
+    {
+        showCityOwner(city, cityElement);
+    }
+
+    // Show trade text only to owner
+    if (Player == city.owner)
+    {
+        //showCityTradeText(city, cityElement);
+        showCityTradeSelect(city, cityElement);       
+    }
+    
+    // Show owner selection box to manager
+    if (MANAGER)
+    {
+        showCityOwnerSelect(city, cityElement);
+    }
+    
   }
   
   var updateCities = function(obj) {
 	Cities = obj;
 	obj.forEach(function(entry) {
-		updateCity(entry);
+		showCity(entry);
 	});
   };
+  
+  ///////////////////////////////////////////////////////////////
+    
+  var showCityProductionText = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_prod';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('div');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-production-text');
+      cityElement.appendChild(element);
+    }
+     
+    element.innerHTML = city.production;
+  }
+        
+  var showCityHappiness = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_happyico';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('img');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-happy');
+      element.onclick = function(){ toggleCityHappiness(city); }
+      cityElement.appendChild(element);
+    }
+     
+    if(city.isHappy)
+    {
+        element.src='happy24.png';
+    }
+    else
+    {
+        element.src='unhappy24.png';
+    }     
+  }  
+  
+  var showCityProductivity = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_prodico';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('img');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-productive');
+      element.onclick = function(){ toggleCityProduction(city); }
+      cityElement.appendChild(element);
+    }
+    
+    if(city.isFertile)
+    {
+        element.src='fertile24.png';    
+    }
+    else if(city.isProductive)
+    {            
+        element.src='productive24.png';
+    }
+    else
+    {
+        element.src='unproductive24.png';
+    }
+  }
+  
+  var showCityResourceText = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_res';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('div');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-resource-text span24');
+      cityElement.appendChild(element);
+    }
+
+    if(city.resource > 0)
+    {
+        element.innerHTML = Resources[city.resource];
+    }
+    else
+    {
+        element.innerHTML = "None";
+    }    
+  }
+  
+  var showCityResourceIcon = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_resico';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('img');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-resource-ico');
+      cityElement.appendChild(element);
+    }
+
+    element.src=ResourcesID[city.resource]+'24.png';
+  }  
+  
+  var showCityProdIcon = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_prodico2';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('img');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-production-ico');
+      element.src='coins24.png';
+      cityElement.appendChild(element);
+    }
+  }
+  
+  var showCitySizeIcon = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_sizeico';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('img');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-size-ico');
+      element.src='size24.png';
+      element.onclick = function(){ increaseCitySize(city); }
+      cityElement.appendChild(element);
+    }
+  }  
+  
+  var showCitySizeText = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_size';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('div');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-size-text');
+      cityElement.appendChild(element);
+    }
+     
+    element.innerHTML = city.size + 1;
+  }
+  
+  var showCityTradeText = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_tradetext';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('div');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-trade-text');
+      element.innerHTML = 'Trade:'
+      cityElement.appendChild(element);
+    }
+  }
+  
+  var showCityTradeSelect = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_tradeselect';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      var outerElement = document.createElement('div');
+      
+      element = document.createElement('div');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-trade-text');
+      element.innerHTML = 'Trade:'
+      outerElement.appendChild(element);      
+      
+      element = document.createElement('select');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-option-select');
+      element.options.add(new Option('-', -1));
+      for(var i = 0; i < Players.length; i++)
+      {
+         //if(Player != i) // Causes crash on reload on ....selected = true;
+         element.options.add(new Option(Players[i].name, i));
+      }
+      element.options[city.traded+1].selected = true;
+      element.onchange = function(){assignCityTrade(city, element);};
+      outerElement.appendChild(element);
+      
+      cityElement.appendChild(outerElement);      
+    }
+  }  
+  
+  var showCityOwnerSelect = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_ownselect';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('select');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-option-select');
+      element.options.add(new Option('-', -1));
+      for(var i = 0; i < Players.length; i++)
+      {
+         element.options.add(new Option(Players[i].name, i));
+      }
+      element.options[city.owner+1].selected = true;
+      element.onchange = function(){assignCity(city, element);};
+      cityElement.appendChild(element);
+    }
+  }   
+  
+  var showCityOwner = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_own';
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('div');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city-owner-text');
+      cityElement.appendChild(element);
+    }
+    element.innerHTML = 'Owner: '+Players[city.owner].name;
+  }   
+  
+  var hideCityOwner = function(city, cityElement)
+  {
+    var id = 'city_'+city.id+'_own';
+    var element = document.getElementById(id);
+     
+    if (element != null)
+    {
+        element.parentNode.removeChild(element);
+    }    
+  }
+  
+  var showCityBox = function(city)
+  {
+    var id = 'city_'+city.id;
+    var element = document.getElementById(id);
+     
+    if (element == null)
+    {
+      element = document.createElement('div');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'city');
+      document.getElementById('cities').appendChild(element);
+    }
+    
+    return element;
+  }  
+  
+  var hideCityBox = function(city)
+  {
+    var id = 'city_'+city.id;
+    var element = document.getElementById(id);
+     
+    if (element != null)
+    {
+      element.parentNode.removeChild(element);
+    }
+    
+    return element;
+  }    
   
   

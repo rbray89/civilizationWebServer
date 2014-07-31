@@ -17,7 +17,8 @@ enum RESOURCE
 	OIL,
 	COAL,
 	WINE,
-	GEMS
+	GEMS,
+	NUM_RESOURCES
 };
 
 using namespace rapidjson;
@@ -36,8 +37,8 @@ class City
 	int Traded;
 	int Id;
 
-	UPGRADE Happy;
-	UPGRADE Productive;
+	bool hasHappyUpgrade;
+	bool hasProductivityUpgrade;
 
 	bool isHappy();
 	bool isProductive();
@@ -50,6 +51,10 @@ public:
 	static void Trade(int player, int city);
 	static void SetSize(int city, int size);
 	static void SetFertile(int city, int size);
+	static void ToggleCityHappinessUpgrade(int city);
+	static void ToggleCityProductivityUpgrade(int city);
+	static void IncreaseCitySize(int city);
+	static int  GetPlayerTotalOutput(int player);
 	static void GetJSONArray(Document* document, Value* array);
 	static char* GetCityStatusJSON();
 	~City();

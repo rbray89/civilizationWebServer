@@ -20,6 +20,7 @@
 		send_cmd("get_player_status");
 		send_cmd("get_tech_status");
 		send_cmd("get_city_status");
+        send_cmd("get_upgrade_status");
     };
     websocket.onclose = function(ev) {
 
@@ -32,14 +33,13 @@
 		if(json.players != null)
 		{
 			updatePlayers(json.players);
-			if(Players.length > 0)
+			if(Players != null && Players.length > 0)
 			{
 				var playerSelector = document.getElementById("players-show");
-				playerSelector.style.display= "none";
-				showContainer("tech");
+                document.getElementById("set-players-button").style.display = "none"
 			}
 		}
-		if(Players.length > 0)
+		if(Players != null && Players.length > 0)
 		{
 			if(json.game_timer != null)
 			{
@@ -64,6 +64,10 @@
 			{
 				updateCities(json.cities);
 			}
+            if(json.upgrades != null)
+            {
+                updateUpgrades(json.upgrades);
+            }            
 		}
       }
     };

@@ -8,6 +8,7 @@
 <script language="javascript" type="text/javascript" src="gameTimer.js"></script>
 <script language="javascript" type="text/javascript" src="wonders.js"></script>
 <script language="javascript" type="text/javascript" src="cities.js"></script>
+<script language="javascript" type="text/javascript" src="upgrades.js"></script>
 <script language="javascript" type="text/javascript" src="page.js"></script>
 <body>
 	<div id="login">
@@ -41,7 +42,7 @@
 			</div>
 		</td></tr>
 		<tr><td id="player-banner">
-			<div id="header">
+			<div id="player-banner-left">
 				<span class="span45" id="player"></span>
 			</div>
 			<div id="game-phase" >
@@ -54,6 +55,9 @@
 				<div class="show-container button-up" onclick="showContainer('cities');">
 					<span class="span45" >Cities</span>
 				</div>
+				<div class="show-container button-up" onclick="showContainer('upgrades');">
+					<span class="span45" >Upgrades</span>
+				</div>                
 			</div>
 		</td></tr></table>
 		</div>
@@ -72,7 +76,10 @@
 			</div>
 		</div>
 		<div class="container" id="cities" style="display:none;">
+            <div id="cities-resource-bar"></div>
 		</div>
+		<div class="container" id="upgrades" style="display:none;">
+		</div>        
 	</div>
 </body>
 </html>

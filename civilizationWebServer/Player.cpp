@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "City.h"
 #include "string.h"
 
 Player* Player::Players[6];
@@ -14,7 +15,9 @@ void Player::PlayersInit(const char* players[6], int playerCount)
 	}
 }
 
-Player::Player(const char* name)
+Player::Player(const char* name) : 
+	AvailableHappiness(1),
+	AvailableProductivity(0)
 {
 	Name = new char[strlen(name) + 1];
 	strcpy(Name, name);
@@ -35,7 +38,7 @@ char* Player::GetName()
 
 char* Player::GetPlayerName(int i)
 {
-	return i >= PlayerCount || i < 0 ? "" : Players[i]->GetName();
+	return i >= PlayerCount || i < 0 ? "Unknown" : Players[i]->GetName();
 }
 
 void Player::GetJSON(Document* document, Value* array)
@@ -45,6 +48,9 @@ void Player::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<bool>("logged_in", LoggedIn, document->GetAllocator());
 	jsonObject.AddMember<int>("id", Id, document->GetAllocator());
 	jsonObject.AddMember<int>("color", Color, document->GetAllocator());
+	jsonObject.AddMember<int>("happiness", AvailableHappiness, document->GetAllocator());
+	jsonObject.AddMember<int>("productivity", AvailableProductivity, document->GetAllocator());
+	jsonObject.AddMember<int>("total_output", City::GetPlayerTotalOutput(Id), document->GetAllocator());
 	array->PushBack(jsonObject, document->GetAllocator());
 }
 
@@ -168,15 +174,47 @@ void Player::SendToAllPlayers(char* string)
 	}
 }
 
-void Player::DepricateUpgrade(UPGRADE upgrade)
+void Player::DeprecateUpgrade(UPGRADE upgrade, BENEFIT_TYPE type)
 {
 	for (int i = 0; i < PlayerCount; i++)
 	{
-		Players[i]->upgrades &= ~static_cast<int>(upgrade);
+		if (Players[i]->upgrades & static_cast<int>(upgrade))
+		{
+			int happyDiff = 0;
+			int prodDiff = 0;
+			Upgrade::GetBenefitFromType(type, happyDiff, prodDiff);
+
+			ChangeAvailableUpgrades(i, -happyDiff, -prodDiff);
+			Players[i]->upgrades = Players[i]->upgrades & ~upgrade;
+		}
 	}
 }
 
-void Player::PurchaseUpgrade(int player, UPGRADE upgrade)
+void Player::PurchaseUpgrade(int player, UPGRADE upgrade, BENEFIT_TYPE type)
 {
-	Players[player]->upgrades |= upgrade;
+	Players[player]->upgrades = Players[player]->upgrades | upgrade;
+
+	int happyDiff = 0;
+	int prodDiff = 0;
+	Upgrade::GetBenefitFromType(type, happyDiff, prodDiff);
+	ChangeAvailableUpgrades(player, happyDiff, prodDiff);
+}
+
+void Player::ChangeAvailableUpgrades(int player, int happyDiff, int productivityDiff)
+{
+	if (player != -1)
+	{
+		Players[player]->AvailableHappiness += happyDiff;
+		Players[player]->AvailableProductivity += productivityDiff;
+	}
+}
+
+bool Player::HasAvailableHappiness(int player)
+{
+	return Players[player]->AvailableHappiness > 0;
+}
+
+bool Player::HasAvailableProductivity(int player)
+{
+	return Players[player]->AvailableProductivity > 0;
 }

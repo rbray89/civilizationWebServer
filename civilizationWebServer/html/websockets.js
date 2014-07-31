@@ -20,6 +20,7 @@
 		send_cmd("get_player_status");
 		send_cmd("get_tech_status");
 		send_cmd("get_city_status");
+        send_cmd("get_upgrade_status");
     };
     websocket.onclose = function(ev) {
 
@@ -35,6 +36,16 @@
 		}
 		if(Players.length > 0)
 		{
+			if(json.login != null)
+			{
+				if(json.login.verified == true)
+				{
+					loginPlayer(json.login.player, json.login.color, true);
+					send_cmd("get_city_status");
+                    send_cmd("get_upgrade_status");
+				}
+			}
+            
 			if(json.game_timer != null)
 			{
 				updateTurnStatus(json.game_timer);
@@ -47,19 +58,14 @@
 			{
 				updateTechnologies(json.technologies);
 			}
-			
-			if(json.login != null)
-			{
-				if(json.login.verified == true)
-				{
-					loginPlayer(json.login.player, json.login.color, true);
-					send_cmd("get_city_status");
-				}
-			}
 			if(json.cities != null)
 			{
 				updateCities(json.cities);
 			}
+            if(json.upgrades != null)
+            {
+                updateUpgrades(json.upgrades);
+            }
 		}
       }
     };

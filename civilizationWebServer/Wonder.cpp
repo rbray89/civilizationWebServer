@@ -1,15 +1,18 @@
 #include "Wonder.h"
+#include "Upgrade.h"
+#include "Player.h"
 
 int Wonder::IdCount = 0;
 Wonder* Wonder::Wonders[WONDER_COUNT];
 char* Wonder::TextJSON;
 
-Wonder::Wonder(char* name, TECH_ERA era, char* description)
+Wonder::Wonder(char* name, TECH_ERA era, BENEFIT_TYPE benefit, char* description)
 {
 	Name = name;
 	Era = era;
 	Description = description;
 	Id = IdCount;
+	Benefit = benefit;
 	Owner = -1;
 	Wonders[IdCount++] = this;
 }
@@ -19,9 +22,16 @@ int Wonder::GetId()
 	return Id;
 }
 
-void Wonder::SetOwner(int player)
+void Wonder::SetOwner(int player, int previousOwner)
 {
 	Owner = player;
+
+	// Increment happy/prod counters if necessary
+	int happyDiff = 0;
+	int prodDiff = 0;
+	Upgrade::GetBenefitFromType(Benefit, happyDiff, prodDiff);
+	Player::ChangeAvailableUpgrades(player, happyDiff, prodDiff);
+	Player::ChangeAvailableUpgrades(previousOwner, -happyDiff, -prodDiff);
 }
 
 void Wonder::GetJSON(Document* document, Value* array)

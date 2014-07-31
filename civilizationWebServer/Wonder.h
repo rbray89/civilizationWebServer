@@ -16,15 +16,16 @@ class Wonder
 	TECH_ERA Era;
 	int Owner;
 	int Id;
+	BENEFIT_TYPE Benefit;
 
 	static Wonder* Wonders[WONDER_COUNT];
 	static int IdCount;
 	static char* TextJSON;
 
 public:
-	Wonder(char* name, TECH_ERA era, char* description);
+	Wonder(char* name, TECH_ERA era, BENEFIT_TYPE type, char* description);
 	int GetId();
-	void SetOwner(int player);
+	void SetOwner(int player, int previousOwner);
 	void GetJSON(Document* document, Value* array);
 	static char* GetWonderStatusJSON();
 	~Wonder();

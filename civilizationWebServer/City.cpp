@@ -1,7 +1,14 @@
 #include "City.h"
+#include "Player.h"
 
 int City::CityCount = 0;
 City* City::CityList[MAX_CITY_COUNT];
+
+#define UNIQUE_RESOURCE_BONUS_MULTIPLIER 3
+#define MINIMUM_INCOME 10
+
+// by city size
+static int monopoly_bonus_incomes[] = {0, 0, 0, 20, 40, 80};
 
 using namespace rapidjson;
 char* City::TextJSON = nullptr;
@@ -13,8 +20,8 @@ City::City(RESOURCE resource, int owner, bool fertile)
 	CityList[Id] = this;
 	CityCount++;
 	Fertile = fertile;
-	Happy = NONE;
-	Productive = NONE;
+	hasHappyUpgrade = false;
+	hasProductivityUpgrade = false;
 	Traded = -1;
 	Size = 0;
 	Resource = resource;
@@ -22,10 +29,51 @@ City::City(RESOURCE resource, int owner, bool fertile)
 
 void City::Assign(int player, int city)
 {
-	CityList[city]->Happy = NONE;
-	CityList[city]->Productive = NONE;
+	CityList[city]->hasHappyUpgrade = false;
+	CityList[city]->hasProductivityUpgrade = false;
 	CityList[city]->Owner = player;
 	CityList[city]->Traded = -1;
+}
+
+int City::GetPlayerTotalOutput(int player)
+{
+	int totalOutput = 0;
+	int resourceCount[NUM_RESOURCES];
+	memset(resourceCount, 0, sizeof(resourceCount));
+
+	for (int i = 0; i < CityCount; i++)
+	{
+		if (CityList[i] != nullptr)
+		{
+			// The owner always gets the city's production
+			if (CityList[i]->Owner == player)
+			{
+				totalOutput += CityList[i]->production();
+			}
+
+			// But only count it for monopoly/unique if
+			// 1. It's traded to you (possibly by yourself), or
+		    // 2. You own it and it's not traded to anyone
+			if (CityList[i]->Traded == player || (CityList[i]->Traded == -1 && CityList[i]->Owner == player))
+			{
+				resourceCount[CityList[i]->Resource]++;
+			}
+		}
+	}
+	
+	int numUniqueResources = 0;
+	int monopolyBonus = 0;
+	
+	for (int i = NO_RESOURCE + 1; i < NUM_RESOURCES; i++)
+	{
+		if (resourceCount[i] > 0)
+		{
+			numUniqueResources++;
+			monopolyBonus += monopoly_bonus_incomes[MIN(5, resourceCount[i])];
+		}
+	}
+
+	return MAX(MINIMUM_INCOME, totalOutput + numUniqueResources*UNIQUE_RESOURCE_BONUS_MULTIPLIER + monopolyBonus);
 }
 
 void City::Trade(int player, int city)
@@ -35,22 +83,84 @@ void City::Trade(int player, int city)
 
 bool City::isHappy()
 {
-	if (Resource == GEMS || Resource == WINE || Upgrade::isActive(Happy))
-	{
-		return true;
-	}
-
-	return false;
+	return (Resource == GEMS || Resource == WINE || hasHappyUpgrade);
 }
 
 bool City::isProductive()
 {
-	if (Fertile || Upgrade::isActive(Productive))
-	{
-		return true;
-	}
-	return false;
+	return Fertile || hasProductivityUpgrade;
 }
+
+void City::ToggleCityHappinessUpgrade(int city)
+{
+	if (CityList[city]->Resource != GEMS && CityList[city]->Resource != WINE)
+	{
+		int availHappyDiff = 0;
+		if (!CityList[city]->hasHappyUpgrade)
+		{
+			if (Player::HasAvailableHappiness(CityList[city]->Owner))
+			{
+				CityList[city]->hasHappyUpgrade = true;
+				availHappyDiff = -1;
+			}
+		}
+		else
+		{
+			CityList[city]->hasHappyUpgrade = false;
+			availHappyDiff = 1;
+		}
+
+		Player::ChangeAvailableUpgrades(CityList[city]->Owner, availHappyDiff, 0);
+	}
+}
+
+void City::ToggleCityProductivityUpgrade(int city)
+{
+	if (!CityList[city]->Fertile)
+	{
+		int availProdDiff = 0;
+		if (!CityList[city]->hasProductivityUpgrade)
+		{
+			if (Player::HasAvailableProductivity(CityList[city]->Owner))
+			{
+				CityList[city]->hasProductivityUpgrade = true;
+				availProdDiff = -1;
+			}
+		}
+		else
+		{
+			CityList[city]->hasProductivityUpgrade = false;
+			availProdDiff = 1;
+		}
+
+		Player::ChangeAvailableUpgrades(CityList[city]->Owner, 0, availProdDiff);
+	}
+}
+
+void City::IncreaseCitySize(int city)
+{
+	bool isUpgradeAllowed = false;
+	switch(CityList[city]->Size + 1)
+	{
+	case 1:
+		isUpgradeAllowed = Upgrade::GetUpgrade(SIZE_2_CITIES)->IsUnlocked();
+		break;
+	case 2:
+		isUpgradeAllowed = Upgrade::GetUpgrade(SIZE_3_CITIES)->IsUnlocked();
+		break;
+	case 3:
+		isUpgradeAllowed = Upgrade::GetUpgrade(SIZE_4_CITIES)->IsUnlocked();
+		break;
+	default:
+		break;
+	}
+
+	if (isUpgradeAllowed)
+	{
+		CityList[city]->Size++;
+	}
+}
+
 
 int City::production()
 {
@@ -93,11 +203,10 @@ void City::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<int>("id", Id, document->GetAllocator());
 	jsonObject.AddMember<int>("owner", Owner, document->GetAllocator());
 	jsonObject.AddMember<int>("traded", Traded, document->GetAllocator());
-	jsonObject.AddMember<UPGRADE>("happy", Happy, document->GetAllocator());
 	jsonObject.AddMember<bool>("isHappy", isHappy(), document->GetAllocator());
-	jsonObject.AddMember<UPGRADE>("productive", Productive, document->GetAllocator());
 	jsonObject.AddMember<bool>("isProductive", isProductive(), document->GetAllocator());
 	jsonObject.AddMember<int>("size", Size, document->GetAllocator());
+	jsonObject.AddMember<int>("isFertile", Fertile, document->GetAllocator());
 	jsonObject.AddMember<RESOURCE>("resource", Resource, document->GetAllocator());
 	jsonObject.AddMember<int>("production", production(), document->GetAllocator());
 	array->PushBack(jsonObject, document->GetAllocator());

@@ -102,7 +102,7 @@ body, html
     margin-bottom: 10px;
 }
 
-#header, #game-phase
+#player-banner-left, #game-phase
 {
 	font: 18px Arial;
 	font-weight: bold;
@@ -125,7 +125,7 @@ body, html
 	width: 288px;
 }
 
-#header
+#player-banner-left
 {
 	width: 288px;
 	float: left;
@@ -257,7 +257,11 @@ body, html
 .technology-expanded, 
 .technology-unexpanded, 
 .technology-dependency-1, 
-.technology-dependency-2
+.technology-dependency-2,
+.upgrade-deprecated,
+.upgrade-purchased,
+.upgrade-unlocked,
+.upgrade-locked
 {
 	position: relative;
 	padding:5px;
@@ -270,17 +274,25 @@ body, html
 	z-index:2;
 }
 
-.technology-unavailable
+.technology-unavailable,
+.upgrade-locked
 {
 	background: #DCDCDC;
 }
 
-.technology-available
+.upgrade-deprecated
+{
+	background: #FFCECE;
+}
+
+.technology-available,
+.upgrade-unlocked
 {
 	background: #F5DEB3;
 }
 
-.technology-purchased
+.technology-purchased,
+.upgrade-purchased
 {
 	background: floralwhite;
 }
@@ -316,7 +328,8 @@ body, html
 	background: floralwhite;
 }
 
-.tech-text-name
+.tech-text-name,
+.upgrade-text-name
 {
 	font: 14px Arial;
 	text-align: center;
@@ -324,10 +337,10 @@ body, html
 	float: top;
 }
 
-.tech-text-cost-ico, .tech-text-cost, .city-production-ico,
-.city-production-text, .city-option-select, .city-option-select-size,
+.tech-text-cost-ico, .tech-text-cost,
+.city-option-select, .city-option-select-size,
 .city-resource-ico, .city-resource-text, 
-.city-size-ico, .city-size-text, .city-trade-text
+.city-trade-text, .city-upgrade-text
 {
 	font: 14px Arial;
 	text-align: left;
@@ -335,19 +348,33 @@ body, html
 	float: left;
 }
 
+.city-trade-text, .city-owner-text
+{
+    clear: left
+}
+
 .city-resource-center
 {
 	font: 20px Arial;
 	text-align: center;
-	overflow:hidden
+
 }
 
-.tech-text-benefits, .city-happy, .city-productive
+.tech-text-benefits, .city-happy, .city-productive, .upgrade-img-benefits,
+.city-size-ico, .city-size-text, .city-production-ico, .city-production-text
 {
 	font: 14px Arial;
 	text-align: right;
 	margin: 3px 5px 0 0;
 	float: right;
+}
+
+.player-resources-text
+{
+	font: 30px Arial;
+	text-align: center;
+	margin: 3px 5px 0 0;
+    width: 100%
 }
 
 .tech-text-cost
@@ -356,15 +383,15 @@ body, html
 }
 
 .city-production-text,
-.city-size-text, .city-trade-text
+.city-size-text, .city-trade-text, .city-upgrade-text, .city-owner-text
 {
 	font: 20px Arial;
-	width: 32px;
+#	width: 32px;
 }
 
-.city-trade-text
+.city-trade-text, .city-upgrade-text
 {
-	width: 64px;
+	width: 80px;
 }
 
 .city-size-text
@@ -372,17 +399,18 @@ body, html
 	width: 16px;
 }
 
+.city-owner-text,
 .city-resource-text
 {
 	margin: 3px 0 0 5px;
 	font: 20px Arial;
-	width: 125px;
+#	width: 105px;
 }
 
 .city-option-select
 {
 	font: 18px Arial;
-	width: 125px;
+	width: 150px;
 }
 
 .city-option-select-size
@@ -425,7 +453,9 @@ body, html
 	float: right;
 }
 
-.tech-purchase
+.tech-purchase,
+.upgrade-purchase,
+.upgrade-deprecate
 {
 	height: 18px;
 	margin: 4px 0 0 2px;
@@ -450,7 +480,7 @@ body, html
 	border:3px solid gray;
 	margin:10px;
 	height:60px;
-	width:285px;
+	width:310px;
 	float:left;
 	z-index:2;
 }

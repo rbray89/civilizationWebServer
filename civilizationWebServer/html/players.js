@@ -96,7 +96,65 @@
 	send_cmd('init_players', -1, players);
   };
   
+  var updatePlayerResourcesBar = function(playerResources)
+  {
+    if (MANAGER)
+    {
+      return;
+    }
+   
+      
+    var id = 'player-info';
+    var element = document.getElementById(id);  
+    
+    if (element == null)
+    {
+      element = document.createElement('div');
+      element.setAttribute('id', id); 
+      element.setAttribute('class', 'player-resources-text'); // TODO change class
+      document.getElementById('cities-resource-bar').appendChild(element);
+      
+      // Total of city output
+      var subElement = document.createElement('span');
+      subElement.setAttribute('id', id+'_output');
+      element.appendChild(subElement);
+      subElement = document.createElement('img');
+      subElement.src = 'coins24.png';
+      element.appendChild(subElement);      
+      
+      // Available happiness
+      subElement = document.createElement('span');
+      subElement.setAttribute('id', id+'_happy');
+      element.appendChild(subElement);
+      subElement = document.createElement('img');
+      subElement.src = 'happy24.png';
+      element.appendChild(subElement);      
+      
+      // Available productivity
+      subElement = document.createElement('span');
+      subElement.setAttribute('id', id+'_prod');
+      element.appendChild(subElement);
+      subElement = document.createElement('img');
+      subElement.src = 'productive24.png';
+      element.appendChild(subElement);         
+    }
+    
+    var totalOutput = document.getElementById(id+'_output');
+    totalOutput.innerHTML = playerResources.total_output;
+    
+    var totalHappy = document.getElementById(id+'_happy');
+    totalHappy.innerHTML = "&nbsp;&nbsp;&nbsp;"+playerResources.happiness;
+
+    var totalProductive = document.getElementById(id+'_prod');
+    totalProductive.innerHTML = "&nbsp;&nbsp;&nbsp;"+playerResources.productivity;    
+  }
+  
   var updatePlayers = function(players) {
+    if (players.length == 0)
+    {
+        return;
+    }
+    
 	if(MANAGER && Players == null)
 	{
 		var cityPlayerAdd = document.getElementById("city-player-add");
@@ -134,6 +192,10 @@
 			assignLoginColor(i);
 		}
 	}
+    else if (Player != null)
+    {
+        updatePlayerResourcesBar(Players[Player]);
+    }
   };
   
 

@@ -255,7 +255,6 @@
 		
 		tech.appendChild(techExpanded);
 	}
-	resetTech(false);
   };  
   
   var updateTechnologies = function(obj) {
@@ -263,6 +262,11 @@
 	obj.forEach(function(entry) {
 		updateTech(entry);
 	});
+    resetTech(false);
 	selectTech(SelectedTech);
   };
+  
+//  var updateCities = function(obj) {
+//	resetTech(false)
+//  };  
   

@@ -19,6 +19,8 @@ private:
 	bool LoggedIn;
 	int Id;
 	int Color;
+	int AvailableHappiness;
+	int AvailableProductivity;
 	struct mg_connection* Token;
 	UPGRADE upgrades;
 
@@ -38,8 +40,11 @@ public:
 	static bool LogOut(struct mg_connection* token);
 	static char* GetLoginStatusJSON(int player, bool success);
 	static void SendToAllPlayers(char* string);
-	static void DepricateUpgrade(UPGRADE upgrade);
-	static void PurchaseUpgrade(int player, UPGRADE upgrade);
+	static void DeprecateUpgrade(UPGRADE upgrade, BENEFIT_TYPE type);
+	static void PurchaseUpgrade(int player, UPGRADE upgrade, BENEFIT_TYPE type);
+	static void ChangeAvailableUpgrades(int player, int happyDiff, int productivityDiff);
+	static bool HasAvailableHappiness(int player);
+	static bool HasAvailableProductivity(int player);
 	~Player();
 };
 

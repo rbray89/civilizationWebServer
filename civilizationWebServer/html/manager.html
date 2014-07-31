@@ -3,11 +3,12 @@
 <title>Civilization Manager</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 <script language="javascript" type="text/javascript" src="manager.js"></script>
+<script language="javascript" type="text/javascript" src="cities.js"></script>
 <script language="javascript" type="text/javascript" src="players.js"></script>
 <script language="javascript" type="text/javascript" src="technology.js"></script>
 <script language="javascript" type="text/javascript" src="gameTimer.js"></script>
 <script language="javascript" type="text/javascript" src="wonders.js"></script>
-<script language="javascript" type="text/javascript" src="cities.js"></script>
+<script language="javascript" type="text/javascript" src="upgrades.js"></script>
 <script language="javascript" type="text/javascript" src="page.js"></script>
 <body>
 	<div id="civilization-manager" >
@@ -29,7 +30,7 @@
 			</div>
 		</td></tr>
 		<tr><td id="player-banner">
-			<div id="header">
+			<div id="player-banner-left">
 				<span class="span45" id="player"></span>
 			</div>
 			<div id="game-phase" >
@@ -45,6 +46,9 @@
 				<div class="show-container button-up" onclick="showContainer('cities');">
 					<span class="span45" >Cities</span>
 				</div>
+				<div class="show-container button-up" onclick="showContainer('upgrades');">
+					<span class="span45" >Upgrades</span>
+				</div>                  
 			</div>
 		</td></tr></table>
 		</div>
@@ -63,7 +67,7 @@
 					<input class="players-set-class" id="player-add-1"></input>
 					<input class="players-set-class" id="player-add-2"></input>
 				</div>
-				<div class="players-set-class button-up" onclick="setPlayers();"><span class="span25"></span>Set</div>
+				<div class="players-set-class button-up" id="set-players-button" onclick="setPlayers();"><span class="span25"></span>Set</div>
 			</div>
 		</div>
 		<div class="container" id="tech" style="display:none">
@@ -102,6 +106,8 @@
 			</div>
 			
 		</div>
+		<div class="container" id="upgrades" style="display:none;">
+		</div>           
 	</div>
 </body>
 </html>

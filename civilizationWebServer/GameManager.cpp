@@ -2,7 +2,6 @@
 #include "mongoose.h"
 #include "string.h"
 #include <fstream>
-#include <windows.h>
 #include "rapidjson\document.h"
 #include "rapidjson\writer.h"
 #include "rapidjson\stringbuffer.h"
@@ -16,7 +15,6 @@ GameManager::GameManager() : CurrentPhase(MOVEMENT_PHASE)
 GameManager::GameManager(struct mg_server* server) : CurrentPhase(MOVEMENT_PHASE)
 {
 	this->Server = server;
-	Upgrade::InitUpgrades();
 	Technology::InitTech();
 	
 	TimeRemaining = PLAYER_TURN_TIME;
@@ -222,6 +220,15 @@ void GameManager::SendCityStatusUpdate()
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
+void GameManager::SendUpgradeStatusUpdate()
+{
+	static char buf[UPDATE_BUFF_SIZE];
+
+	const char* string = Upgrade::GetUpgradeStatusJSON();
+	strcpy_s(buf, sizeof(buf), string);
+	mg_iterate_over_connections(Server, PostMsgToClient, buf);
+}
+
 VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 {
 	GameManager* gameTimer = (GameManager*)lpParam;
@@ -267,6 +274,19 @@ void GameManager::PurchaseTech(int player, int tech)
 	}
 }
 
+void GameManager::PurchaseUpgrade(int player, int upgrade)
+{
+	if (player == Player::GetCurrentPlayer() && CurrentPhase == PURCHASE_PHASE)
+	{
+		Upgrade::PurchaseUpgrade(player, (UPGRADE) upgrade);
+	}
+}
+
+void GameManager::DeprecateUpgrade(int upgrade)
+{
+	Upgrade::DeprecateUpgrade((UPGRADE) upgrade);
+}
+
 void GameManager::PurchaseTechOverride(int player, int tech)
 {
 	Technology::Purchase(tech, player);
@@ -280,6 +300,21 @@ void GameManager::AssignCity(int player, int city)
 void GameManager::AssignCityTrade(int player, int city)
 {
 	City::Trade(player, city);
+}
+
+void GameManager::ToggleCityHappinessUpgrade(int city)
+{
+	City::ToggleCityHappinessUpgrade(city);
+}
+
+void GameManager::ToggleCityProductivityUpgrade(int city)
+{
+	City::ToggleCityProductivityUpgrade(city);
+}
+
+void GameManager::IncreaseCitySize(int city)
+{
+	City::IncreaseCitySize(city);
 }
 
 void GameManager::CreateCity(int player, RESOURCE resource, bool fertile)
@@ -327,6 +362,11 @@ char* GameManager::GetWonderStatusJSON()
 char* GameManager::GetCityStatusJSON()
 {
 	return City::GetCityStatusJSON();
+}
+
+char* GameManager::GetUpgradeStatusJSON()
+{
+	return Upgrade::GetUpgradeStatusJSON();
 }
 
 void GameManager::LoadState(char* filename)

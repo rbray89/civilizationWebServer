@@ -21,7 +21,7 @@ enum UPGRADE
 	CASTLE = (1 << 9),
 	UNIVERSITY = (1 << 10),
 	CATHEDRAL = (1 << 11),
-	CAPITAL = (1 << 12),
+	CAPITOL = (1 << 12),
 	STOCK_MARKET = (1 << 13),
 	LEGISLATURE = (1 << 14),
 	FACTORY = (1 << 15),
@@ -31,63 +31,58 @@ enum UPGRADE
 	MANUFACTURING_PLANT = (1 << 19),
 	RESEARCH_LAB = (1 << 20),
 	AIRPORT = (1 << 21),
-	NUKE_PLANT = (1 << 22),
+	NUCLEAR_POWER_PLANT = (1 << 22),
 	SHOPPING_MALL = (1 << 23),
 	TELEVISION_STATION = (1 << 24),
 	INTERNET = (1 << 25),
-	MEDICARE_COMPLEX = (1 << 26),
-	FUSION_REACTOR = (1 << 27)
+	HEALTHCARE_COMPLEX = (1 << 26),
+	FUSION_REACTOR = (1 << 27),
+	SIZE_2_CITIES = (1 << 28),
+	SIZE_3_CITIES = (1 << 29),
+	SIZE_4_CITIES = (1 << 30),
 };
 
-enum UPGRADE_TYPE
-{
-	HAPPY,
-	PRODUCTIVE,
-	DOUBLE_HAPPY,
-	DOUBLE_PRODUCTIVE
-};
-
-#define UPGRADE_COUNT 26
+#define UPGRADE_COUNT 31
 
 inline UPGRADE operator|(UPGRADE a, UPGRADE b)
 {
 	return static_cast<UPGRADE>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-inline UPGRADE operator|=(UPGRADE a, UPGRADE b)
-{
-	return static_cast<UPGRADE>(static_cast<int>(a) | static_cast<int>(b));
-}
-
-inline UPGRADE operator&(UPGRADE a, UPGRADE b)
+inline UPGRADE operator&(UPGRADE a, int b)
 {
 	return static_cast<UPGRADE>(static_cast<int>(a) & static_cast<int>(b));
-}
-
-inline UPGRADE operator&=(UPGRADE a, int b)
-{
-	return static_cast<UPGRADE>(static_cast<int>(a)& b);
 }
 
 class Upgrade
 {
 	static Upgrade* UpgradeList[UPGRADE_COUNT];
+	static bool UpgradePurchased[6][UPGRADE_COUNT];
+	static char* TextJSON;
 
 	TECH_ERA Era;
 	char* Name;
+	char* UnlockedBy;
 	UPGRADE Id;
-	UPGRADE_TYPE Type;
-	bool Depricated;
+	BENEFIT_TYPE Type;
+	bool Deprecated;
+	bool Unlocked;
+	int upgradeIndex;
 
 public:
-	static void InitUpgrades();
 
-	Upgrade(UPGRADE id, char* name, TECH_ERA era, UPGRADE_TYPE Type);
-	static void DepricateUpgrade(UPGRADE upgrade);
+	Upgrade(UPGRADE id, char* name, TECH_ERA era, BENEFIT_TYPE Type);
+	static void DeprecateUpgrade(UPGRADE upgrade);
 	static void PurchaseUpgrade(int player, UPGRADE upgrade);
 	static bool isActive(UPGRADE upgrade);
 	void GetJSON(Document* document, Value* array);
 	static void GetJSONArray(Document* document, Value* array);
+	static char* Upgrade::GetUpgradeStatusJSON();
+	static void GetBenefitFromType(BENEFIT_TYPE type, int& happyDiff, int& prodDiff);
+	static Upgrade* Upgrade::GetUpgrade(UPGRADE upgrade);
+	void LockUpgrade();
+	void UnlockUpgrade(int owner);
+	bool IsUnlocked();
 	~Upgrade();
 };
 

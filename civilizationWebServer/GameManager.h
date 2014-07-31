@@ -42,6 +42,7 @@ public:
 	void SendTechStatusUpdate();
 	void SendWonderStatusUpdate();
 	void SendCityStatusUpdate();
+	void SendUpgradeStatusUpdate();
 	GameManager();
 	GameManager(struct mg_server* server);
 	void StartStop();
@@ -52,13 +53,19 @@ public:
 	void ExtendTurn();
 	void PurchaseTech(int player, int tech);
 	void PurchaseTechOverride(int player, int tech);
+	void PurchaseUpgrade(int player, int upgrade);
+	void DeprecateUpgrade(int upgrade);
 	void AssignCity(int player, int city);
 	void AssignCityTrade(int player, int city);
+	void ToggleCityHappinessUpgrade(int city);
+	void ToggleCityProductivityUpgrade(int city);
+	void IncreaseCitySize(int city);
 	void CreateCity(int player, RESOURCE resource, bool fertile);
 	char* GetPlayerStatusJSON();
 	char* GetTechStatusJSON();
 	char* GetWonderStatusJSON();
 	char* GetCityStatusJSON();
+	char* GetUpgradeStatusJSON();
 	void LoadState(char* filename);
 	void SaveState(char* filename);
 	~GameManager();
