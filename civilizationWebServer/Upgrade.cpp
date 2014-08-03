@@ -73,6 +73,7 @@ void Upgrade::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<int>("id", Id, document->GetAllocator());
 	jsonObject.AddMember<char*>("name", Name, document->GetAllocator());
 	jsonObject.AddMember<BENEFIT_TYPE>("type", Type, document->GetAllocator());
+	jsonObject.AddMember<TECH_ERA>("era", Era, document->GetAllocator());
 	jsonObject.AddMember<bool>("unlocked", Unlocked, document->GetAllocator());
 	jsonObject.AddMember<char*>("unlockedby", UnlockedBy, document->GetAllocator());
 	jsonObject.AddMember<bool>("deprecated", Deprecated, document->GetAllocator());

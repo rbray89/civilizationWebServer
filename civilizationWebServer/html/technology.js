@@ -201,7 +201,7 @@
 		techText.style.display = 'none';
 		tech.appendChild(techText);	
 		
-		document.getElementById(EraIds[techObj.era]).appendChild(tech);
+		document.getElementById(EraIds[techObj.era]+"-tech").appendChild(tech);
 		
 		var techExpanded = document.createElement('div');
 		techExpanded.setAttribute('id', 'tech_expanded_'+techObj.id);

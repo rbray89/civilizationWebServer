@@ -66,7 +66,7 @@
 		upgradeElement.innerHTML = "";
 		upgrade.appendChild(upgradeElement);        
         
-        document.getElementById('upgrades').appendChild(upgrade);        
+        document.getElementById(EraIds[upgradeObj.era]+"-upgrade").appendChild(upgrade);
 	}
     
     var deprecateButton = document.getElementById('upgrade_deprecate_'+upgradeObj.id);
