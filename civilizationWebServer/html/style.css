@@ -369,6 +369,11 @@ body, html
 	float: right;
 }
 
+.city-size-ico, .city-happy, .city-productive
+{
+	cursor: pointer;
+}
+
 .player-resources-text
 {
 	font: 30px Arial;
