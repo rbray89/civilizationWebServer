@@ -261,7 +261,9 @@ body, html
 .upgrade-deprecated,
 .upgrade-purchased,
 .upgrade-unlocked,
-.upgrade-locked
+.upgrade-locked,
+.unit-unlocked,
+.unit-locked
 {
 	position: relative;
 	padding:5px;
@@ -270,12 +272,12 @@ body, html
 	height:60px;
 	width:160px;
 	float:left;
-	cursor: pointer;
 	z-index:2;
 }
 
 .technology-unavailable,
-.upgrade-locked
+.upgrade-locked,
+.unit-locked
 {
 	background: #DCDCDC;
 }
@@ -286,7 +288,8 @@ body, html
 }
 
 .technology-available,
-.upgrade-unlocked
+.upgrade-unlocked,
+.unit-unlocked
 {
 	background: #F5DEB3;
 }
@@ -329,7 +332,8 @@ body, html
 }
 
 .tech-text-name,
-.upgrade-text-name
+.upgrade-text-name,
+.unit-text-name
 {
 	font: 14px Arial;
 	text-align: center;
@@ -361,7 +365,8 @@ body, html
 }
 
 .tech-text-benefits, .city-happy, .city-productive, .upgrade-img-benefits,
-.city-size-ico, .city-size-text, .city-production-ico, .city-production-text
+.city-size-ico, .city-size-text, .city-production-ico, .city-production-text,
+.unit-img-category
 {
 	font: 14px Arial;
 	text-align: right;
@@ -369,6 +374,14 @@ body, html
 	float: right;
 }
 
+.technology-available,
+.technology-unavailable, 
+.technology-purchased,
+.technology-selected, 
+.technology-expanded, 
+.technology-unexpanded, 
+.technology-dependency-1, 
+.technology-dependency-2,
 .city-size-ico, .city-happy, .city-productive
 {
 	cursor: pointer;

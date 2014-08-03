@@ -21,6 +21,7 @@
 		send_cmd("get_tech_status");
 		send_cmd("get_city_status");
         send_cmd("get_upgrade_status");
+        send_cmd("get_unit_status");
     };
     websocket.onclose = function(ev) {
 
@@ -66,6 +67,10 @@
             {
                 updateUpgrades(json.upgrades);
             }
+            if(json.units != null)
+            {
+                updateUnits(json.units);
+            }            
 		}
       }
     };
