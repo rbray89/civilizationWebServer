@@ -25,6 +25,7 @@ class Wonder
 public:
 	Wonder(char* name, TECH_ERA era, BENEFIT_TYPE type, char* description);
 	int GetId();
+	static int GetVictoryPoints(int player);
 	void SetOwner(int player, int previousOwner);
 	void GetJSON(Document* document, Value* array);
 	static char* GetWonderStatusJSON();

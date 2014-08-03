@@ -55,6 +55,7 @@ public:
 	static void ToggleCityProductivityUpgrade(int city);
 	static void IncreaseCitySize(int city);
 	static int  GetPlayerTotalOutput(int player);
+	static int  GetVictoryPoints(int player);
 	static void GetJSONArray(Document* document, Value* array);
 	static char* GetCityStatusJSON();
 	~City();

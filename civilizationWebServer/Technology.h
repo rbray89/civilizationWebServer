@@ -73,6 +73,7 @@ public:
 	static void Purchase(int tech, int player);
 	static void LoadState(Document* document);
 	static void SaveState(Document* document);
+	static int GetVictoryPoints(int player);
 	~Technology();
 };
 

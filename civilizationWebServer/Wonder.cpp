@@ -34,6 +34,21 @@ void Wonder::SetOwner(int player, int previousOwner)
 	Player::ChangeAvailableUpgrades(previousOwner, -happyDiff, -prodDiff);
 }
 
+int Wonder::GetVictoryPoints(int player)
+{
+	int points = 0;
+
+	for (int i = 0; i < WONDER_COUNT; i++)
+	{
+		if (Wonders[i]->Owner == player)
+		{
+			points += 2;
+		}
+	}
+
+	return points;
+}
+
 void Wonder::GetJSON(Document* document, Value* array)
 {
 

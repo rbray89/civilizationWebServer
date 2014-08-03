@@ -85,6 +85,25 @@ int City::GetPlayerTotalOutput(int player)
 	return MAX(MINIMUM_INCOME, totalOutput + numUniqueResources*UNIQUE_RESOURCE_BONUS_MULTIPLIER + monopolyBonus);
 }
 
+int City::GetVictoryPoints(int player)
+{
+	int points = 0;
+
+	for (int i = 0; i < CityCount; i++)
+	{
+		if (CityList[i] != nullptr)
+		{
+			// The owner always gets the city's production
+			if (CityList[i]->Owner == player)
+			{
+				points += CityList[i]->Size + 1;
+			}
+		}
+	}
+
+	return points;
+}
+
 void City::Trade(int player, int city)
 {
 	CityList[city]->Traded = player;

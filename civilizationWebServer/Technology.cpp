@@ -545,6 +545,19 @@ void Technology::LoadState(Document* document)
 	}
 }
 
+int Technology::GetVictoryPoints(int player)
+{
+	int points = 0;
+	for (int i = 0; i < TECH_COUNT; i++)
+	{
+		if (TechTree[i]->Owner == player && TechTree[i]->Benefits & SEMINAL_BENEFIT)
+		{
+			points += 4;
+		}
+	}
+	return points;
+}
+
 void Technology::SaveState(Document* document)
 {
 	Value technologies(kArrayType);

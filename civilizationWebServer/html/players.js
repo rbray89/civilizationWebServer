@@ -137,6 +137,14 @@
       subElement = document.createElement('img');
       subElement.src = 'productive24.png';
       element.appendChild(subElement);         
+
+      // Victory points
+      subElement = document.createElement('span');
+      subElement.setAttribute('id', id+'_victory');
+      element.appendChild(subElement);
+      subElement = document.createElement('img');
+      subElement.src = 'seminal24.png';
+      element.appendChild(subElement); 
     }
     
     var totalOutput = document.getElementById(id+'_output');
@@ -147,6 +155,9 @@
 
     var totalProductive = document.getElementById(id+'_prod');
     totalProductive.innerHTML = "&nbsp;&nbsp;&nbsp;"+playerResources.productivity;    
+
+    var victoryPoints = document.getElementById(id+'_victory');
+    victoryPoints.innerHTML = "&nbsp;&nbsp;&nbsp;"+playerResources.victory_points;  
   }
   
   var updatePlayers = function(players) {

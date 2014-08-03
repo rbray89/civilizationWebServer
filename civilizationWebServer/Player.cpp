@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "City.h"
+#include "Technology.h"
+#include "Wonder.h"
 #include "string.h"
 
 Player* Player::Players[6];
@@ -41,6 +43,17 @@ char* Player::GetPlayerName(int i)
 	return i >= PlayerCount || i < 0 ? "Unknown" : Players[i]->GetName();
 }
 
+int Player::GetVictoryPoints()
+{
+	int victoryPoints = 0;
+
+	victoryPoints += City::GetVictoryPoints(Id);
+	victoryPoints += Technology::GetVictoryPoints(Id);
+	victoryPoints += Wonder::GetVictoryPoints(Id);
+
+	return victoryPoints;
+}
+
 void Player::GetJSON(Document* document, Value* array)
 {
 	Value jsonObject(kObjectType);
@@ -50,6 +63,7 @@ void Player::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<int>("color", Color, document->GetAllocator());
 	jsonObject.AddMember<int>("happiness", AvailableHappiness, document->GetAllocator());
 	jsonObject.AddMember<int>("productivity", AvailableProductivity, document->GetAllocator());
+	jsonObject.AddMember<int>("victory_points", GetVictoryPoints(), document->GetAllocator());
 	jsonObject.AddMember<int>("total_output", City::GetPlayerTotalOutput(Id), document->GetAllocator());
 	array->PushBack(jsonObject, document->GetAllocator());
 }

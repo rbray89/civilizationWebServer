@@ -25,6 +25,7 @@ private:
 	UPGRADE upgrades;
 
 	char* GetName();
+	int GetVictoryPoints();
 	void GetJSON(Document* document, Value* array);
 	Player(const char* name);
 public:
