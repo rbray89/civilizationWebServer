@@ -29,6 +29,15 @@ City::City(RESOURCE resource, int owner, bool fertile)
 
 void City::Assign(int player, int city)
 {
+	// If the city was previously assigned, release the allocated
+	// productivity and happiness improvements back to the previous owner
+	if (CityList[city]->Owner >= 0)
+	{
+		Player::ChangeAvailableUpgrades(CityList[city]->Owner,
+			CityList[city]->hasHappyUpgrade ? 1 : 0,
+			CityList[city]->hasProductivityUpgrade ? 1 : 0);
+	}
+
 	CityList[city]->hasHappyUpgrade = false;
 	CityList[city]->hasProductivityUpgrade = false;
 	CityList[city]->Owner = player;
