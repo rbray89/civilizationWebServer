@@ -3,6 +3,7 @@
 #include "string.h"
 #include "GameManager.h"
 #include "Wonder.h"
+#include "Unit.h"
 
 using namespace rapidjson;
 
@@ -71,7 +72,40 @@ void Technology::InitTech()
 	Upgrade* Size2Cities = new Upgrade(SIZE_2_CITIES, "Size 2 Cities", MEDEVIAL_ERA, NO_BENEFIT);
 	Upgrade* Size3Cities = new Upgrade(SIZE_3_CITIES, "Size 3 Cities", GUNPOWDER_ERA, NO_BENEFIT);
 	Upgrade* Size4Cities = new Upgrade(SIZE_4_CITIES, "Size 4 Cities", MODERN_ERA, NO_BENEFIT);
-
+    
+    Unit* Spearman = new Unit(SPEARMAN, "Spearman", ANCIENT_ERA, INFANTRY_TYPE, 1, 0);
+    Unit* Swordsman = new Unit(SWORDSMAN, "Swordsman", ANCIENT_ERA, INFANTRY_TYPE, 1, 1);
+    Unit* Chariot = new Unit(CHARIOT, "Chariot", ANCIENT_ERA, CAVALRY_TYPE, 1, 0);
+    Unit* Horseman = new Unit(HORSEMAN, "Horseman", ANCIENT_ERA, CAVALRY_TYPE, 1, 1);
+    Unit* Catapult = new Unit(CATAPULT, "Catapult", ANCIENT_ERA, ARTILLERY_TYPE, 1, 1);
+    Unit* Galley = new Unit(GALLEY, "Galley", ANCIENT_ERA, FLEET_TYPE, 1, 0);
+    
+    Unit* ManAtArms = new Unit(MANATARMS, "ManAtArms", MEDEVIAL_ERA, INFANTRY_TYPE, 2, 0);
+    Unit* Knight = new Unit(KNIGHT, "Knight", MEDEVIAL_ERA, CAVALRY_TYPE, 2, 0);
+    Unit* Trebuchet = new Unit(TREBUCHET, "Trebuchet", MEDEVIAL_ERA, ARTILLERY_TYPE, 2, 0);
+    Unit* Caravel = new Unit(CARAVEL, "Caravel", MEDEVIAL_ERA, FLEET_TYPE, 2, 0);
+    Unit* Galleon = new Unit(GALLEON, "Galleon", MEDEVIAL_ERA, FLEET_TYPE, 2, 2);
+    
+    Unit* Musketman = new Unit(MUSKETMAN, "Musketman", GUNPOWDER_ERA, INFANTRY_TYPE, 3, 0);
+    Unit* Rifleman = new Unit(RIFLEMAN, "Rifleman", GUNPOWDER_ERA, INFANTRY_TYPE, 3, 2);
+    Unit* Dragoon = new Unit(DRAGOON, "Dragoon", GUNPOWDER_ERA, CAVALRY_TYPE, 3, 0);
+    Unit* Cannon = new Unit(CANNON, "Cannon", GUNPOWDER_ERA, ARTILLERY_TYPE, 3, 1);
+    Unit* Artillery = new Unit(ARTILLERY, "Artillery", GUNPOWDER_ERA, ARTILLERY_TYPE, 3, 3);
+    Unit* Frigate = new Unit(FRIGATE, "Frigate", GUNPOWDER_ERA, FLEET_TYPE, 3, 0);
+    Unit* Ironclad = new Unit(IRONCLAD, "Ironclad", GUNPOWDER_ERA, FLEET_TYPE, 3, 2);
+    
+    Unit* Machinegunner = new Unit(MACHINEGUNNER, "Machine Gunner", MODERN_ERA, INFANTRY_TYPE, 4, 0);
+    Unit* MechanizedInfantry = new Unit(MECHANIZED_INFANTRY, "Mechanized Infantry", MODERN_ERA, INFANTRY_TYPE, 4, 2);
+    Unit* Tank = new Unit(TANK, "Tank", MODERN_ERA, CAVALRY_TYPE, 4, 0);
+    Unit* ModernArmor = new Unit(MODERN_ARMOR, "Modern Armor", MODERN_ERA, CAVALRY_TYPE, 4, 3);
+    Unit* RocketArtillery = new Unit(ROCKET_ARTILLERY, "Rocket Artillery", MODERN_ERA, ARTILLERY_TYPE, 4, 2);
+    Unit* CruiseMissles = new Unit(CRUISE_MISSLES, "Cruise Missles", MODERN_ERA, ARTILLERY_TYPE, 4, 4);
+    Unit* Battleship = new Unit(BATTLESHIP, "Battleship", MODERN_ERA, FLEET_TYPE, 4, 1);
+    Unit* Carrier = new Unit(CARRIER, "Carrier", MODERN_ERA, FLEET_TYPE, 4, 0);
+    Unit* Biplane = new Unit(BIPLANE, "Biplane", MODERN_ERA, AIRCRAFT_TYPE, 1, 0);
+    Unit* Monoplane = new Unit(MONOPLANE, "Monoplane", MODERN_ERA, AIRCRAFT_TYPE, 2, 0);
+    Unit* Jet = new Unit(JET, "Jet", MODERN_ERA, AIRCRAFT_TYPE, 3, 0);
+    Unit* StealthAircraft = new Unit(STEALTH_AIRCRAFT, "Stealth Aircraft", MODERN_ERA, AIRCRAFT_TYPE, 4, 0);
 
 	Technology* Masonry = new Technology("Masonry", ANCIENT_ERA, 15, WONDER_BENEFIT);
 	Masonry->SetWonders(1, HangingGardens);
@@ -84,11 +118,13 @@ void Technology::InitTech()
 	Pottery_Specialization->EnablesText = "Granary";
 
 	Technology* TheWheel = new Technology("The Wheel", ANCIENT_ERA, 25, CAVALRY_BENEFIT);
+	TheWheel->SetUnits(1, Chariot);
 	TheWheel->BenefitText = "One free Chariot unit";
 	TheWheel->EnablesText = "Chariot";
 
 	Technology* BronzeWorking = new Technology("Bronze Working", ANCIENT_ERA, 25, INFANTRY_BENEFIT | WONDER_BENEFIT);
 	BronzeWorking->SetWonders(1, Colossus);
+	BronzeWorking->SetUnits(1, Spearman);
 	BronzeWorking->EnablesText = "Spearman";
 
 	Technology* CeremonialBurial = new Technology("Ceremonial Burial", ANCIENT_ERA, 25, HAPPY_BENEFIT | WONDER_BENEFIT);
@@ -97,6 +133,7 @@ void Technology::InitTech()
 	CeremonialBurial->EnablesText = "Ziggurat";
 
 	Technology* HorsebackRiding = new Technology("Horseback Riding", ANCIENT_ERA, 40, CAVALRY_BENEFIT);
+	HorsebackRiding->SetUnits(1, Horseman);
 	HorsebackRiding->EnablesText = "Horseman";
 	HorsebackRiding->BenefitText = "One free Horseman unit";
 	HorsebackRiding->SetDependencies(1, TheWheel);
@@ -108,11 +145,13 @@ void Technology::InitTech()
 	CodeOfLaws->SetDependencies(2, Alphabet_Writing, Pottery_Specialization);
 
 	Technology* Mathematics = new Technology("Mathematics", ANCIENT_ERA, 40, ARTILLERY_BENEFIT);
+	Mathematics->SetUnits(1, Catapult);
 	Mathematics->BenefitText = "One free Catapult unit";
 	Mathematics->EnablesText = "Catapult";
 	Mathematics->SetDependencies(2, Masonry, Alphabet_Writing);
 
 	Technology* IronWorking = new Technology("Iron Working", ANCIENT_ERA, 40, INFANTRY_BENEFIT);
+	IronWorking->SetUnits(1, Swordsman);
 	IronWorking->BenefitText = "One free Swordsman unit";
 	IronWorking->EnablesText = "Swordsman";
 	IronWorking->SetDependencies(2, BronzeWorking, Pottery_Specialization);
@@ -131,6 +170,7 @@ void Technology::InitTech()
 
 	Technology* Trade_Mapmaking = new Technology("Trade/Mapmaking", ANCIENT_ERA, 50, TRADE_BENEFIT | FLEET_BENEFIT | WONDER_BENEFIT);
 	Trade_Mapmaking->SetWonders(1, GreatLighthouse);
+	Trade_Mapmaking->SetUnits(1, Galley);
 	Trade_Mapmaking->EnablesText = "Galley, Trade1-sea";
 	Trade_Mapmaking->SetDependencies(2, Mathematics, Pottery_Specialization);
 
@@ -159,6 +199,7 @@ void Technology::InitTech()
 	Education->SetDependencies(2, Trade_Mapmaking, Philosophy_Literature);
 
 	Technology* Engineering = new Technology("Engineering", MEDEVIAL_ERA, 70, ARTILLERY_BENEFIT);
+	Engineering->SetUnits(1, Trebuchet);
 	Engineering->EnablesText = "Trebuchet";
 	Engineering->BenefitText = "One free Trebuchet unit";
 	Engineering->SetDependencies(2, TheWheel, Construction);
@@ -172,11 +213,13 @@ void Technology::InitTech()
 	Technology* Feudalism = new Technology("Feudalism", MEDEVIAL_ERA, 70, HAPPY_BENEFIT | INFANTRY_BENEFIT | WONDER_BENEFIT);
 	Feudalism->SetUpgrades(1, Castle);
 	Feudalism->SetWonders(1, ArtOfWar);
+	Feudalism->SetUnits(1, ManAtArms);
 	Feudalism->EnablesText = "Man-At-Arms, Castle";
 	Feudalism->SetDependencies(2, CodeOfLaws, Construction);
 
 	Technology* Astronomy = new Technology("Astronomy", MEDEVIAL_ERA, 60, TRADE_BENEFIT | FLEET_BENEFIT | WONDER_BENEFIT);
 	Astronomy->SetWonders(1, CopernicusObservatory);
+	Astronomy->SetUnits(1, Caravel);
 	Astronomy->EnablesText = "Caravel, Trade2-sea";
 	Astronomy->SetDependencies(2, Education, Engineering);
 
@@ -184,11 +227,13 @@ void Technology::InitTech()
 	PrintingPress->SetDependencies(2, Theology, Education);
 
 	Technology* Chivalry = new Technology("Chivalry", MEDEVIAL_ERA, 60, CAVALRY_BENEFIT);
+	Chivalry->SetUnits(1, Knight);
 	Chivalry->EnablesText = "Knight";
 	Chivalry->BenefitText = "One free Knight unit";
 	Chivalry->SetDependencies(2, HorsebackRiding, Feudalism);
 
 	Technology* Navigation = new Technology("Navigation", MEDEVIAL_ERA, 60, TRADE_BENEFIT | FLEET_BENEFIT);
+	Navigation->SetUnits(1, Galleon);
 	Navigation->EnablesText = "Galleons, Trade3";
 	Navigation->BenefitText = "One free Galleon unit";
 	Navigation->SetDependencies(1, Astronomy);
@@ -216,11 +261,13 @@ void Technology::InitTech()
 	Economics->SetDependencies(1, Nationalism);
 
 	Technology* GunpowderWeapons = new Technology("Gunpowder Weapons", GUNPOWDER_ERA, 90, INFANTRY_BENEFIT);
+	GunpowderWeapons->SetUnits(1, Musketman);
 	GunpowderWeapons->EnablesText = "Musketman";
 	GunpowderWeapons->BenefitText = "One free Musketman unit";
 	GunpowderWeapons->SetDependencies(1, Physics);
 
 	Technology* Cavalry = new Technology("Cavalry", GUNPOWDER_ERA, 80, CAVALRY_BENEFIT);
+	Cavalry->SetUnits(1, Dragoon);
 	Cavalry->EnablesText = "Dragoon";
 	Cavalry->BenefitText = "One free Dragoon unit";
 	Cavalry->SetDependencies(2, Chivalry, GunpowderWeapons);
@@ -233,6 +280,7 @@ void Technology::InitTech()
 
 	Technology* Metallurgy = new Technology("Metallurgy", GUNPOWDER_ERA, 100, ARTILLERY_BENEFIT | FLEET_BENEFIT | WONDER_BENEFIT);
 	Metallurgy->SetWonders(1, MagellansVoyage);
+	Metallurgy->SetUnits(2, Cannon, Frigate);
 	Metallurgy->EnablesText = "Cannon, Frigate";
 	Metallurgy->SetDependencies(2, IronWorking, GunpowderWeapons);
 
@@ -245,11 +293,13 @@ void Technology::InitTech()
 	Technology* SteamPower = new Technology("Steam Power", GUNPOWDER_ERA, 120, PRODUCTIVE_BENEFIT | FLEET_BENEFIT | INFANTRY_BENEFIT | TRADE_BENEFIT | WONDER_BENEFIT | SEMINAL_BENEFIT);
 	SteamPower->SetUpgrades(1, Railroad);
 	SteamPower->SetWonders(1, TranscontinentalRailroad);
+	SteamPower->SetUnits(2, Ironclad, Rifleman);
 	SteamPower->EnablesText = "Ironclad, Rifleman, Railroad, Trade4-land";
 	SteamPower->SetDependencies(1, Metallurgy);
 
 	Technology* Industrialization = new Technology("Industrialization", GUNPOWDER_ERA, 100, ARTILLERY_BENEFIT | PRODUCTIVE_BENEFIT);
 	Industrialization->SetUpgrades(1, Factory);
+	Industrialization->SetUnits(1, Artillery);
 	Industrialization->EnablesText = "Artillery, Factory";
 	Industrialization->BenefitText = "Free Factory improvement";
 	Industrialization->SetDependencies(2, Economics, SteamPower);
@@ -262,6 +312,7 @@ void Technology::InitTech()
 	ScientificMethod->SetDependencies(1, Medicine);
 
 	Technology* Electricity = new Technology("Electricity", MODERN_ERA, 100, INFANTRY_BENEFIT);
+	Electricity->SetUnits(1, Machinegunner);
 	Electricity->EnablesText = "Machine Gunner";
 	Electricity->BenefitText = "One free Machinegunner unit";
 	Electricity->SetDependencies(1, SteamPower);
@@ -269,11 +320,13 @@ void Technology::InitTech()
 
 	Technology* Combustion = new Technology("Combustion", MODERN_ERA, 100, PRODUCTIVE_BENEFIT | FLEET_BENEFIT);
 	Combustion->SetUpgrades(1, HighwaySystem);
-	Combustion->EnablesText = "Highway System";
+	Combustion->SetUnits(1, Battleship);
+	Combustion->EnablesText = "Highway System, Battleship";
 	Combustion->BenefitText = "One free Battleship unit";
 	Combustion->SetDependencies(1, Industrialization);
 
 	Technology* Flight = new Technology("Flight", MODERN_ERA, 100, AIRCRAFT_BENEFIT | TRADE_BENEFIT);
+	Flight->SetUnits(1, Biplane);
 	Flight->EnablesText = "Biplane, Trade-All";
 	Flight->BenefitText = "One free Biplane unit";
 	Flight->SetDependencies(1, Combustion);
@@ -291,6 +344,7 @@ void Technology::InitTech()
 	Technology* MassProduction = new Technology("Mass Production", MODERN_ERA, 100, PRODUCTIVE_BENEFIT | CAVALRY_BENEFIT | WONDER_BENEFIT);
 	MassProduction->SetUpgrades(1, ManufacturingPlant);
 	MassProduction->SetWonders(1, UniversalSuffrage);
+	MassProduction->SetUnits(1, Tank);
 	MassProduction->EnablesText = "Tank, Manufacturing Plant";
 	MassProduction->SetDependencies(2, Combustion, Electricity);
 
@@ -301,6 +355,7 @@ void Technology::InitTech()
 	Plastics->SetDependencies(1, MassProduction);
 
 	Technology* Robotics = new Technology("Robotics", MODERN_ERA, 100, INFANTRY_BENEFIT);
+	Robotics->SetUnits(1, MechanizedInfantry);
 	Robotics->EnablesText = "Mechanized Infantry";
 	Robotics->BenefitText = "One free Mechanized Infantry unit";
 	Robotics->SetDependencies(2, Electronics, MassProduction);
@@ -318,6 +373,7 @@ void Technology::InitTech()
 
 	Technology* AdvancedFlight = new Technology("Advanced Flight", MODERN_ERA, 100, AIRCRAFT_BENEFIT | PRODUCTIVE_BENEFIT | FLEET_BENEFIT);
 	AdvancedFlight->SetUpgrades(1, Airport);
+	AdvancedFlight->SetUnits(2, Carrier, Monoplane);
 	AdvancedFlight->EnablesText = "Aircraft Carrier, Monoplane, Airport";
 	AdvancedFlight->BenefitText = "One free Monoplane unit";
 	AdvancedFlight->SetDependencies(2, Flight, Radio_Television);
@@ -329,21 +385,25 @@ void Technology::InitTech()
 	Genetics->SetDependencies(2, Medicine, Computers);
 
 	Technology* Rocketry = new Technology("Rocketry", MODERN_ERA, 120, ARTILLERY_BENEFIT | AIRCRAFT_BENEFIT);
+	Rocketry->SetUnits(2, RocketArtillery, Jet);
 	Rocketry->EnablesText = "Rocket Artillery, Jets";
 	Rocketry->BenefitText = "One free Rocket Artillery unit";
 	Rocketry->SetDependencies(1, AdvancedFlight);
 
 	Technology* SpaceFlight = new Technology("Space Flight", MODERN_ERA, 150, ARTILLERY_BENEFIT | WONDER_BENEFIT);
 	SpaceFlight->SetWonders(1, ApolloProgram);
-	SpaceFlight->EnablesText = "Cruise Missiles";
+	SpaceFlight->SetUnits(1, CruiseMissles);
+	SpaceFlight->EnablesText = "Cruise Missles";
 	SpaceFlight->SetDependencies(4, Plastics, Computers, Robotics, Rocketry);
 
 	Technology* Miniaturization = new Technology("Miniaturization", MODERN_ERA, 100, CAVALRY_BENEFIT);
-	Miniaturization->EnablesText = "Modern Armour Calvary";
+	Miniaturization->SetUnits(1, ModernArmor);
+	Miniaturization->EnablesText = "Modern Armor";
 	Miniaturization->BenefitText = "One free Modern Armour unit";
 	Miniaturization->SetDependencies(1, Computers);
 
 	Technology* SuperConductor = new Technology("Super Conductor", MODERN_ERA, 120, AIRCRAFT_BENEFIT);
+	SuperConductor->SetUnits(1, StealthAircraft);
 	SuperConductor->EnablesText = "Stealth Aircraft";
 	SuperConductor->BenefitText = "One free Stealth Aircraft";
 	SuperConductor->SetDependencies(2, Miniaturization, SpaceFlight);
@@ -434,6 +494,19 @@ void Technology::SetUpgrades(int n, ...)
 	va_end(args);
 }
 
+void Technology::SetUnits(int n, ...)
+{
+	UnitCount = n;
+	Units = new Unit*[n];
+	va_list args;
+	va_start(args, n);
+	for (int i = 0; i < n; i++)
+	{
+		Units[i] = va_arg(args, Unit*);
+	}
+	va_end(args);
+}
+
 void Technology::SetWonders(int n, ...)
 {
 	WonderCount = n;
@@ -482,6 +555,18 @@ void Technology::Purchase(int player)
 		else
 		{
 			Upgrades[i]->UnlockUpgrade(player);
+		}
+	}
+
+	for (int i = 0; i < UnitCount; i++)
+	{
+		if (player == -1)
+		{
+			Units[i]->LockUnit();
+		}
+		else
+		{
+			Units[i]->UnlockUnit(player);
 		}
 	}
 }

@@ -229,6 +229,15 @@ void GameManager::SendUpgradeStatusUpdate()
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
+void GameManager::SendUnitStatusUpdate()
+{
+	static char buf[UPDATE_BUFF_SIZE];
+
+	const char* string = Unit::GetUnitStatusJSON();
+	strcpy_s(buf, sizeof(buf), string);
+	mg_iterate_over_connections(Server, PostMsgToClient, buf);
+}
+
 VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 {
 	GameManager* gameTimer = (GameManager*)lpParam;
@@ -367,6 +376,11 @@ char* GameManager::GetCityStatusJSON()
 char* GameManager::GetUpgradeStatusJSON()
 {
 	return Upgrade::GetUpgradeStatusJSON();
+}
+
+char* GameManager::GetUnitStatusJSON()
+{
+	return Unit::GetUnitStatusJSON();
 }
 
 void GameManager::LoadState(char* filename)
