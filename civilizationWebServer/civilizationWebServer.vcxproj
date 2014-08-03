@@ -96,6 +96,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Technology.h" />
+    <ClInclude Include="Unit.h" />
     <ClInclude Include="Upgrade.h" />
     <ClInclude Include="Wonder.h" />
   </ItemGroup>
@@ -107,6 +108,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Technology.cpp" />
+    <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Upgrade.cpp" />
     <ClCompile Include="Wonder.cpp" />
   </ItemGroup>
