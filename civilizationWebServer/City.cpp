@@ -27,6 +27,25 @@ City::City(RESOURCE resource, int owner, bool fertile)
 	Resource = resource;
 }
 
+City::City(RESOURCE resource, int owner, bool fertile, int traded, bool isHappy, bool isProductive, int size)
+{
+	Id = CityCount;
+	CityList[Id] = this;
+	CityCount++;
+
+	Resource = resource;
+	Owner = owner;
+	Fertile = fertile;
+	this->Traded = traded;
+	this->hasHappyUpgrade = isHappy;
+	this->hasProductivityUpgrade = isProductive;
+	this->Size = size;
+
+	Player::ChangeAvailableUpgrades(owner,
+		 Resource != GEMS && Resource != WINE && hasHappyUpgrade ? -1 : 0,
+		 !fertile && hasProductivityUpgrade ? -1 : 0);
+}
+
 void City::Assign(int player, int city)
 {
 	// If the city was previously assigned, release the allocated
@@ -277,6 +296,29 @@ char* City::GetCityStatusJSON()
 	memcpy(TextJSON, str, strLen);
 
 	return TextJSON;
+}
+
+
+void City::LoadState(Document* document)
+{
+	const Value& cityArray = (*document)["cities"];
+	for (SizeType i = 0; i < cityArray.Size(); i++)
+	{
+		new City((RESOURCE) cityArray[SizeType(i)]["resource"].GetInt(),
+								cityArray[SizeType(i)]["owner"].GetInt(),
+								cityArray[SizeType(i)]["isFertile"].GetInt(),
+								cityArray[SizeType(i)]["traded"].GetInt(),
+								cityArray[SizeType(i)]["isHappy"].GetBool(),
+								cityArray[SizeType(i)]["isProductive"].GetBool(),
+								cityArray[SizeType(i)]["size"].GetInt());
+	}
+}
+
+void City::SaveState(Document* document)
+{
+	Value cityArray(kArrayType);
+
+	City::GetJSONArray(document, &cityArray);
 }
 
 City::~City()

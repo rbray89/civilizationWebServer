@@ -58,7 +58,7 @@
 		<div class="container container-center" id="players">
 			<div class="container-center-sub">
 				<div class="players-set-count">Player Count:
-					<select onchange="updatePlayerAddCount(this);">
+					<select onchange="updatePlayerAddCount(this.options[this.selectedIndex].value);">
 						<option value="2">2</option>
 						<option value="3">3</option>
 						<option value="4">4</option>

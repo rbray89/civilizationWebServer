@@ -332,7 +332,6 @@ char* GameManager::GetPlayerStatusJSON()
 	Value players(kArrayType);
 
 	Player::GetJSONArray(&document, &players);
-	document.AddMember("players", players, document.GetAllocator());
 
 	document.Accept(writer);
 	const char* str = ss.GetString();
@@ -393,7 +392,11 @@ void GameManager::LoadState(char* filename)
 	Player::SetCurrentPlayer(document["gameState"]["currentPlayer"].GetInt());
 	StartingPlayer = document["gameState"]["turnStartingPlayer"].GetInt();
 	CurrentPhase = (GAME_PHASES)document["gameState"]["currentPhase"].GetInt();
+	Player::LoadState(&document);
 	Technology::LoadState(&document);
+	Upgrade::LoadState(&document);
+	City::LoadState(&document);
+	HandleSecondEvent(false);
 }
 
 void GameManager::SaveState(char* filename)
@@ -409,7 +412,10 @@ void GameManager::SaveState(char* filename)
 	gameState.AddMember<int>("turnStartingPlayer", StartingPlayer, document.GetAllocator());
 	gameState.AddMember<GAME_PHASES>("currentPhase", CurrentPhase, document.GetAllocator());
 	document.AddMember("gameState", gameState, document.GetAllocator());
+	Player::SaveState(&document);
 	Technology::SaveState(&document);
+	Upgrade::SaveState(&document);
+	City::SaveState(&document);	
 	document.Accept(writer);
 	const char* str = ss.GetString();
 

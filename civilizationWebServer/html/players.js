@@ -69,8 +69,7 @@
 	});
   }
   
-  var updatePlayerAddCount = function(element) {
-	var count = element.options[element.selectedIndex].value;
+  var updatePlayerAddCount = function(count) {
 	var playerContainer = document.getElementById("player-add-container");
 	while(playerContainer.firstChild) {
 		playerContainer.removeChild(playerContainer.firstChild);
@@ -172,6 +171,16 @@
 		players.forEach(function(entry) {
 			cityPlayerAdd.options.add(new Option(entry.name, entry.id));
 		});
+        
+
+        updatePlayerAddCount(players.length);
+    
+        for(var i = 0; i < players.length; i++)
+        {
+            var playerInput = document.getElementById("player-add-" + (i+1));
+            playerInput.value = players[i].name;
+            
+        }        
 	}
 	Players = players;
 	if(!MANAGER && Player == null)

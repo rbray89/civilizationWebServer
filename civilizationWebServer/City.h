@@ -47,6 +47,7 @@ class City
 
 public:
 	City(RESOURCE resource, int owner, bool fertile);
+	City::City(RESOURCE resource, int owner, bool fertile, int traded, bool isHappy, bool isProductive, int size);
 	static void Assign(int player, int city);
 	static void Trade(int player, int city);
 	static void SetSize(int city, int size);
@@ -58,6 +59,8 @@ public:
 	static int  GetVictoryPoints(int player);
 	static void GetJSONArray(Document* document, Value* array);
 	static char* GetCityStatusJSON();
+	static void LoadState(Document* document);
+	static void SaveState(Document* document);
 	~City();
 };
 

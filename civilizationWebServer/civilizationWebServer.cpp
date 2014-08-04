@@ -156,6 +156,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 				int color = document["command"]["args"]["color"].GetInt();
 				bool success = Player::LogIn(player, color, conn);
 				_GameManager->SendPlayerStatusUpdate();
+				_GameManager->HandleSecondEvent(false);
 				char* string = Player::GetLoginStatusJSON(player, success);
 				mg_websocket_write(conn, 1, string, strlen(string));
 			}
@@ -241,6 +242,11 @@ bool cmd_handler()
 	else if (c == 'l')
 	{
 		_GameManager->LoadState(filename);
+		_GameManager->SendPlayerStatusUpdate();
+		_GameManager->SendWonderStatusUpdate();
+		_GameManager->SendTechStatusUpdate();
+		_GameManager->SendCityStatusUpdate();
+		_GameManager->SendUpgradeStatusUpdate();
 	}
 	else if (c <= '9' && c >= '0')
 	{
