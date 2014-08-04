@@ -107,7 +107,29 @@
         upgrade.setAttribute('class', 'upgrade-locked');        
     }
     
-  };  
+  };
+  
+  var updateUpgradesForTurn = function() {
+	if (Upgrades != null)
+    {
+       Upgrades.forEach(function(upgradeObj) {
+          var upgrade = document.getElementById('upgrade_'+upgradeObj.id);
+          if (upgrade != null && upgradeObj.unlocked)
+          {
+             var purchaseButton = document.getElementById('upgrade_purchase_'+upgradeObj.id);
+             if (TurnStatus!=null && TurnStatus.current_phase == 0 && 
+			     TurnStatus.player_current == Player)
+             {
+                 purchaseButton.style.display = 'block';         
+             }
+             else
+             {
+                 purchaseButton.style.display = 'none';         
+             }
+          }
+       });
+    }    
+  }
   
   var updateUpgrades = function(obj) {
 	Upgrades = obj;

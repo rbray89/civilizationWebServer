@@ -79,5 +79,6 @@
 		endTurnButton.style.visibility = 'hidden';
 	}
 	resetTech(false);
+    updateUpgradesForTurn();
   };
  
