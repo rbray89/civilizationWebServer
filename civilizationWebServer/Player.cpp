@@ -27,6 +27,29 @@ Player::Player(const char* name) :
 	Id = PlayerCount++;
 	Color = -1;
 	upgrades = NONE;
+	Players[Id] = this;
+}
+
+Player::Player(const char* name, int upgrades) :
+	AvailableHappiness(1),
+	AvailableProductivity(0)
+{
+	Name = new char[strlen(name) + 1];
+	strcpy(Name, name);
+	LoggedIn = false;
+	Id = PlayerCount++;
+	Color = -1;
+	this->upgrades = (UPGRADE) upgrades;
+	Players[Id] = this;
+
+	// Purchase all upgrades
+	for (int upgradeIndex = 0; upgradeIndex < UPGRADE_COUNT; upgradeIndex++)
+	{
+		if (upgrades & (1 << upgradeIndex))
+		{
+			Upgrade::PurchaseUpgrade(Id, (UPGRADE) (1 << upgradeIndex));
+		}
+	}
 }
 
 Player::~Player()
@@ -63,10 +86,12 @@ void Player::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<int>("color", Color, document->GetAllocator());
 	jsonObject.AddMember<int>("happiness", AvailableHappiness, document->GetAllocator());
 	jsonObject.AddMember<int>("productivity", AvailableProductivity, document->GetAllocator());
+	jsonObject.AddMember<int>("upgrades", upgrades, document->GetAllocator());
 	jsonObject.AddMember<int>("victory_points", GetVictoryPoints(), document->GetAllocator());
 	jsonObject.AddMember<int>("total_output", City::GetPlayerTotalOutput(Id), document->GetAllocator());
 	array->PushBack(jsonObject, document->GetAllocator());
 }
+
 
 void Player::GetJSONArray(Document* document, Value* array)
 {
@@ -74,6 +99,24 @@ void Player::GetJSONArray(Document* document, Value* array)
 	{
 		Players[i]->GetJSON(document, array);
 	}
+	document->AddMember("players", *array, document->GetAllocator());
+}
+
+void Player::LoadState(Document* document)
+{
+	const Value& playerArray = (*document)["players"];
+	for (SizeType i = 0; i < playerArray.Size(); i++)
+	{
+		new Player(playerArray[SizeType(i)]["name"].GetString(),
+				   playerArray[SizeType(i)]["upgrades"].GetInt());
+	}
+}
+
+void Player::SaveState(Document* document)
+{
+	Value playerArray(kArrayType);
+
+	Player::GetJSONArray(document, &playerArray);
 }
 
 bool Player::LogIn(int player, int color, struct mg_connection* token)

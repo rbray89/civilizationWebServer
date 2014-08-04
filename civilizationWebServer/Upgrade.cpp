@@ -76,6 +76,7 @@ void Upgrade::GetJSON(Document* document, Value* array)
 	jsonObject.AddMember<TECH_ERA>("era", Era, document->GetAllocator());
 	jsonObject.AddMember<bool>("unlocked", Unlocked, document->GetAllocator());
 	jsonObject.AddMember<char*>("unlockedby", UnlockedBy, document->GetAllocator());
+	jsonObject.AddMember<int>("upgrade_index", upgradeIndex, document->GetAllocator());
 	jsonObject.AddMember<bool>("deprecated", Deprecated, document->GetAllocator());
 
 	// Send purchased indicator for each player
@@ -95,6 +96,22 @@ void Upgrade::GetJSONArray(Document* document, Value* array)
 	}
 
 	document->AddMember("upgrades", *array, document->GetAllocator());
+}
+void Upgrade::LoadState(Document* document)
+{
+	const Value& upgradeArray = (*document)["upgrades"];
+	for (SizeType i = 0; i < upgradeArray.Size(); i++)
+	{
+		int upgradeIndex = upgradeArray[SizeType(i)]["upgrade_index"].GetInt();;
+		UpgradeList[upgradeIndex]->Deprecated = upgradeArray[SizeType(i)]["deprecated"].GetBool();
+	}
+}
+
+void Upgrade::SaveState(Document* document)
+{
+	Value upgradeArray(kArrayType);
+
+	Upgrade::GetJSONArray(document, &upgradeArray);
 }
 
 char* Upgrade::GetUpgradeStatusJSON()
