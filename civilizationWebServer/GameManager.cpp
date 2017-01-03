@@ -229,6 +229,15 @@ void GameManager::SendUpgradeStatusUpdate()
 	mg_iterate_over_connections(Server, PostMsgToClient, buf);
 }
 
+void GameManager::SendUnitStatusUpdate()
+{
+	static char buf[UPDATE_BUFF_SIZE];
+
+	const char* string = Unit::GetUnitStatusJSON();
+	strcpy_s(buf, sizeof(buf), string);
+	mg_iterate_over_connections(Server, PostMsgToClient, buf);
+}
+
 VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 {
 	GameManager* gameTimer = (GameManager*)lpParam;
@@ -332,7 +341,6 @@ char* GameManager::GetPlayerStatusJSON()
 	Value players(kArrayType);
 
 	Player::GetJSONArray(&document, &players);
-	document.AddMember("players", players, document.GetAllocator());
 
 	document.Accept(writer);
 	const char* str = ss.GetString();
@@ -369,6 +377,11 @@ char* GameManager::GetUpgradeStatusJSON()
 	return Upgrade::GetUpgradeStatusJSON();
 }
 
+char* GameManager::GetUnitStatusJSON()
+{
+	return Unit::GetUnitStatusJSON();
+}
+
 void GameManager::LoadState(char* filename)
 {
 	std::ifstream in(filename, std::ios::in | std::ios::binary);
@@ -393,7 +406,11 @@ void GameManager::LoadState(char* filename)
 	Player::SetCurrentPlayer(document["gameState"]["currentPlayer"].GetInt());
 	StartingPlayer = document["gameState"]["turnStartingPlayer"].GetInt();
 	CurrentPhase = (GAME_PHASES)document["gameState"]["currentPhase"].GetInt();
+	Player::LoadState(&document);
 	Technology::LoadState(&document);
+	Upgrade::LoadState(&document);
+	City::LoadState(&document);
+	HandleSecondEvent(false);
 }
 
 void GameManager::SaveState(char* filename)
@@ -409,7 +426,10 @@ void GameManager::SaveState(char* filename)
 	gameState.AddMember<int>("turnStartingPlayer", StartingPlayer, document.GetAllocator());
 	gameState.AddMember<GAME_PHASES>("currentPhase", CurrentPhase, document.GetAllocator());
 	document.AddMember("gameState", gameState, document.GetAllocator());
+	Player::SaveState(&document);
 	Technology::SaveState(&document);
+	Upgrade::SaveState(&document);
+	City::SaveState(&document);	
 	document.Accept(writer);
 	const char* str = ss.GetString();
 

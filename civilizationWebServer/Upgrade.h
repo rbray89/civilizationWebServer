@@ -77,9 +77,11 @@ public:
 	static bool isActive(UPGRADE upgrade);
 	void GetJSON(Document* document, Value* array);
 	static void GetJSONArray(Document* document, Value* array);
-	static char* Upgrade::GetUpgradeStatusJSON();
+	static char* GetUpgradeStatusJSON();
+	static void LoadState(Document* document);
+	static void SaveState(Document* document);
 	static void GetBenefitFromType(BENEFIT_TYPE type, int& happyDiff, int& prodDiff);
-	static Upgrade* Upgrade::GetUpgrade(UPGRADE upgrade);
+	static Upgrade* GetUpgrade(UPGRADE upgrade);
 	void LockUpgrade();
 	void UnlockUpgrade(int owner);
 	bool IsUnlocked();

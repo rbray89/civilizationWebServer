@@ -50,6 +50,11 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 			char* string = _GameManager->GetUpgradeStatusJSON();
 			mg_websocket_write(conn, 1, string, strlen(string));
 		}
+		else if (strcmp(document["command"]["cmd"].GetString(), "get_unit_status") == 0)
+		{
+			char* string = _GameManager->GetUnitStatusJSON();
+			mg_websocket_write(conn, 1, string, strlen(string));
+		}
 		else if (strcmp(document["command"]["cmd"].GetString(), "assign_city_trade") == 0)
 		{
 			int player = document["command"]["args"]["traded"].GetInt();
@@ -102,6 +107,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 				_GameManager->SendTechStatusUpdate();
 				_GameManager->SendCityStatusUpdate();
 				_GameManager->SendUpgradeStatusUpdate();
+				_GameManager->SendUnitStatusUpdate();
 				
 			}
 			
@@ -114,6 +120,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 				_GameManager->SendTechStatusUpdate();
 				_GameManager->SendUpgradeStatusUpdate();
 				_GameManager->SendPlayerStatusUpdate();
+				_GameManager->SendUnitStatusUpdate();
 			}
 			if (strcmp(document["command"]["cmd"].GetString(), "assign_city") == 0)
 			{
@@ -156,6 +163,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 				int color = document["command"]["args"]["color"].GetInt();
 				bool success = Player::LogIn(player, color, conn);
 				_GameManager->SendPlayerStatusUpdate();
+				_GameManager->HandleSecondEvent(false);
 				char* string = Player::GetLoginStatusJSON(player, success);
 				mg_websocket_write(conn, 1, string, strlen(string));
 			}
@@ -176,6 +184,7 @@ static void msg_handler(char* msg, struct mg_connection *conn)
 				_GameManager->SendTechStatusUpdate();
 				_GameManager->SendUpgradeStatusUpdate();
 				_GameManager->SendPlayerStatusUpdate();
+				_GameManager->SendUnitStatusUpdate();
 			}
 			else if (strcmp(document["command"]["cmd"].GetString(), "purchase_upgrade") == 0)
 			{
@@ -241,6 +250,11 @@ bool cmd_handler()
 	else if (c == 'l')
 	{
 		_GameManager->LoadState(filename);
+		_GameManager->SendPlayerStatusUpdate();
+		_GameManager->SendWonderStatusUpdate();
+		_GameManager->SendTechStatusUpdate();
+		_GameManager->SendCityStatusUpdate();
+		_GameManager->SendUpgradeStatusUpdate();
 	}
 	else if (c <= '9' && c >= '0')
 	{

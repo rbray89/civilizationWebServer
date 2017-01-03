@@ -43,6 +43,7 @@ public:
 	void SendWonderStatusUpdate();
 	void SendCityStatusUpdate();
 	void SendUpgradeStatusUpdate();
+	void SendUnitStatusUpdate();
 	GameManager();
 	GameManager(struct mg_server* server);
 	void StartStop();
@@ -66,6 +67,7 @@ public:
 	char* GetWonderStatusJSON();
 	char* GetCityStatusJSON();
 	char* GetUpgradeStatusJSON();
+	char* GetUnitStatusJSON();
 	void LoadState(char* filename);
 	void SaveState(char* filename);
 	~GameManager();

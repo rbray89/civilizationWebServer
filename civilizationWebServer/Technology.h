@@ -6,6 +6,7 @@
 #include "rapidjson\stringbuffer.h"
 #include "Upgrade.h"
 #include "Wonder.h"
+#include "Unit.h"
 
 #define TECH_COUNT 53
 	
@@ -42,6 +43,8 @@ private:
 	Technology** DependsOn;
 	Upgrade** Upgrades;
 	int UpgradeCount;
+	Unit** Units;
+	int UnitCount;
 	Wonder** Wonders;
 	int WonderCount;
 	int Id;
@@ -66,6 +69,7 @@ public:
 	void GetJSON(Document* document, Value* array, bool minimal = false);
 	void SetDependencies(int n, ...);
 	void SetUpgrades(int n, ...);
+	void SetUnits(int n, ...);
 	void SetWonders(int n, ...);
 
 	static void InitTech();

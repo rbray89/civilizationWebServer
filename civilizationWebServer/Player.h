@@ -28,6 +28,7 @@ private:
 	int GetVictoryPoints();
 	void GetJSON(Document* document, Value* array);
 	Player(const char* name);
+	Player(const char* name, int upgrades);
 public:
 	static void PlayersInit(const char** players, int playerCount);
 	static void GetJSONArray(Document* document, Value* array);
@@ -46,6 +47,8 @@ public:
 	static void ChangeAvailableUpgrades(int player, int happyDiff, int productivityDiff);
 	static bool HasAvailableHappiness(int player);
 	static bool HasAvailableProductivity(int player);
+	static void LoadState(Document* document);
+	static void SaveState(Document* document);
 	~Player();
 };
 
