@@ -56,7 +56,7 @@ void Technology::InitTech()
 	Upgrade* Capitol = new Upgrade(CAPITOL, "Capitol", GUNPOWDER_ERA, HAPPY);
 	Upgrade* StockMarket = new Upgrade(STOCK_MARKET, "Stock Market", GUNPOWDER_ERA, PRODUCTIVE);
 	Upgrade* Legislature = new Upgrade(LEGISLATURE, "Legislature", GUNPOWDER_ERA, HAPPY);
-	Upgrade* Factory = new Upgrade(FACTORY, "Factory", GUNPOWDER_ERA, PRODUCTIVE);
+	Upgrade* Factory = new Upgrade(FACTORY, "Factory", GUNPOWDER_ERA, DOUBLE_PRODUCTIVE);
 	Upgrade* Railroad = new Upgrade(RAILROAD, "Railroad", GUNPOWDER_ERA, PRODUCTIVE);
 	Upgrade* Hospital = new Upgrade(HOSPITAL, "Hospital", GUNPOWDER_ERA, HAPPY);
 	Upgrade* HighwaySystem = new Upgrade(HIGHWAY_SYSTEM, "Highway System", MODERN_ERA, PRODUCTIVE);
