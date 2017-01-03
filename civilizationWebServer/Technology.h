@@ -63,7 +63,7 @@ public:
 
 //	Technology();
 	Technology(char* name, TECH_ERA era, int cost, TECH_BENEFITS benefits);
-	(const char*) GetName();
+	const char* GetName();
 	int GetCost();
 	void Purchase(int player);
 	void GetJSON(Document* document, Value* array, bool minimal = false);

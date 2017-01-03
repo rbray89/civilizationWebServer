@@ -282,7 +282,7 @@ int main(int argc, char* argv[]){
 	}
 
 	filename = argv[1];
-	//Player::PlayersInit(&(argv[2]), argc - 2);
+	Player::PlayersInit((const char**) &(argv[2]), argc - 2);
 
 	struct mg_server *server = mg_create_server(NULL);
 	
